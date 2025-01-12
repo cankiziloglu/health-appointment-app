@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Ubuntu_Sans, Ubuntu_Sans_Mono } from 'next/font/google';
-import './globals.css';
+import '../globals.css';
 
 const ubuntuSans = Ubuntu_Sans({
   variable: '--font-ubuntu-sans',
