@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Ubuntu_Sans, Ubuntu_Sans_Mono } from 'next/font/google';
 import '../globals.css';
+import { Providers } from './providers';
+import { Locale } from '@/i18n-config';
 
 const ubuntuSans = Ubuntu_Sans({
   variable: '--font-ubuntu-sans',
@@ -18,17 +20,22 @@ export const metadata: Metadata = {
     'Find Appointments for Your Favorite Healthcare Provider or Doctor',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ lang: Locale['key'] }>;
 }>) {
+  const { lang } = await params;
   return (
-    <html lang='en'>
+    <html lang={lang} suppressHydrationWarning>
       <body
         className={`${ubuntuSans.variable} ${ubuntuSansMono.variable} antialiased`}
       >
-        {children}
+        <Providers attribute='class' defaultTheme='system' enableSystem>
+          {children}
+        </Providers>
       </body>
     </html>
   );

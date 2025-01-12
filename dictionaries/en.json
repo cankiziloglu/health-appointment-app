@@ -1,0 +1,32 @@
+{
+  "header": {
+    "about": "About",
+    "title": "Healthcare Appointment"
+  },
+  "HomePage": {
+    "title": "Easy Access to Healthcare Services",
+    "subtitle": "Quickly and easily access the healthcare service you need. Book your appointment now.",
+    "cityPlaceholder": "Select City",
+    "specialtyPlaceholder": "Select Specialty",
+    "searchButton": "Search Appointment",
+    "features": [
+      {
+        "title": "No Registration Required",
+        "description": "Quick and easy appointment booking."
+      },
+      {
+        "title": "Instant Appointment",
+        "description": "Get your appointment at your chosen date and time."
+      },
+      {
+        "title": "Wide Healthcare Network",
+        "description": "Thousands of healthcare providers across Turkiye."
+      }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2024 Healthcare Appointment. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Use"
+  }
+}

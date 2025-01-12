@@ -1,0 +1,32 @@
+{
+  "header": {
+    "about": "About",
+    "title": "Healthcare Appointment"
+  },
+  "HomePage": {
+    "title": "Sağlık Hizmetlerine Kolay Erişim",
+    "subtitle": "İhtiyacınız olan sağlık hizmetine hızlı ve kolay bir şekilde ulaşın. Randevunuzu hemen alın.",
+    "cityPlaceholder": "Şehir Seçin",
+    "specialtyPlaceholder": "Uzmanlık Alanı Seçin",
+    "searchButton": "Randevu Ara",
+    "features": [
+      {
+        "title": "Kayıt Gerekmez",
+        "description": "Hızlı ve kolay randevu alma imkanı."
+      },
+      {
+        "title": "Anında Randevu",
+        "description": "Seçtiğiniz tarih ve saatte randevunuzu alın."
+      },
+      {
+        "title": "Geniş Sağlık Ağı",
+        "description": "Türkiye genelinde binlerce sağlık kuruluşu."
+      }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2024 Sağlık Randevu. Tüm hakları saklıdır.",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Kullanım Şartları"
+  }
+}
