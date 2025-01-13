@@ -25,7 +25,7 @@ export default function LocaleSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline'>{lang?.flag}</Button>
+        <Button variant='ghost' size='icon'><span className='text-xl'>{lang?.flag}</span></Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {i18n.locales.map((locale) => (

@@ -8,6 +8,7 @@ import Negotiator from 'negotiator';
 
 const locales = ['en', 'tr'];
 function getLocale(request: NextRequest): string | undefined {
+  
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));

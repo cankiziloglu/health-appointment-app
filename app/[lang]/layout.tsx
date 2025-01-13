@@ -3,6 +3,9 @@ import { Ubuntu_Sans, Ubuntu_Sans_Mono } from 'next/font/google';
 import '../globals.css';
 import { Providers } from './providers';
 import { Locale } from '@/i18n-config';
+import { getDictionary } from '@/lib/dictionaries';
+import { Header } from './header';
+import Footer from './footer';
 
 const ubuntuSans = Ubuntu_Sans({
   variable: '--font-ubuntu-sans',
@@ -28,13 +31,19 @@ export default async function RootLayout({
   params: Promise<{ lang: Locale['key'] }>;
 }>) {
   const { lang } = await params;
+  const dict = await getDictionary(lang);
+  
   return (
     <html lang={lang} suppressHydrationWarning>
       <body
-        className={`${ubuntuSans.variable} ${ubuntuSansMono.variable} antialiased`}
+        className={`${ubuntuSans.variable} ${ubuntuSansMono.variable} antialiased min-h-screen flex flex-col justify-between items-center`}
       >
         <Providers attribute='class' defaultTheme='system' enableSystem>
-          {children}
+          <Header dictionary={dict.header} lang={lang} />
+          <main className=''>
+            {children}
+            </main>
+          <Footer dictionary={dict.footer} lang={lang} />
         </Providers>
       </body>
     </html>
