@@ -40,7 +40,14 @@
   "signUpForm": {
     "name": "Name",
     "email": "E-mail",
+    "password": "Password",
+    "cpassword": "Confirm Password",
     "signIn": "Sign In",
-    "register": "Register"
+    "register": "Register",
+    "account": "Already have an account?  ",
+    "description": "Enter your information below to register an account",
+    "provider": "Provider Type",
+    "hcp": "Hospital/CLinic",
+    "pp": "Private Practitioner"
   }
 }

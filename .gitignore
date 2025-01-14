@@ -25,6 +25,7 @@
 *.pem
 .vscode/
 todo
+/prisma/migrations/*
 
 # debug
 npm-debug.log*

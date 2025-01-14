@@ -1,6 +1,7 @@
 import { Locale } from '@/i18n-config';
 
 import { getDictionary } from '@/lib/dictionaries';
+import RegisterForm from './register-form';
 
 export default async function SignUpPage({
   params,
@@ -12,7 +13,7 @@ export default async function SignUpPage({
 
   return (
     <div className='h-full w-full max-w-sm flex flex-col justify-center items-center p-6 md:p-10'>
-      <RegisterForm dictionary={dictionary.signInForm} lang={lang} />
+      <RegisterForm dictionary={dictionary.signUpForm} lang={lang} />
     </div>
   );
 }
