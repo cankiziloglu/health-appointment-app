@@ -1,6 +1,4 @@
-import React from 'react';
-import { Header } from '../../header';
-import { getDictionary } from '@/lib/dictionaries';
+
 import { Locale } from '@/i18n-config';
 
 export default async function AboutPage({
@@ -8,12 +6,11 @@ export default async function AboutPage({
 }: {
   params: Promise<{ lang: Locale['key'] }>;
 }) {
-  const { lang } = await params;
-  const dict = await getDictionary(lang);
+  const { lang } = await params
+
   return (
-    <div>
-      <Header dictionary={dict.header} />
-      <main></main>
-    </div>
+    <main>
+      About this app
+      </main>
   );
 }

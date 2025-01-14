@@ -10,9 +10,9 @@ export default {
   ],
   theme: {
     extend: {
-      fonts: {
-        sans: '--var-font-ubuntu-sans',
-        mono: '--var-font-ubuntu-mono',
+      fontFamily: {
+        sans: 'var(--font-ubuntu-sans)',
+        mono: 'var(--font-ubuntu-mono)',
       },
       colors: {
         background: 'hsl(var(--background))',

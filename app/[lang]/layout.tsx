@@ -32,7 +32,7 @@ export default async function RootLayout({
 }>) {
   const { lang } = await params;
   const dict = await getDictionary(lang);
-  
+
   return (
     <html lang={lang} suppressHydrationWarning>
       <body
@@ -40,9 +40,7 @@ export default async function RootLayout({
       >
         <Providers attribute='class' defaultTheme='system' enableSystem>
           <Header dictionary={dict.header} lang={lang} />
-          <main className=''>
-            {children}
-            </main>
+          <main className='font-sans'>{children}</main>
           <Footer dictionary={dict.footer} lang={lang} />
         </Providers>
       </body>
