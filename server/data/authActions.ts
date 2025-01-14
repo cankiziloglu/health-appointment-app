@@ -9,6 +9,8 @@ import {
   RegisterSchemaType,
 } from '@/lib/schemas';
 import { AuthError } from 'next-auth';
+import { db } from '@/prisma/prisma';
+import * as bcrypt from 'bcrypt';
 
 export async function signInAction(payload: SignInSchemaType) {
   const result = signInSchema.safeParse(payload);
@@ -37,13 +39,26 @@ export async function registerAction(payload: RegisterSchemaType) {
   }
 
   if (result.success) {
-    try {
-      console.log(result.data);
-    } catch (error) {
-      if (error instanceof AuthError) {
-        return { error: 'Authentication error!' };
-      }
-      throw error;
+    const { name, email, password, role } = result.data;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const existingUser = await db.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+    if (existingUser) {
+      return { error: 'Email is already in use' };
     }
+    await db.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+        role,
+      },
+    });
+
+    // TODO: send verification email
+    return { success: 'User created!' };
   }
 }

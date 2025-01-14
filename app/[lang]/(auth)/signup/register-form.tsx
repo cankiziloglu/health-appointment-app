@@ -44,8 +44,13 @@ export default function RegisterForm({
   });
 
   const onSubmit: SubmitHandler<RegisterSchemaType> = async (data) => {
-    console.log(data);
     const submitted = await registerAction(data);
+    if (submitted?.error) {
+      setError('root', {
+        type: 'custom',
+        message: submitted.error,
+      });
+    }
     if (submitted?.errors) {
       setError('root', {
         type: 'custom',
