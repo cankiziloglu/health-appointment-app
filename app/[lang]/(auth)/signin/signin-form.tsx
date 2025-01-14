@@ -41,23 +41,30 @@ export default function SignInForm({
   });
 
   const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
-    console.log(data);
     const submitted = await signInAction(data);
+    if (submitted?.error) {
+      setError('root', {
+        type: 'custom',
+        message: submitted.error,
+      });
+    }
     if (submitted?.errors) {
-        setError('root', {
-          type: 'custom',
-          message: submitted.errors.formErrors[0] || 'Server returned an error, please try again',
-        })
+      setError('root', {
+        type: 'custom',
+        message:
+          submitted.errors.formErrors[0] ||
+          'Server returned an error, please try again',
+      });
       setError('email', {
         type: 'custom',
         message: submitted.errors.fieldErrors.email?.[0] || 'Invalid email',
       });
       setError('password', {
         type: 'custom',
-        message: submitted.errors.fieldErrors.password?.[0] || 'Invalid password',
+        message:
+          submitted.errors.fieldErrors.password?.[0] || 'Invalid password',
       });
     }
-
   };
 
   return (

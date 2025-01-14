@@ -1,4 +1,5 @@
-// import { auth } from "@/auth"
+import authConfig from '@/auth.config';
+import NextAuth from 'next-auth';
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
@@ -6,9 +7,10 @@ import type { NextRequest } from 'next/server';
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
+const { auth } = NextAuth(authConfig);
+
 const locales = ['en', 'tr'];
 function getLocale(request: NextRequest): string | undefined {
-  
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
@@ -23,8 +25,14 @@ function getLocale(request: NextRequest): string | undefined {
   return locale;
 }
 
-export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+export default auth((request) => {
+  let pathname = request.nextUrl.pathname;
+
+  const isLoggedIn = !!request.auth;
+
+  if (pathname.includes('dashboard') && !isLoggedIn) {
+    pathname = '/signin';
+  }
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = locales.every(
@@ -44,7 +52,7 @@ export function middleware(request: NextRequest) {
       )
     );
   }
-}
+});
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`

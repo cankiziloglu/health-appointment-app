@@ -9,8 +9,7 @@ import {
   RegisterSchemaType,
 } from '@/lib/schemas';
 import { AuthError } from 'next-auth';
-import { db } from '@/prisma/prisma';
-import * as bcrypt from 'bcrypt';
+import { createUser, getUserByEmail } from './user';
 
 export async function signInAction(payload: SignInSchemaType) {
   const result = signInSchema.safeParse(payload);
@@ -21,10 +20,18 @@ export async function signInAction(payload: SignInSchemaType) {
 
   if (result.success) {
     try {
-      await signIn('credentials', result.data);
+      const { email, password } = result.data;
+      const user = signIn('credentials', { email, password, redirectTo: '/dashboard' });
+      console.log(user)
     } catch (error) {
       if (error instanceof AuthError) {
-        return { error: 'Authentication error!' };
+        console.log(error);
+        switch (error.type) {
+          case 'CredentialsSignin':
+            return { error: 'Invalid credentials' };
+          default:
+            return { error: 'Something went wrong' };
+        }
       }
       throw error;
     }
@@ -39,26 +46,13 @@ export async function registerAction(payload: RegisterSchemaType) {
   }
 
   if (result.success) {
-    const { name, email, password, role } = result.data;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const existingUser = await db.user.findUnique({
-      where: {
-        email: email,
-      },
-    });
+    const existingUser = await getUserByEmail(result.data.email);
     if (existingUser) {
       return { error: 'Email is already in use' };
     }
-    await db.user.create({
-      data: {
-        name,
-        email,
-        password: hashedPassword,
-        role,
-      },
-    });
+    const created = await createUser(result.data);
 
     // TODO: send verification email
-    return { success: 'User created!' };
+    return created;
   }
 }
