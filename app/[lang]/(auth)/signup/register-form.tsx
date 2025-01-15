@@ -89,9 +89,9 @@ export default function RegisterForm({
 
   return (
     <div className='flex flex-col gap-6'>
-      <Card>
+      <Card className='w-[380px]'>
         <CardHeader>
-          <CardTitle className='text-2xl'>{dictionary.signIn}</CardTitle>
+          <CardTitle className='text-2xl'>{dictionary.register}</CardTitle>
           <CardDescription>{dictionary.description}</CardDescription>
         </CardHeader>
         <CardContent>
@@ -133,8 +133,8 @@ export default function RegisterForm({
                   </span>
                 )}
               </div>
-              <div className='grid gap-2'>
-                <RadioGroup defaultValue='PP' {...register('role')}>
+              <div className='py-4'>
+                <RadioGroup defaultValue='PP' {...register('role')} className='flex flex-col gap-4'>
                   <div className='flex items-center space-x-2'>
                     <RadioGroupItem value='PP' />
                     <Label htmlFor='PP'>{dictionary.pp}</Label>

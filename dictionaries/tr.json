@@ -1,10 +1,10 @@
 {
   "header": {
-    "about": "Hakkimizda",
-    "title": "Healthcare Appointment",
-    "dashboard": "Dashboard",
-    "signout": "Sign Out",
-    "signin": "Sign In"
+    "about": "Hakkımızda",
+    "title": "Hastane / Doktor Randevusu",
+    "dashboard": "Hesap",
+    "signout": "Çıkış Yap",
+    "signin": "Giriş Yap"
   },
   "HomePage": {
     "title": "Sağlık Hizmetlerine Kolay Erişim",
@@ -28,29 +28,29 @@
     ]
   },
   "footer": {
-    "signin": "Healthcare Provider Sign In",
+    "signin": "Hastane / Doktor Girişi",
     "github": "GitHub Repo"
   },
   "signInForm": {
-    "password": "Password",
-    "email": "E-mail",
-    "signIn": "Sign In",
-    "account": "Don't have an account?  ",
-    "forgot": "Forgot password?",
-    "register": "Register",
-    "description": "Enter your email and password below to login to your account"
+    "password": "Şifre",
+    "email": "E-posta",
+    "signIn": "Giriş",
+    "account": "Hesabınız yok mu?  ",
+    "forgot": "Şifremi unuttum",
+    "register": "Kaydol",
+    "description": "E-posta ve şifrenizi girerek hesabınıza giriş yapın"
   },
   "signUpForm": {
-    "name": "Name",
-    "email": "E-mail",
-    "password": "Password",
-    "cpassword": "Confirm Password",
-    "signIn": "Sign In",
-    "register": "Register",
-    "account": "Already have an account?  ",
-    "description": "Enter your information below to register an account",
-    "provider": "Provider Type",
-    "hcp": "Hospital/CLinic",
-    "pp": "Private Practitioner"
+    "name": "Ad Soyad",
+    "email": "E-posta",
+    "password": "Şifre",
+    "cpassword": "Şifre doğrula",
+    "signIn": "Giriş",
+    "register": "Kaydol",
+    "account": "Zaten hesabınız var mı?  ",
+    "description": "Bilgilerinizi girerek bir hesap oluşturun",
+    "provider": "Hizmet Türü",
+    "hcp": "Hastane / Klinik",
+    "pp": "Özel Doktor"
   }
 }

@@ -29,7 +29,7 @@ export default function LocaleSwitcher() {
           <span className='text-xl'>{lang?.flag}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className='text-sm font-mono font-medium'>
         {i18n.locales.map((locale) => (
           <DropdownMenuItem key={locale.key} asChild>
             <Link href={redirectedPathname(locale.key)}>

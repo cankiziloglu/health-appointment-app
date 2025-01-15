@@ -28,10 +28,20 @@ export default async function middleware(request: NextRequest) {
   const cookie = (await cookies()).get('session')?.value;
   const session = await decrypt(cookie);
 
-  const isSignedIn = (session && 'error' in session) || !session ? false : true;
-
+  const isSignedIn = !!session;
+  // If user is not signed in replace dashboard in pathname with signin
   if (pathname.includes('dashboard') && !isSignedIn) {
-    pathname = '/signin';
+    const segments = pathname.split('/');
+    const idx = segments.findIndex((segment) => segment === 'dashboard');
+    segments[ idx ] = 'signin';
+    segments.splice(idx + 1);
+    pathname = segments.join('/');
+    return NextResponse.redirect(
+      new URL(
+        `${pathname.startsWith('/') ? '' : '/'}${pathname}`,
+        request.url
+      )
+    );
   }
 
   // Check if there is any supported locale in the pathname

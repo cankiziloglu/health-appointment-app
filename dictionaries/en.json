@@ -50,7 +50,7 @@
     "account": "Already have an account?  ",
     "description": "Enter your information below to register an account",
     "provider": "Provider Type",
-    "hcp": "Hospital/Clinic",
+    "hcp": "Hospital / Clinic",
     "pp": "Private Practitioner"
   }
 }

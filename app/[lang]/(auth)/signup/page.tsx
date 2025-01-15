@@ -12,7 +12,7 @@ export default async function SignUpPage({
   const dictionary = await getDictionary(lang);
 
   return (
-    <div className='h-full w-full max-w-sm flex flex-col justify-center items-center p-6 md:p-10'>
+    <div className='h-full w-full max-w-md flex flex-col justify-center items-center p-6 md:p-10'>
       <RegisterForm dictionary={dictionary.signUpForm} lang={lang} />
     </div>
   );

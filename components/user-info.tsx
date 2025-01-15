@@ -39,13 +39,13 @@ export default function UserInfo({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className='size-10 p-2'>
-          <AvatarImage src={image} className='rounded-full'/>
+          <AvatarImage src={image} className='rounded-full' />
           <AvatarFallback>
             <CircleUser />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className='text-sm font-mono font-medium'>
         <DropdownMenuItem asChild>
           <Link href={`/${lang}/dashboard`}>{dictionary.dashboard}</Link>
         </DropdownMenuItem>

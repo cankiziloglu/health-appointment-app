@@ -77,7 +77,7 @@ export default function SignInForm({
 
   return (
     <div className='flex flex-col gap-6'>
-      <Card>
+      <Card className='w-[380px]'>
         <CardHeader>
           <CardTitle className='text-2xl'>{dictionary.signIn}</CardTitle>
           <CardDescription>{dictionary.description}</CardDescription>
@@ -95,21 +95,19 @@ export default function SignInForm({
                 )}
               </div>
               <div className='grid gap-2'>
-                <div className='flex items-center'>
-                  <Label htmlFor='password'>{dictionary.password}</Label>
-                  <Link
-                    href='#' // TODO: forgot password logic and link
-                    className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
-                  >
-                    {dictionary.forgot}
-                  </Link>
-                </div>
+                <Label htmlFor='password'>{dictionary.password}</Label>
                 <Input {...register('password')} type='password' />
                 {errors.password && (
                   <span className='text-sm font-medium text-destructive'>
                     {errors.password.message}
                   </span>
                 )}
+                <Link
+                  href='#' // TODO: forgot password logic and link
+                  className='ml-auto inline-block text-sm underline-offset-4 hover:underline'
+                >
+                  {dictionary.forgot}
+                </Link>
               </div>
               {errors.root && (
                 <div className='rounded-xl w-full bg-destructive/20 text-destructive p-2 text-sm font-medium'>
