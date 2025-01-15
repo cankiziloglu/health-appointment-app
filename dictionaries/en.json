@@ -1,7 +1,10 @@
 {
   "header": {
     "about": "About",
-    "title": "Healthcare Appointment"
+    "title": "Healthcare Appointment",
+    "dashboard": "Dashboard",
+    "signout": "Sign Out",
+    "signin": "Sign In"
   },
   "HomePage": {
     "title": "Easy Access to Healthcare Services",

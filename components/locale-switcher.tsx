@@ -25,11 +25,13 @@ export default function LocaleSwitcher() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='icon'><span className='text-xl'>{lang?.flag}</span></Button>
+        <Button variant='ghost' size='icon'>
+          <span className='text-xl'>{lang?.flag}</span>
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         {i18n.locales.map((locale) => (
-          <DropdownMenuItem key={locale.key}>
+          <DropdownMenuItem key={locale.key} asChild>
             <Link href={redirectedPathname(locale.key)}>
               {locale.flag} {locale.value}
             </Link>

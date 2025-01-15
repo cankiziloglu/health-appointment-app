@@ -19,6 +19,8 @@ import Link from 'next/link';
 import { Locale } from '@/i18n-config';
 import { registerAction } from '@/server/data/authActions';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { useRouter } from 'next/navigation';
+import { LoaderCircle } from 'lucide-react';
 
 export default function RegisterForm({
   dictionary,
@@ -31,7 +33,8 @@ export default function RegisterForm({
     register,
     handleSubmit,
     setError,
-    formState: { errors, isLoading },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -43,14 +46,16 @@ export default function RegisterForm({
     },
   });
 
+  const router = useRouter();
+
   const onSubmit: SubmitHandler<RegisterSchemaType> = async (data) => {
     const submitted = await registerAction(data);
     if (submitted && 'errors' in submitted) {
       setError('root', {
         type: 'custom',
         message:
-        submitted.errors?.formErrors[0] ||
-        'Server returned an error, please try again',
+          submitted.errors?.formErrors[0] ||
+          'Server returned an error, please try again',
       });
       setError('email', {
         type: 'custom',
@@ -59,7 +64,7 @@ export default function RegisterForm({
       setError('password', {
         type: 'custom',
         message:
-        submitted.errors?.fieldErrors.password?.[0] || 'Invalid password',
+          submitted.errors?.fieldErrors.password?.[0] || 'Invalid password',
       });
       setError('name', {
         type: 'custom',
@@ -76,6 +81,10 @@ export default function RegisterForm({
         message: submitted.error,
       });
     }
+    if (submitted?.success) {
+      reset();
+      router.push(`/${lang}/dashboard`);
+    }
   };
 
   return (
@@ -90,7 +99,7 @@ export default function RegisterForm({
             <div className='flex flex-col gap-6'>
               <div className='grid gap-2'>
                 <Label htmlFor='name'>{dictionary.name}</Label>
-                <Input {...register('name')} type='text' id='name' />
+                <Input {...register('name')} type='text' />
                 {errors.name && (
                   <span className='text-sm font-medium text-destructive'>
                     {errors.name.message}
@@ -99,7 +108,7 @@ export default function RegisterForm({
               </div>
               <div className='grid gap-2'>
                 <Label htmlFor='email'>{dictionary.email}</Label>
-                <Input {...register('email')} type='email' id='email' />
+                <Input {...register('email')} type='email' />
                 {errors.email && (
                   <span className='text-sm font-medium text-destructive'>
                     {errors.email.message}
@@ -108,11 +117,7 @@ export default function RegisterForm({
               </div>
               <div className='grid gap-2'>
                 <Label htmlFor='password'>{dictionary.password}</Label>
-                <Input
-                  {...register('password')}
-                  type='password'
-                  id='password'
-                />
+                <Input {...register('password')} type='password' />
                 {errors.password && (
                   <span className='text-sm font-medium text-destructive'>
                     {errors.password.message}
@@ -121,11 +126,7 @@ export default function RegisterForm({
               </div>
               <div className='grid gap-2'>
                 <Label htmlFor='cpassword'>{dictionary.cpassword}</Label>
-                <Input
-                  {...register('cpassword')}
-                  type='password'
-                  id='cpassword'
-                />
+                <Input {...register('cpassword')} type='password' />
                 {errors.cpassword && (
                   <span className='text-sm font-medium text-destructive'>
                     {errors.cpassword.message}
@@ -135,11 +136,11 @@ export default function RegisterForm({
               <div className='grid gap-2'>
                 <RadioGroup defaultValue='PP' {...register('role')}>
                   <div className='flex items-center space-x-2'>
-                    <RadioGroupItem value='PP' id='PP' />
+                    <RadioGroupItem value='PP' />
                     <Label htmlFor='PP'>{dictionary.pp}</Label>
                   </div>
                   <div className='flex items-center space-x-2'>
-                    <RadioGroupItem value='HCP' id='HCP' />
+                    <RadioGroupItem value='HCP' />
                     <Label htmlFor='HCP'>{dictionary.hcp}</Label>
                   </div>
                 </RadioGroup>
@@ -149,7 +150,8 @@ export default function RegisterForm({
                   {errors.root.message}
                 </div>
               )}
-              <Button type='submit' className='w-full' disabled={isLoading}>
+              <Button type='submit' className='w-full' disabled={isSubmitting}>
+                {isSubmitting && <LoaderCircle className='animate-spin' />}
                 {dictionary.register}
               </Button>
             </div>

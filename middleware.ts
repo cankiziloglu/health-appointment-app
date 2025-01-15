@@ -1,9 +1,10 @@
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
+import { cookies } from 'next/headers';
+import { decrypt } from './server/data/authActions';
 
 const locales = ['en', 'tr'];
 function getLocale(request: NextRequest): string | undefined {
@@ -21,15 +22,17 @@ function getLocale(request: NextRequest): string | undefined {
   return locale;
 }
 
-export default function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+export default async function middleware(request: NextRequest) {
+  let pathname = request.nextUrl.pathname;
 
-  // const isLoggedIn = !!request.auth;
+  const cookie = (await cookies()).get('session')?.value;
+  const session = await decrypt(cookie);
 
-  // if (pathname.includes('dashboard') && !isLoggedIn) {
-  //   pathname = '/signin';
-  // }
-  // TODO: Authentication check
+  const isSignedIn = (session && 'error' in session) || !session ? false : true;
+
+  if (pathname.includes('dashboard') && !isSignedIn) {
+    pathname = '/signin';
+  }
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = locales.every(
@@ -49,7 +52,7 @@ export default function middleware(request: NextRequest) {
       )
     );
   }
-};
+}
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`

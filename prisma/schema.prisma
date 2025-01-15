@@ -15,13 +15,155 @@ model User {
   image         String?
   password      String?
   role          Role
-
+  provider      HealthcareProvider? @relation(fields: [provider_id], references: [id])
+  provider_id   String?
+  doctor        Doctor?     @relation(fields: [doctor_id], references: [id])
+  doctor_id     String?     @unique
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model HealthcareProvider {
+  id            String      @id @default(cuid())
+  name          String
+  email         String      @unique
+  phone         String
+  logo_url      String?
+  website       String?
+  is_verified   Boolean     @default(false)
+  doctors       Doctor[]
+  locations     Location[]
+  users         User[]
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+}
+
+model Doctor {
+  id            String      @id @default(cuid())
+  provider      HealthcareProvider @relation(fields: [provider_id], references: [id])
+  provider_id   String
+  medical_unit  MedicalUnit @relation(fields: [medical_unit_id], references: [id])
+  medical_unit_id String
+  location      Location    @relation(fields: [location_id], references: [id])
+  location_id   String
+  first_name    String
+  last_name     String
+  title         String?
+  email         String      @unique
+  phone         String
+  photo_url     String?
+  bio           String?     @db.Text
+  is_active     Boolean     @default(true)
+  time_slots    TimeSlot[]
+  user          User?
+  created_at    DateTime    @default(now())
+  updated_at    DateTime    @updatedAt
+
+  @@index([provider_id])
+  @@index([medical_unit_id])
+  @@index([location_id])
+  @@index([email])
+}
+
+model MedicalUnit {
+  id             String    @id @default(cuid())
+  name_tr        String    @unique
+  name_en        String    @unique
+  description_tr String?   @db.Text
+  description_en String?   @db.Text
+  doctors        Doctor[]
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  @@index([name_tr, name_en])
+}
+
+model TimeSlot {
+  id          String        @id @default(cuid())
+  doctor      Doctor        @relation(fields: [doctor_id], references: [id])
+  doctor_id   String
+  start_time  DateTime
+  end_time    DateTime
+  status      TimeSlotStatus @default(AVAILABLE)
+  appointment Appointment?
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+
+  @@index([doctor_id, start_time, status])
+  @@index([start_time])
+}
+
+model Appointment {
+  id           String           @id @default(cuid())
+  time_slot    TimeSlot        @relation(fields: [time_slot_id], references: [id])
+  time_slot_id String          @unique
+  patient      Patient         @relation(fields: [patient_id], references: [id])
+  patient_id   String
+  status       AppointmentStatus @default(CONFIRMED)
+  notes        String?         @db.Text
+  created_at   DateTime        @default(now())
+  updated_at   DateTime        @updatedAt
+
+  @@index([patient_id])
+  @@index([time_slot_id])
+}
+
+model Patient {
+  id          String        @id @default(cuid())
+  first_name  String
+  last_name   String
+  email       String
+  phone       String        @unique
+  appointments Appointment[]
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+
+  @@index([email, phone])
+}
+
+model Location {
+  id            String    @id @default(cuid())
+  provider      HealthcareProvider? @relation(fields: [provider_id], references: [id])
+  provider_id   String?
+  city          City      @relation(fields: [city_id], references: [id])
+  city_id       String
+  address       String
+  district      String
+  postal_code   String
+  latitude      Float?
+  longitude     Float?
+  doctors       Doctor[]
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  @@index([provider_id])
+  @@index([city_id])
+}
+
+model City {
+  id          String      @id @default(cuid())
+  name_tr     String      @unique
+  name_en     String      @unique
+  locations   Location[]
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  @@index([name_tr, name_en])
 }
 
 enum Role {
   ADMIN
   HCP
   PP
+}
+
+enum AppointmentStatus {
+  CONFIRMED
+  CANCELLED
+}
+
+enum TimeSlotStatus {
+  AVAILABLE
+  BOOKED
+  BLOCKED
 }

@@ -4,7 +4,6 @@ import { DictionaryType } from '@/lib/types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signInSchema, SignInSchemaType } from '@/lib/schemas';
-// import { signInAction } from '@/server/data/authActions';
 
 import {
   Card,
@@ -19,6 +18,8 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Locale } from '@/i18n-config';
 import { signInAction } from '@/server/data/authActions';
+import { useRouter } from 'next/navigation';
+import { LoaderCircle } from 'lucide-react';
 
 export default function SignInForm({
   dictionary,
@@ -31,7 +32,8 @@ export default function SignInForm({
     register,
     handleSubmit,
     setError,
-    formState: { errors, isLoading },
+    reset,
+    formState: { errors, isSubmitting },
   } = useForm<SignInSchemaType>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -39,6 +41,8 @@ export default function SignInForm({
       password: '',
     },
   });
+
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<SignInSchemaType> = async (data) => {
     const submitted = await signInAction(data);
@@ -64,6 +68,10 @@ export default function SignInForm({
         message:
           submitted.errors?.fieldErrors.password?.[0] || 'Invalid password',
       });
+    }
+    if (submitted?.success) {
+      reset();
+      router.push(`/${lang}/dashboard`);
     }
   };
 
@@ -108,7 +116,8 @@ export default function SignInForm({
                   {errors.root.message}
                 </div>
               )}
-              <Button type='submit' className='w-full' disabled={isLoading}>
+              <Button type='submit' className='w-full' disabled={isSubmitting}>
+                {isSubmitting && <LoaderCircle className='animate-spin' />}
                 {dictionary.signIn}
               </Button>
             </div>
