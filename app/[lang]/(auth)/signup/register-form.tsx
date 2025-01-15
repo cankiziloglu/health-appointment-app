@@ -45,35 +45,35 @@ export default function RegisterForm({
 
   const onSubmit: SubmitHandler<RegisterSchemaType> = async (data) => {
     const submitted = await registerAction(data);
-    if (submitted?.error) {
-      setError('root', {
-        type: 'custom',
-        message: submitted.error,
-      });
-    }
-    if (submitted?.errors) {
+    if (submitted && 'errors' in submitted) {
       setError('root', {
         type: 'custom',
         message:
-          submitted.errors.formErrors[0] ||
-          'Server returned an error, please try again',
+        submitted.errors?.formErrors[0] ||
+        'Server returned an error, please try again',
       });
       setError('email', {
         type: 'custom',
-        message: submitted.errors.fieldErrors.email?.[0] || 'Invalid email',
+        message: submitted.errors?.fieldErrors.email?.[0] || 'Invalid email',
       });
       setError('password', {
         type: 'custom',
         message:
-          submitted.errors.fieldErrors.password?.[0] || 'Invalid password',
+        submitted.errors?.fieldErrors.password?.[0] || 'Invalid password',
       });
       setError('name', {
         type: 'custom',
-        message: submitted.errors.fieldErrors.name?.[0] || 'Invalid name',
+        message: submitted.errors?.fieldErrors.name?.[0] || 'Invalid name',
       });
       setError('role', {
         type: 'custom',
-        message: submitted.errors.fieldErrors.role?.[0] || 'Invalid role',
+        message: submitted.errors?.fieldErrors.role?.[0] || 'Invalid role',
+      });
+    }
+    if (submitted && 'error' in submitted) {
+      setError('root', {
+        type: 'custom',
+        message: submitted.error,
       });
     }
   };

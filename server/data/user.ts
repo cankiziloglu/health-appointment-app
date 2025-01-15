@@ -24,7 +24,7 @@ export async function createUser(data: RegisterSchemaType) {
   const { name, email, password, role } = data;
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
-    const user = await db.user.create({
+    await db.user.create({
       data: {
         name,
         email,

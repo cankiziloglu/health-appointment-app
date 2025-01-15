@@ -1,13 +1,9 @@
-import authConfig from '@/auth.config';
-import NextAuth from 'next-auth';
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
-
-const { auth } = NextAuth(authConfig);
 
 const locales = ['en', 'tr'];
 function getLocale(request: NextRequest): string | undefined {
@@ -25,14 +21,15 @@ function getLocale(request: NextRequest): string | undefined {
   return locale;
 }
 
-export default auth((request) => {
-  let pathname = request.nextUrl.pathname;
+export default function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
 
-  const isLoggedIn = !!request.auth;
+  // const isLoggedIn = !!request.auth;
 
-  if (pathname.includes('dashboard') && !isLoggedIn) {
-    pathname = '/signin';
-  }
+  // if (pathname.includes('dashboard') && !isLoggedIn) {
+  //   pathname = '/signin';
+  // }
+  // TODO: Authentication check
 
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = locales.every(
@@ -52,7 +49,7 @@ export default auth((request) => {
       )
     );
   }
-});
+};
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`

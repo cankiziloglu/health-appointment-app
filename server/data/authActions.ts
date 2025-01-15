@@ -1,16 +1,18 @@
 'use server';
 import 'server-only';
 
-import { signIn } from '@/auth';
 import {
   signInSchema,
   SignInSchemaType,
   registerSchema,
   RegisterSchemaType,
 } from '@/lib/schemas';
-import { AuthError } from 'next-auth';
 import { createUser, getUserByEmail } from './user';
+import * as bcrypt from 'bcryptjs';
+import * as jose from 'jose'
+import { Role } from '@prisma/client';
 
+// TODO: Pass lang to server actions for redirection
 export async function signInAction(payload: SignInSchemaType) {
   const result = signInSchema.safeParse(payload);
 
@@ -21,19 +23,15 @@ export async function signInAction(payload: SignInSchemaType) {
   if (result.success) {
     try {
       const { email, password } = result.data;
-      const user = signIn('credentials', { email, password, redirectTo: '/dashboard' });
-      console.log(user)
+      const user = await getUserByEmail(email);
+      if (!user || !user.password) return null;
+      const pwMatch = await bcrypt.compare(password, user.password);
+      if (!pwMatch) return null; // TODO: return values
+      console.log(user);
+      return user;
     } catch (error) {
-      if (error instanceof AuthError) {
-        console.log(error);
-        switch (error.type) {
-          case 'CredentialsSignin':
-            return { error: 'Invalid credentials' };
-          default:
-            return { error: 'Something went wrong' };
-        }
-      }
-      throw error;
+      console.error(error);
+      return { error: 'Invalid credentials' };
     }
   }
 }
@@ -55,4 +53,8 @@ export async function registerAction(payload: RegisterSchemaType) {
     // TODO: send verification email
     return created;
   }
+}
+
+async function createSession(userId: string, role: Role) {
+  
 }
