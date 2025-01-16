@@ -7,7 +7,7 @@ import {
   registerSchema,
   RegisterSchemaType,
 } from '@/lib/schemas';
-import { createUser, getUserByEmail } from './user';
+import { createUser, getUserByEmail } from '../data/user';
 import * as bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
 import { Role } from '@prisma/client';

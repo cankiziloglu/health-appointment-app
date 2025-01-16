@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Locale } from '@/i18n-config';
-import { registerAction } from '@/server/data/authActions';
+import { registerAction } from '@/server/actions/authActions';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useRouter } from 'next/navigation';
 import { LoaderCircle } from 'lucide-react';
@@ -134,7 +134,11 @@ export default function RegisterForm({
                 )}
               </div>
               <div className='py-4'>
-                <RadioGroup defaultValue='PP' {...register('role')} className='flex flex-col gap-4'>
+                <RadioGroup
+                  defaultValue='PP'
+                  {...register('role')}
+                  className='flex flex-col gap-4'
+                >
                   <div className='flex items-center space-x-2'>
                     <RadioGroupItem value='PP' />
                     <Label htmlFor='PP'>{dictionary.pp}</Label>

@@ -12,7 +12,7 @@ import { CircleUser } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DictionaryType } from '@/lib/types';
 import { Locale } from '@/i18n-config';
-import { signOutAction } from '@/server/data/authActions';
+import { signOutAction } from '@/server/actions/authActions';
 import { useRouter } from 'next/navigation';
 
 export default function UserInfo({

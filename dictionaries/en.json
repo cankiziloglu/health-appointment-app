@@ -52,5 +52,15 @@
     "provider": "Provider Type",
     "hcp": "Hospital / Clinic",
     "pp": "Private Practitioner"
+  },
+  "Dashboard": {
+    "account": "Account Details",
+    "description": "View and Update your account details",
+    "name": "Name",
+    "email": "E-mail",
+    "password": "Password",
+    "cpassword": "Confirm Password",
+    save: "Save",
+    
   }
 }

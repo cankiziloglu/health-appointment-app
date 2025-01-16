@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Locale } from '@/i18n-config';
-import { signInAction } from '@/server/data/authActions';
+import { signInAction } from '@/server/actions/authActions';
 import { useRouter } from 'next/navigation';
 import { LoaderCircle } from 'lucide-react';
 

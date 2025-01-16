@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 import { cookies } from 'next/headers';
-import { decrypt } from './server/data/authActions';
+import { decrypt } from './server/actions/authActions';
 
 const locales = ['en', 'tr'];
 function getLocale(request: NextRequest): string | undefined {
@@ -33,14 +33,11 @@ export default async function middleware(request: NextRequest) {
   if (pathname.includes('dashboard') && !isSignedIn) {
     const segments = pathname.split('/');
     const idx = segments.findIndex((segment) => segment === 'dashboard');
-    segments[ idx ] = 'signin';
+    segments[idx] = 'signin';
     segments.splice(idx + 1);
     pathname = segments.join('/');
     return NextResponse.redirect(
-      new URL(
-        `${pathname.startsWith('/') ? '' : '/'}${pathname}`,
-        request.url
-      )
+      new URL(`${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
     );
   }
 

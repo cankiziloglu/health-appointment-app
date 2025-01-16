@@ -6,7 +6,7 @@ import { Locale } from '@/i18n-config';
 import UserInfo from '@/components/user-info';
 import { DictionaryType } from '@/lib/types';
 import { cookies } from 'next/headers';
-import { decrypt } from '@/server/data/authActions';
+import { decrypt } from '@/server/actions/authActions';
 import { getUserById } from '@/server/data/user';
 
 export async function Header({

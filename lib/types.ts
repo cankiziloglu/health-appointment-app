@@ -9,3 +9,4 @@ export type SessionData = {
   emailVerified: boolean;
   expiresAt?: Date
 };
+
