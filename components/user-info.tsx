@@ -38,7 +38,7 @@ export default function UserInfo({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className='size-10 p-2'>
+        <Avatar className='size-10 p-2 cursor-pointer hover:text-muted-foreground'>
           <AvatarImage src={image} className='rounded-full' />
           <AvatarFallback>
             <CircleUser />
