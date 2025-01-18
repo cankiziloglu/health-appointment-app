@@ -52,5 +52,16 @@
     "provider": "Hizmet Türü",
     "hcp": "Hastane / Klinik",
     "pp": "Özel Doktor"
+  },
+  "Dashboard": {
+    "account": "Account Details",
+    "description": "View and Update your account details",
+    "name": "Name",
+    "email": "E-mail",
+    "password": "Password",
+    "cpassword": "Confirm Password",
+    "save": "Save",
+    "edit": "Edit details",
+    "change": "Change Password"
   }
 }

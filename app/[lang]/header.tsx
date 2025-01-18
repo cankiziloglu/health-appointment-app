@@ -5,9 +5,8 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { Locale } from '@/i18n-config';
 import UserInfo from '@/components/user-info';
 import { DictionaryType } from '@/lib/types';
-import { cookies } from 'next/headers';
-import { decrypt } from '@/server/actions/authActions';
 import { getUserById } from '@/server/data/user';
+import { auth } from '@/server/data/auth';
 
 export async function Header({
   dictionary,
@@ -16,8 +15,7 @@ export async function Header({
   dictionary: DictionaryType['header'];
   lang: Locale['key'];
 }) {
-  const cookie = (await cookies()).get('session')?.value;
-  const session = await decrypt(cookie);
+  const session = await auth();
   const isSignedIn = !!session;
 
   const user = await getUserById(

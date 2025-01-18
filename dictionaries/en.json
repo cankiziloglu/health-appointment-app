@@ -60,7 +60,8 @@
     "email": "E-mail",
     "password": "Password",
     "cpassword": "Confirm Password",
-    save: "Save",
-    
+    "save": "Save",
+    "edit": "Edit details",
+    "change": "Change Password"
   }
 }

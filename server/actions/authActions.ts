@@ -9,13 +9,9 @@ import {
 } from '@/lib/schemas';
 import { createUser, getUserByEmail } from '../data/user';
 import * as bcrypt from 'bcryptjs';
-import { SignJWT, jwtVerify } from 'jose';
 import { Role } from '@prisma/client';
-import { SessionData } from '@/lib/types';
 import { cookies } from 'next/headers';
-
-const secretKey = process.env.AUTH_SECRET;
-const encodedKey = new TextEncoder().encode(secretKey);
+import { encrypt } from '../data/auth';
 
 export async function signInAction(payload: SignInSchemaType) {
   const result = signInSchema.safeParse(payload);
@@ -78,28 +74,6 @@ export async function registerAction(payload: RegisterSchemaType) {
       }
     }
     // TODO: send verification email
-  }
-}
-
-async function encrypt(sessionData: SessionData) {
-  return new SignJWT(sessionData)
-    .setProtectedHeader({ alg: 'HS256' })
-    .setIssuedAt()
-    .setExpirationTime('7d')
-    .sign(encodedKey);
-}
-
-export async function decrypt(session: string | undefined = '') {
-  try {
-    if (session) {
-      const sessionData = await jwtVerify(session, encodedKey, {
-        algorithms: ['HS256'],
-      });
-      return sessionData;
-    } else return null;
-  } catch (error) {
-    console.error(error);
-    return null;
   }
 }
 

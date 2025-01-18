@@ -1,8 +1,9 @@
-import { Locale } from '@/i18n-config';
+'use client';
+
 import { DictionaryType } from '@/lib/types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema, RegisterSchemaType } from '@/lib/schemas';
+import { updateUserSchema, updateUserSchemaType } from '@/lib/schemas';
 
 import {
   Card,
@@ -14,36 +15,35 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { registerAction } from '@/server/actions/authActions';
 import { LoaderCircle } from 'lucide-react';
+import { User } from '@prisma/client';
+import { updateUserAction } from '@/server/actions/userActions';
+import { revalidatePath } from 'next/cache';
 
 export default function UserDetails({
   dictionary,
-  lang,
+  user,
 }: {
-  dictionary: DictionaryType['header'];
-  lang: Locale['key'];
+  dictionary: DictionaryType['Dashboard'];
+  user: User;
 }) {
   const {
     register,
     handleSubmit,
     setError,
-    reset,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterSchemaType>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<updateUserSchemaType>({
+    resolver: zodResolver(updateUserSchema),
     defaultValues: {
-      name: '',
-      email: '',
+      name: user.name ?? '',
+      email: user.email,
       password: '',
       cpassword: '',
-      role: undefined,
     },
   });
 
-  const onSubmit: SubmitHandler<RegisterSchemaType> = async (data) => {
-    const submitted = await registerAction(data);
+  const onSubmit: SubmitHandler<updateUserSchemaType> = async (data) => {
+    const submitted = await updateUserAction(data);
     if (submitted && 'errors' in submitted) {
       setError('root', {
         type: 'custom',
@@ -64,10 +64,6 @@ export default function UserDetails({
         type: 'custom',
         message: submitted.errors?.fieldErrors.name?.[0] || 'Invalid name',
       });
-      setError('role', {
-        type: 'custom',
-        message: submitted.errors?.fieldErrors.role?.[0] || 'Invalid role',
-      });
     }
     if (submitted && 'error' in submitted) {
       setError('root', {
@@ -75,13 +71,13 @@ export default function UserDetails({
         message: submitted.error,
       });
     }
-    if (submitted?.success) {
-      reset();
+    if (submitted && 'name' in submitted) {
+      revalidatePath('/dashboard');
     }
   };
 
   return (
-    <Card className='w-[380px]'>
+    <Card className='w-[360px]'>
       <CardHeader>
         <CardTitle className='text-2xl'>{dictionary.account}</CardTitle>
         <CardDescription>{dictionary.description}</CardDescription>
@@ -106,6 +102,14 @@ export default function UserDetails({
                   {errors.email.message}
                 </span>
               )}
+            </div>
+            <div className='flex gap-4'>
+              <Button type='button' className='w-full' disabled={isSubmitting}>
+                {dictionary.edit}
+              </Button>
+              <Button type='button' className='w-full' disabled={isSubmitting}>
+                {dictionary.change}
+              </Button>
             </div>
             <div className='grid gap-2'>
               <Label htmlFor='password'>{dictionary.password}</Label>
@@ -132,7 +136,7 @@ export default function UserDetails({
             )}
             <Button type='submit' className='w-full' disabled={isSubmitting}>
               {isSubmitting && <LoaderCircle className='animate-spin' />}
-              {dictionary.register}
+              {dictionary.save}
             </Button>
           </div>
         </form>

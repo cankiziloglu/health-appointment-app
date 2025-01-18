@@ -3,8 +3,7 @@ import type { NextRequest } from 'next/server';
 
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
-import { cookies } from 'next/headers';
-import { decrypt } from './server/actions/authActions';
+import { auth } from './server/data/auth';
 
 const locales = ['en', 'tr'];
 function getLocale(request: NextRequest): string | undefined {
@@ -25,8 +24,7 @@ function getLocale(request: NextRequest): string | undefined {
 export default async function middleware(request: NextRequest) {
   let pathname = request.nextUrl.pathname;
 
-  const cookie = (await cookies()).get('session')?.value;
-  const session = await decrypt(cookie);
+  const session = await auth();
 
   const isSignedIn = !!session;
   // If user is not signed in replace dashboard in pathname with signin
