@@ -31,11 +31,16 @@ export const registerSchema = z
   });
 export type RegisterSchemaType = z.infer<typeof registerSchema>;
 
-export const updateUserSchema = z
+export const updateUserSchema = z.object({
+  userId: z.string().cuid(),
+  name: z.string().min(2, 'Must be at least 2 characters'),
+  email: z.string().email(),
+});
+export type updateUserSchemaType = z.infer<typeof updateUserSchema>;
+
+export const changePassSchema = z
   .object({
     userId: z.string().cuid(),
-    name: z.string().min(2, 'Must be at least 2 characters'),
-    email: z.string().email(),
     password: z
       .string()
       .min(6, 'Must be at least 6 characters')
@@ -49,4 +54,4 @@ export const updateUserSchema = z
     message: 'Passwords do not match',
     path: ['password'],
   });
-export type updateUserSchemaType = z.infer<typeof updateUserSchema>;
+export type changePassSchemaType = z.infer<typeof changePassSchema>;

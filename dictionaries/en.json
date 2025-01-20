@@ -62,6 +62,7 @@
     "cpassword": "Confirm Password",
     "save": "Save",
     "edit": "Edit details",
-    "change": "Change Password"
+    "change": "Change Password",
+    "cancel": "Cancel"
   }
 }

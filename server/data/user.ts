@@ -48,10 +48,7 @@ export async function updateUser(data: {
   userId: string;
   name: string;
   email: string;
-  password: string;
 }): Promise<User | null> {
-  const hashedPassword = await bcrypt.hash(data.password, 10);
-
   try {
     const user = await db.user.update({
       where: {
@@ -60,6 +57,25 @@ export async function updateUser(data: {
       data: {
         name: data.name,
         email: data.email,
+      },
+    });
+    return user;
+  } catch {
+    return null;
+  }
+}
+
+export async function changeUserPassword(data: {
+  userId: string;
+  password: string;
+}) {
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+  try {
+    const user = await db.user.update({
+      where: {
+        id: data.userId,
+      },
+      data: {
         password: hashedPassword,
       },
     });
