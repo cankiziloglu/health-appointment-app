@@ -12,7 +12,7 @@ export default async function DashboardPage({
   params: Promise<{ lang: Locale['key'] }>;
 }) {
   const { lang } = await params;
-  const dictionary = await getDictionary(lang);
+  const dictionary = (await getDictionary(lang)).Dashboard;
 
   const session = await auth();
   if (!session) return null;
@@ -23,11 +23,11 @@ export default async function DashboardPage({
 
   return (
     <div className='container mx-auto py-8'>
-      <h1 className='text-3xl font-bold mb-8'>User Dashboard</h1>
+      <h1 className='text-3xl font-bold mb-8'>{user.name}</h1>
       <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
         <div>
           <Suspense fallback={<div>Loading user details...</div>}>
-            <UserDetails dictionary={dictionary.Dashboard} user={user} />
+            <UserDetails dictionary={dictionary} user={user} />
           </Suspense>
           <Suspense fallback={<div>Loading profiles...</div>}>
             {/* <ProviderDoctorList /> */}
