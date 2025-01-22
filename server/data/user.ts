@@ -20,6 +20,26 @@ export async function getUserById(id: string | undefined) {
     where: {
       id: id,
     },
+    include: {
+      doctor: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          title: true,
+          photo_url: true,
+          is_active: true,
+        },
+      },
+      provider: {
+        select: {
+          id: true,
+          name: true,
+          logo_url: true,
+          is_verified: true,
+        },
+      },
+    },
   });
   return user;
 }

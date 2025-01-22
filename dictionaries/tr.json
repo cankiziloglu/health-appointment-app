@@ -63,6 +63,13 @@
     "save": "Save",
     "edit": "Edit details",
     "change": "Change Password",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "profiles": "Your Profiles",
+    "profile_desc": "View, create and edit the profiles you manage.",
+    "create": "Create",
+    "pp": "Private Practitioner",
+    "hcp": "Hospital / Clinic",
+    "null": "You haven't created any profile yet.",
+    "edt": "Edit"
   }
 }

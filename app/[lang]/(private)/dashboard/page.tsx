@@ -5,6 +5,7 @@ import { auth } from '@/server/data/auth';
 import { getUserById } from '@/server/data/user';
 import { SessionData } from '@/lib/types';
 import { getDictionary } from '@/lib/dictionaries';
+import ProfileList from './profile-list';
 
 export default async function DashboardPage({
   params,
@@ -22,19 +23,14 @@ export default async function DashboardPage({
   if (!user) return null;
 
   return (
-    <div className='mx-auto py-8 flex flex-col justify-center'>
-      <h1 className='text-2xl font-bold mb-8'>{user.name}</h1>
-      
-        <div>
-          <Suspense fallback={<div>Loading user details...</div>}>
-            <UserDetails dictionary={dictionary} user={user} />
-          </Suspense>
-          <Suspense fallback={<div>Loading profiles...</div>}>
-            {/* <ProviderDoctorList /> */}
-          </Suspense>
-        </div>
-        <div>{/* <NewProfileForm /> */}</div>
-      
+    <div className='mx-auto py-8 px-4 md:px-6 flex flex-col justify-center gap-6'>
+      <h1 className='text-2xl font-bold'>{user.name}</h1>
+        <Suspense fallback={<div>Loading user details...</div>}>
+          <UserDetails dictionary={dictionary} user={user} />
+        </Suspense>
+        <Suspense fallback={<div>Loading profiles...</div>}>
+          <ProfileList dictionary={dictionary} user={user} />
+        </Suspense>
     </div>
   );
 }

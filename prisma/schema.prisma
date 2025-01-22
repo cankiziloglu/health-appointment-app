@@ -53,7 +53,7 @@ model Doctor {
   phone           String
   photo_url       String?
   bio             String?            @db.Text
-  is_active       Boolean            @default(true)
+  is_active       Boolean            @default(false)
   time_slots      TimeSlot[]
   user            User?
   created_at      DateTime           @default(now())

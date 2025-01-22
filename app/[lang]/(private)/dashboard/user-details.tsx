@@ -69,7 +69,7 @@ export default function UserDetails({
     }
     const payload = { ...data, userId: user.id };
     const submitted = await updateUserAction(payload);
-    console.log(data, payload);
+    
     if (submitted && 'errors' in submitted) {
       setError('root', {
         type: 'custom',
@@ -103,7 +103,7 @@ export default function UserDetails({
 
   return (
     <>
-      <Card className='w-[360px]'>
+      <Card>
         <CardHeader>
           <CardTitle className='text-2xl'>{dictionary.account}</CardTitle>
           <CardDescription>{dictionary.description}</CardDescription>
