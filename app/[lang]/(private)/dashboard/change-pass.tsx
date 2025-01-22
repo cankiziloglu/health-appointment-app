@@ -2,51 +2,43 @@
 
 import { DictionaryType } from '@/lib/types';
 import { User } from '@prisma/client';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { changePassSchema, changePassSchemaType } from '@/lib/schemas';
+import { changePassFormSchema, changePassFormSchemaType } from '@/lib/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordAction } from '@/server/actions/userActions';
-import { revalidatePath } from 'next/cache';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export function ChangePass({
   dictionary,
   user,
-  setEditPass
 }: {
   dictionary: DictionaryType['Dashboard'];
-    user: User;
-  setEditPass: (arg0: boolean) => void
+  user: User;
 }) {
   const {
     register,
     handleSubmit,
     setError,
-    reset,
     formState: { errors, isSubmitting },
-  } = useForm<changePassSchemaType>({
-    resolver: zodResolver(changePassSchema),
+  } = useForm<changePassFormSchemaType>({
+    resolver: zodResolver(changePassFormSchema),
     defaultValues: {
       password: '',
       cpassword: '',
     },
   });
 
-  const { toast } = useToast();
+  const router = useRouter();
 
-  const onSubmit: SubmitHandler<changePassSchemaType> = async (data) => {
-    
-    const submitted = await changePasswordAction(data);
+  const onSubmit: SubmitHandler<changePassFormSchemaType> = async (data) => {
+    const payload = { ...data, userId: user.id };
+    const submitted = await changePasswordAction(payload);
     if (submitted && 'errors' in submitted) {
       setError('root', {
         type: 'custom',
@@ -67,20 +59,16 @@ export function ChangePass({
       });
     }
     if (submitted && 'success' in submitted) {
-      toast({
-        title: 'Success',
+      toast('Success', {
         description: submitted.success,
       });
-      revalidatePath('/dashboard');
+      router.refresh();
     }
-    reset();
   };
 
   return (
-    <Card className='w-[360px] mt-4'>
-      <CardHeader>
-        <CardTitle className='text-2xl'>{dictionary.change}</CardTitle>
-      </CardHeader>
+    <Card>
+      <CardHeader></CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-6'>
@@ -107,19 +95,8 @@ export function ChangePass({
                 {errors.root.message}
               </div>
             )}
-            <div className='flex gap-4'>
-              <Button
-                type='button'
-                className='w-full'
-                variant='outline'
-                disabled={isSubmitting}
-                onClick={() => {
-                  setEditPass(false);
-                }}
-              >
-                {dictionary.cancel}
-              </Button>
-              <Button type='submit' className='w-full' disabled={isSubmitting}>
+            <div className='flex justify-end'>
+              <Button type='submit' className='w-1/2' disabled={isSubmitting}>
                 {isSubmitting && <LoaderCircle className='animate-spin' />}
                 {dictionary.save}
               </Button>

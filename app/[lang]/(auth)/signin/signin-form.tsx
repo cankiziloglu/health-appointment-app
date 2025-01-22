@@ -77,7 +77,7 @@ export default function SignInForm({
 
   return (
     <div className='flex flex-col gap-6'>
-      <Card className='w-[380px]'>
+      <Card>
         <CardHeader>
           <CardTitle className='text-2xl'>{dictionary.signIn}</CardTitle>
           <CardDescription>{dictionary.description}</CardDescription>

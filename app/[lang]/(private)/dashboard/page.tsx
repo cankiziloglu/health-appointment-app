@@ -22,9 +22,9 @@ export default async function DashboardPage({
   if (!user) return null;
 
   return (
-    <div className='container mx-auto py-8'>
-      <h1 className='text-3xl font-bold mb-8'>{user.name}</h1>
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
+    <div className='mx-auto py-8 flex flex-col justify-center'>
+      <h1 className='text-2xl font-bold mb-8'>{user.name}</h1>
+      
         <div>
           <Suspense fallback={<div>Loading user details...</div>}>
             <UserDetails dictionary={dictionary} user={user} />
@@ -34,7 +34,7 @@ export default async function DashboardPage({
           </Suspense>
         </div>
         <div>{/* <NewProfileForm /> */}</div>
-      </div>
+      
     </div>
   );
 }

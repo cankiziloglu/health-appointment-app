@@ -18,7 +18,7 @@ export async function updateUserAction(data: updateUserSchemaType) {
 
   if (result.success) {
     const existingUser = await getUserByEmail(result.data.email);
-    if (existingUser) {
+    if (existingUser && existingUser.id !== result.data.userId) {
       return { error: 'Email is already in use' };
     }
     const { userId, name, email } = result.data;
@@ -30,7 +30,7 @@ export async function updateUserAction(data: updateUserSchemaType) {
     if (!updated) {
       return { error: 'Something went wrong. Try again.' };
     } else {
-      return updated;
+      return { success: 'User details changed successfully' };
     }
   }
 }

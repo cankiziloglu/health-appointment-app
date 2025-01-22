@@ -6,7 +6,7 @@ import { Locale } from '@/i18n-config';
 import { getDictionary } from '@/lib/dictionaries';
 import { Header } from './header';
 import Footer from './footer';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from 'sonner';
 
 const ubuntuSans = Ubuntu_Sans({
   variable: '--font-ubuntu-sans',
@@ -41,7 +41,7 @@ export default async function RootLayout({
       >
         <Providers attribute='class' defaultTheme='system' enableSystem>
           <Header dictionary={dict.header} lang={lang} />
-          <main className='font-sans'>{children}</main>
+          <main className='font-sans max-w-3xl mx-auto overflow-hidden'>{children}</main>
           <Footer dictionary={dict.footer} lang={lang} />
           <Toaster />
         </Providers>

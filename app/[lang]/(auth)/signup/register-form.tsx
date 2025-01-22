@@ -89,7 +89,7 @@ export default function RegisterForm({
 
   return (
     <div className='flex flex-col gap-6'>
-      <Card className='w-[380px]'>
+      <Card>
         <CardHeader>
           <CardTitle className='text-2xl'>{dictionary.register}</CardTitle>
           <CardDescription>{dictionary.description}</CardDescription>

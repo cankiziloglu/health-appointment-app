@@ -13,7 +13,7 @@ export default async function Footer({
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className='flex flex-col gap-4 sm:flex-row py-6 w-full max-w-3xl items-center px-4 md:px-6 border-t font-mono'>
+    <footer className='flex flex-col gap-4 sm:flex-row py-6 w-full max-w-3xl items-center px-4 md:px-6 border-t font-mono mt-auto'>
       <small className='text-xs text-gray-500 dark:text-gray-400'>
         &copy; {currentYear} Can Kiziloglu
       </small>

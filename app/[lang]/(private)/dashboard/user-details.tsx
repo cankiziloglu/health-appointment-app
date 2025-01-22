@@ -3,7 +3,7 @@
 import { DictionaryType } from '@/lib/types';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { updateUserSchema, updateUserSchemaType } from '@/lib/schemas';
+import { updateUserFormSchema, updateUserFormSchemaType } from '@/lib/schemas';
 
 import {
   Card,
@@ -18,9 +18,20 @@ import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
 import { User } from '@prisma/client';
 import { updateUserAction } from '@/server/actions/userActions';
-import { revalidatePath } from 'next/cache';
 import { useState } from 'react';
 import { ChangePass } from './change-pass';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 export default function UserDetails({
   dictionary,
@@ -30,7 +41,6 @@ export default function UserDetails({
   user: User;
 }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editPass, setEditPass] = useState(false);
 
   const {
     register,
@@ -38,16 +48,28 @@ export default function UserDetails({
     setError,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<updateUserSchemaType>({
-    resolver: zodResolver(updateUserSchema),
+  } = useForm<updateUserFormSchemaType>({
+    resolver: zodResolver(updateUserFormSchema),
     defaultValues: {
       name: user.name ?? '',
       email: user.email,
     },
   });
 
-  const onSubmit: SubmitHandler<updateUserSchemaType> = async (data) => {
-    const submitted = await updateUserAction(data);
+  const router = useRouter();
+
+  const onSubmit: SubmitHandler<updateUserFormSchemaType> = async (data) => {
+    if (data.email === user.email && data.name === user.name) {
+      toast('Not Updated', {
+        description: 'User details not changed',
+      });
+      setIsEditing(false);
+      reset();
+      return;
+    }
+    const payload = { ...data, userId: user.id };
+    const submitted = await updateUserAction(payload);
+    console.log(data, payload);
     if (submitted && 'errors' in submitted) {
       setError('root', {
         type: 'custom',
@@ -70,12 +92,13 @@ export default function UserDetails({
         message: submitted.error,
       });
     }
-    if (submitted && 'name' in submitted) {
-      revalidatePath('/dashboard');
+    if (submitted && 'success' in submitted) {
+      toast('Success', {
+        description: submitted.success,
+      });
+      router.refresh();
+      setIsEditing(false);
     }
-    setIsEditing(false);
-    setEditPass(false);
-    reset();
   };
 
   return (
@@ -115,77 +138,77 @@ export default function UserDetails({
                 )}
               </div>
               <div className='flex gap-4'>
-                <Button
-                  type='button'
-                  className='w-full'
-                  disabled={isSubmitting}
-                  hidden={isEditing}
-                  onClick={() => setIsEditing(true)}
-                >
-                  {dictionary.edit}
-                </Button>
-                <Button
-                  type='submit'
-                  className='w-full'
-                  disabled={isSubmitting}
-                  hidden={!isEditing}
-                >
-                  {isSubmitting && <LoaderCircle className='animate-spin' />}
-                  {dictionary.save}
-                </Button>
-                <Button
-                  type='button'
-                  className='w-full'
-                  disabled={isSubmitting || isEditing}
-                  onClick={() => setEditPass(true)}
-                >
-                  {dictionary.change}
-                </Button>
+                {!isEditing && (
+                  <Button
+                    type='button'
+                    className='w-full'
+                    disabled={isSubmitting}
+                    onClick={() => setIsEditing(true)}
+                  >
+                    {dictionary.edit}
+                  </Button>
+                )}
+                {isEditing && (
+                  <Button
+                    type='button'
+                    className='w-full'
+                    variant='outline'
+                    disabled={isSubmitting}
+                    onClick={() => {
+                      setIsEditing(false);
+                      reset();
+                    }}
+                  >
+                    {dictionary.cancel}
+                  </Button>
+                )}
+                {isEditing && (
+                  <Button
+                    type='submit'
+                    className='w-full'
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting && <LoaderCircle className='animate-spin' />}
+                    {dictionary.save}
+                  </Button>
+                )}
+                <Dialog>
+                  <DialogTrigger asChild>
+                    {!isEditing && (
+                      <Button
+                        type='button'
+                        className='w-full'
+                        disabled={isSubmitting || isEditing}
+                      >
+                        {dictionary.change}
+                      </Button>
+                    )}
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>{dictionary.change}</DialogTitle>
+                      <DialogDescription></DialogDescription>
+                    </DialogHeader>
+                    <ChangePass dictionary={dictionary} user={user} />
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button type='button' variant='outline'>
+                          {dictionary.cancel}
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
-
               {errors.root && (
                 <div className='rounded-xl w-full bg-destructive/20 text-destructive p-2 text-sm font-medium'>
                   {errors.root.message}
                 </div>
               )}
-              {editPass ||
-                (isEditing && (
-                  <div className='flex gap-4'>
-                    <Button
-                      type='button'
-                      className='w-full'
-                      variant='outline'
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        setIsEditing(false);
-                        setEditPass(false);
-                      }}
-                    >
-                      {dictionary.cancel}
-                    </Button>
-                    <Button
-                      type='submit'
-                      className='w-full'
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting && (
-                        <LoaderCircle className='animate-spin' />
-                      )}
-                      {dictionary.save}
-                    </Button>
-                  </div>
-                ))}
             </div>
           </form>
         </CardContent>
       </Card>
-      {editPass && (
-        <ChangePass
-          dictionary={dictionary}
-          user={user}
-          setEditPass={setEditPass}
-        />
-      )}
     </>
   );
 }

@@ -31,12 +31,35 @@ export const registerSchema = z
   });
 export type RegisterSchemaType = z.infer<typeof registerSchema>;
 
+export const updateUserFormSchema = z.object({
+  name: z.string().min(2, 'Must be at least 2 characters'),
+  email: z.string().email(),
+});
+export type updateUserFormSchemaType = z.infer<typeof updateUserFormSchema>;
+
 export const updateUserSchema = z.object({
   userId: z.string().cuid(),
   name: z.string().min(2, 'Must be at least 2 characters'),
   email: z.string().email(),
 });
 export type updateUserSchemaType = z.infer<typeof updateUserSchema>;
+
+export const changePassFormSchema = z
+  .object({
+    password: z
+      .string()
+      .min(6, 'Must be at least 6 characters')
+      .max(16, 'Must be 16 characters maximum'),
+    cpassword: z
+      .string()
+      .min(6, 'Must be at least 6 characters')
+      .max(16, 'Must be 16 characters maximum'),
+  })
+  .refine((data) => data.password === data.cpassword, {
+    message: 'Passwords do not match',
+    path: ['cpassword'],
+  });
+export type changePassFormSchemaType = z.infer<typeof changePassFormSchema>;
 
 export const changePassSchema = z
   .object({
@@ -52,6 +75,6 @@ export const changePassSchema = z
   })
   .refine((data) => data.password === data.cpassword, {
     message: 'Passwords do not match',
-    path: ['password'],
+    path: ['cpassword'],
   });
 export type changePassSchemaType = z.infer<typeof changePassSchema>;
