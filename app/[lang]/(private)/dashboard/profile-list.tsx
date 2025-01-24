@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Locale } from '@/i18n-config';
 import { DictionaryType, UserWithProfilesType } from '@/lib/types';
 import { CircleUser } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -16,14 +17,17 @@ import { useRouter } from 'next/navigation';
 export default function ProfileList({
   dictionary,
   user,
+  lang,
 }: {
   dictionary: DictionaryType['Dashboard'];
   user: UserWithProfilesType;
+  lang: Locale['key'];
 }) {
   const doctor = user.doctor;
   const provider = user.provider;
   const role = user.role;
-  const router = useRouter()
+  const isVerified = user.emailVerified;
+  const router = useRouter();
 
   return (
     <Card>
@@ -39,7 +43,7 @@ export default function ProfileList({
             </h3>
             {doctor == null || provider == null ? (
               // TODO: Create a dialog to create a profile
-              <Button variant='outline' size='sm'>
+              <Button variant='outline' size='sm' disabled={!isVerified}>
                 {dictionary.create}
               </Button>
             ) : null}
@@ -58,7 +62,13 @@ export default function ProfileList({
                 </AvatarFallback>
               </Avatar>
               <span>{`${doctor.title} ${doctor.first_name} ${doctor.last_name}`}</span>
-              <Button variant='outline' size='sm' onClick={() => router.push(`/dashboard/doctor/${doctor.id}`)}>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() =>
+                  router.push(`${lang}/dashboard/doctor/${doctor.id}`)
+                }
+              >
                 {dictionary.edt}
               </Button>
             </div>
@@ -79,7 +89,13 @@ export default function ProfileList({
                 </AvatarFallback>
               </Avatar>
               <span>{provider.name}</span>
-              <Button variant='outline' size='sm' onClick={() => router.push(`/dashboard/provider/${provider.id}`)}>
+              <Button
+                variant='outline'
+                size='sm'
+                onClick={() =>
+                  router.push(`${lang}/dashboard/provider/${provider.id}`)
+                }
+              >
                 {dictionary.edt}
               </Button>
             </div>

@@ -6,6 +6,7 @@ import { getUserById } from '@/server/data/user';
 import { SessionData } from '@/lib/types';
 import { getDictionary } from '@/lib/dictionaries';
 import ProfileList from './profile-list';
+import { Button } from '@/components/ui/button';
 
 export default async function DashboardPage({
   params,
@@ -16,7 +17,7 @@ export default async function DashboardPage({
   const dictionary = (await getDictionary(lang)).Dashboard;
 
   const session = await auth();
-  if (!session) return null;
+  const isVerified = session?.emailVerified;
 
   const user = await getUserById((session as SessionData)?.userId);
 
@@ -25,12 +26,19 @@ export default async function DashboardPage({
   return (
     <div className='mx-auto py-8 px-4 md:px-6 flex flex-col justify-center gap-6'>
       <h1 className='text-2xl font-bold'>{user.name}</h1>
-        <Suspense fallback={<div>Loading user details...</div>}>
-          <UserDetails dictionary={dictionary} user={user} />
-        </Suspense>
-        <Suspense fallback={<div>Loading profiles...</div>}>
-          <ProfileList dictionary={dictionary} user={user} />
-        </Suspense>
+      {!isVerified && (
+        <div className='bg-destructive text-destructive-foreground p-4 text-sm flex flex-col gap-2'>
+          <p>{dictionary.warning}</p>
+          {/* TODO: add resend verification email logic */}
+          <Button variant='outline' className='text-foreground'>Resend</Button>
+        </div>
+      )}
+      <Suspense fallback={<div>Loading user details...</div>}>
+        <UserDetails dictionary={dictionary} user={user} />
+      </Suspense>
+      <Suspense fallback={<div>Loading profiles...</div>}>
+        <ProfileList dictionary={dictionary} user={user} lang={lang} />
+      </Suspense>
     </div>
   );
 }

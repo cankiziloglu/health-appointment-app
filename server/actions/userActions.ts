@@ -12,6 +12,7 @@ import { changeUserPassword, getUserByEmail, updateUser } from '../data/user';
 export async function updateUserAction(data: updateUserSchemaType) {
 
   // TODO: Check authentication and authorization
+  // TODO: Check if email is verified
   const result = updateUserSchema.safeParse(data);
 
   if (!result.success) {
@@ -40,6 +41,7 @@ export async function updateUserAction(data: updateUserSchemaType) {
 export async function changePasswordAction(data: changePassSchemaType) {
 
   // TODO: Check authentication and authorization
+  // TODO: Check if email is verified
   const result = changePassSchema.safeParse(data);
 
   if (!result.success) {
