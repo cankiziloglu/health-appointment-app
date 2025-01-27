@@ -71,6 +71,7 @@
     "pp": "Private Practitioner",
     "hcp": "Hospital / Clinic",
     "null": "You haven't created any profile yet.",
-    "edt": "Edit"
+    "edt": "Edit",
+    "resend": "Resend"
   }
 }

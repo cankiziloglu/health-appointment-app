@@ -6,7 +6,7 @@ import { getUserById } from '@/server/data/user';
 import { SessionData } from '@/lib/types';
 import { getDictionary } from '@/lib/dictionaries';
 import ProfileList from './profile-list';
-import { Button } from '@/components/ui/button';
+import ResendButton from './resend-button';
 
 export default async function DashboardPage({
   params,
@@ -29,8 +29,7 @@ export default async function DashboardPage({
       {!isVerified && (
         <div className='bg-destructive text-destructive-foreground p-4 text-sm flex flex-col gap-2'>
           <p>{dictionary.warning}</p>
-          {/* TODO: add resend verification email logic */}
-          <Button variant='outline' className='text-foreground'>Resend</Button>
+          <ResendButton text={dictionary.resend} userId={user.id} />
         </div>
       )}
       <Suspense fallback={<div>Loading user details...</div>}>

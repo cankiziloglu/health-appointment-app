@@ -61,3 +61,7 @@ export async function changePasswordAction(data: changePassSchemaType) {
     }
   }
 }
+
+export async function sendVerifyEmailAction(userId: string) {
+  console.log(userId)
+}
