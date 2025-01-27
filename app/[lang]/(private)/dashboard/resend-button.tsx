@@ -11,11 +11,16 @@ export default function ResendButton({
   text: string;
   userId: string;
 }) {
+  const handleClick = (userId: string) => {
+    const result = sendVerifyEmailAction(userId);
+    console.log(result);
+    // TODO: Toast to display result
+  };
   return (
     <Button
       variant='outline'
       className='text-foreground'
-      onClick={() => sendVerifyEmailAction(userId)}
+      onClick={() => handleClick(userId)}
     >
       {text}
     </Button>

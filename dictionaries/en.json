@@ -56,7 +56,7 @@
   "Dashboard": {
     "account": "Account Details",
     "description": "View and Update your account details",
-    "warning": "You didn't verify your email. You will not be able to use the app until you verify your email. If you didn't receive a verification email, press the Resend button below.",
+    "warning": "You haven't verified your email. You will not be able to use the app until you verify your email. If you didn't receive a verification email, press the Resend button below.",
     "name": "Name",
     "email": "E-mail",
     "password": "New Password",
