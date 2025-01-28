@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { sendVerifyEmailAction } from '@/server/actions/userActions';
 import React from 'react';
+import { toast } from 'sonner';
 
 export default function ResendButton({
   text,
@@ -13,10 +14,17 @@ export default function ResendButton({
   userId: string;
   email: string;
 }) {
-  const handleClick = (userId: string) => {
-    const result = sendVerifyEmailAction({ userId, email });
-    
-    // TODO: Toast to display result
+  const handleClick = async (userId: string) => {
+    const result = await sendVerifyEmailAction({ userId, email });
+    if (result && 'error' in result) {
+      toast('Failed', {
+        description: result.error,
+      });
+    } else {
+      toast('Success', {
+        description: 'Verification email sent',
+      });
+    }
   };
   return (
     <Button

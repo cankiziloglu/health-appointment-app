@@ -13,9 +13,7 @@ import {
   sendVerificationEmail,
 } from '../data/user';
 import * as bcrypt from 'bcryptjs';
-import { Role } from '@prisma/client';
-import { cookies } from 'next/headers';
-import { encrypt } from '../data/auth';
+import { createSession, deleteSession } from '../data/auth';
 
 export async function signInAction(payload: SignInSchemaType) {
   const result = signInSchema.safeParse(payload);
@@ -70,43 +68,18 @@ export async function registerAction(payload: RegisterSchemaType) {
         role: result.data.role,
         emailVerified: false,
       };
-      await sendVerificationEmail({
+      const session = await createSession(sessionData);
+      const sentEmail = await sendVerificationEmail({
         userId: created.userId!,
         email: result.data.email,
       });
-      const session = await createSession(sessionData);
-      if (session.success) {
+      if (session.success && (sentEmail && 'error' in sentEmail)) {
         return { success: 'User registered successfully' };
       } else {
         return { error: session.error };
       }
     }
   }
-}
-
-async function createSession(sessionData: {
-  userId: string;
-  role: Role;
-  emailVerified: boolean;
-}) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ ...sessionData, expiresAt });
-  try {
-    (await cookies()).set('session', session, {
-      httpOnly: true,
-      secure: true,
-      expires: expiresAt,
-      sameSite: 'strict',
-    });
-    return { success: 'Session created' };
-  } catch (error) {
-    console.error(error);
-    return { error: 'Failed to create session' };
-  }
-}
-
-async function deleteSession() {
-  (await cookies()).delete('session');
 }
 
 export async function signOutAction() {

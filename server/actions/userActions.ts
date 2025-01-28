@@ -13,10 +13,20 @@ import {
   sendVerificationEmail,
   updateUser,
 } from '../data/user';
+import { auth } from '../data/auth';
 
 export async function updateUserAction(data: updateUserSchemaType) {
-  // TODO: Check authentication and authorization
-  // TODO: Check if email is verified
+  const session = await auth();
+  if (!session) {
+    return { error: 'Not authenticated' };
+  }
+  if (!session.emailVerified) {
+    return { error: 'Email not verified' };
+  }
+  if (session.userId !== data.userId) {
+    return { error: 'Invalid user credentials' };
+  }
+
   const result = updateUserSchema.safeParse(data);
 
   if (!result.success) {
@@ -43,8 +53,17 @@ export async function updateUserAction(data: updateUserSchemaType) {
 }
 
 export async function changePasswordAction(data: changePassSchemaType) {
-  // TODO: Check authentication and authorization
-  // TODO: Check if email is verified
+  const session = await auth();
+  if (!session) {
+    return { error: 'Not authenticated' };
+  }
+  if (!session.emailVerified) {
+    return { error: 'Email not verified' };
+  }
+  if (session.userId !== data.userId) {
+    return { error: 'Invalid user credentials' };
+  }
+
   const result = changePassSchema.safeParse(data);
 
   if (!result.success) {
@@ -72,13 +91,22 @@ export async function sendVerifyEmailAction({
   userId: string;
   email: string;
 }) {
-  // TODO: Check authentication and authorization
-
+  const session = await auth();
+  if (!session) {
+    return { error: 'Not authenticated' };
+  }
+  if (session.emailVerified) {
+    return { error: 'Email already verified' };
+  }
+  if (session.userId !== userId) {
+    return { error: 'Invalid user credentials' };
+  }
   try {
-    await sendVerificationEmail({
+    const result = await sendVerificationEmail({
       userId,
       email,
     });
+    return result;
   } catch (error) {
     console.error(error);
     return { error: 'There was a problem sending the email.' };

@@ -1,11 +1,14 @@
 import 'server-only';
+
 import { db } from '@/prisma/prisma';
 import { RegisterSchemaType } from '@/lib/schemas';
 import * as bcrypt from 'bcryptjs';
 import { User } from '@prisma/client';
-import { createVerificationToken } from './auth';
+import { auth, createVerificationToken, updateSession } from './auth';
 import { verificationEmail } from '@/lib/emails';
-import { resend } from '@/lib/utils';
+import { Resend } from 'resend';
+
+export const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function getUserByEmail(email: string | undefined) {
   if (!email) return null;
@@ -17,7 +20,8 @@ export async function getUserByEmail(email: string | undefined) {
       id: true,
       name: true,
       emailVerified: true,
-      password: true
+      password: true,
+      role: true,
     },
   });
   return user;
@@ -48,6 +52,22 @@ export async function getUserDetailsById(id: string | undefined) {
           is_verified: true,
         },
       },
+    },
+  });
+  return user;
+}
+
+export async function getUserById(id: string | undefined) {
+  if (!id) return null;
+  const user = await db.user.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      image: true,
     },
   });
   return user;
@@ -122,19 +142,25 @@ export async function sendVerificationEmail({
   email: string;
 }) {
   const token = await createVerificationToken({ userId, email });
-  const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/verify-email?token=${token}`;
+  const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
 
   const emailContent = verificationEmail(verificationUrl);
 
-  await resend.emails.send({
-    from: 'no-reply@cankiziloglu.com',
+  const { data, error } = await resend.emails.send({
+    from: 'no-reply@mail.cankiziloglu.com',
     to: email,
     subject: 'Verify Your Email Address | Eposta Adresinizi Doğrulayın',
     html: emailContent,
   });
+  if (error) {
+    return { error: 'Error sending email.' };
+  }
+  return data;
 }
 
 export async function verifyEmail(userId: string) {
+  const session = await auth();
+
   const now = new Date();
   try {
     const user = await db.user.update({
@@ -146,9 +172,18 @@ export async function verifyEmail(userId: string) {
       },
       select: {
         id: true,
+        role: true,
         emailVerified: true,
       },
     });
+    if (session && user) {
+      const updatedSession = await updateSession({
+        userId: user.id,
+        role: user.role,
+        emailVerified: !!user.emailVerified,
+      });
+      return updatedSession;
+    }
     return user;
   } catch {
     return null;

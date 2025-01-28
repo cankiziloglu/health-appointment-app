@@ -11,10 +11,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    const payload = await decrypt(token);
+    const payload = (await decrypt(token))?.payload;
     if (!payload) {
       return NextResponse.json({ message: 'Invalid token' }, { status: 400 });
     }
+
     const { userId, email } = payload as unknown as {
       userId: string;
       email: string;
@@ -29,14 +30,21 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ message: 'Invalid token' }, { status: 400 });
     }
 
+    if (user.emailVerified) {
+      return NextResponse.json(
+        { message: 'Email already verified' },
+        { status: 400 }
+      );
+    }
+
     const verified = verifyEmail(userId);
 
     if (!verified) {
-      return NextResponse.json({ message: 'User not found.' }, { status: 404 });
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
     return NextResponse.json(
-      { message: 'Email verified successfully!' },
+      { message: 'Email verified successfully' },
       { status: 200 }
     );
   } catch (error) {

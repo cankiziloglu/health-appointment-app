@@ -14,6 +14,7 @@ export default async function DashboardPage({
   params: Promise<{ lang: Locale['key'] }>;
 }) {
   const { lang } = await params;
+
   const dictionary = (await getDictionary(lang)).Dashboard;
 
   const session = await auth();

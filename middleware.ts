@@ -23,6 +23,7 @@ function getLocale(request: NextRequest): string | undefined {
 
 export default async function middleware(request: NextRequest) {
   let pathname = request.nextUrl.pathname;
+  const searchParams = request.nextUrl.search;
 
   const session = await auth();
 
@@ -35,7 +36,10 @@ export default async function middleware(request: NextRequest) {
     segments.splice(idx + 1);
     pathname = segments.join('/');
     return NextResponse.redirect(
-      new URL(`${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
+      new URL(
+        `${pathname.startsWith('/') ? '' : '/'}${pathname}${searchParams}`,
+        request.url
+      )
     );
   }
 
@@ -52,7 +56,9 @@ export default async function middleware(request: NextRequest) {
     // The new URL is now /en-US/products
     return NextResponse.redirect(
       new URL(
-        `/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`,
+        `/${locale}${
+          pathname.startsWith('/') ? '' : '/'
+        }${pathname}${searchParams}`,
         request.url
       )
     );

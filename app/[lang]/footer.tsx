@@ -13,11 +13,11 @@ export default async function Footer({
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className='flex flex-col gap-4 sm:flex-row py-6 w-full max-w-3xl items-center px-4 md:px-6 border-t font-mono mt-auto'>
+    <footer className='flex flex-col gap-4 md:flex-row md:justify-between py-6 w-full max-w-3xl items-center px-4 md:px-6 border-t font-mono mt-auto'>
       <small className='text-xs text-gray-500 dark:text-gray-400'>
         &copy; {currentYear} Can Kiziloglu
       </small>
-      <nav className='flex flex-col md:flex-row justify-center items-center gap-4 md:gap-6'>
+      <nav className='flex flex-col md:flex-row md:justify-between justify-center items-center gap-4 md:gap-6'>
         <Link
           className='text-sm font-medium hover:underline underline-offset-4'
           href={`/${lang}/signin`}

@@ -73,5 +73,14 @@
     "null": "You haven't created any profile yet.",
     "edt": "Edit",
     "resend": "Resend"
+  },
+  "Verify": {
+    "Token is required": "Token is required",
+    "Invalid token": "Invalid token",
+    "Email already verified": "Email already verified",
+    "User not found": "User not found",
+    "Email verified successfully": "Email verified successfully",
+    "Invalid or expired token": "Invalid or expired token",
+    "redirect": "Redirecting to the homepage in 3 seconds..."
   }
 }

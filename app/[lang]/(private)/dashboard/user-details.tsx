@@ -69,7 +69,7 @@ export default function UserDetails({
     }
     const payload = { ...data, userId: user.id };
     const submitted = await updateUserAction(payload);
-    
+
     if (submitted && 'errors' in submitted) {
       setError('root', {
         type: 'custom',
