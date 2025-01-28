@@ -7,10 +7,14 @@ import {
   updateUserSchema,
   updateUserSchemaType,
 } from '@/lib/schemas';
-import { changeUserPassword, getUserByEmail, updateUser } from '../data/user';
+import {
+  changeUserPassword,
+  getUserByEmail,
+  sendVerificationEmail,
+  updateUser,
+} from '../data/user';
 
 export async function updateUserAction(data: updateUserSchemaType) {
-
   // TODO: Check authentication and authorization
   // TODO: Check if email is verified
   const result = updateUserSchema.safeParse(data);
@@ -39,7 +43,6 @@ export async function updateUserAction(data: updateUserSchemaType) {
 }
 
 export async function changePasswordAction(data: changePassSchemaType) {
-
   // TODO: Check authentication and authorization
   // TODO: Check if email is verified
   const result = changePassSchema.safeParse(data);
@@ -62,6 +65,22 @@ export async function changePasswordAction(data: changePassSchemaType) {
   }
 }
 
-export async function sendVerifyEmailAction(userId: string) {
-  console.log(userId)
+export async function sendVerifyEmailAction({
+  userId,
+  email,
+}: {
+  userId: string;
+  email: string;
+}) {
+  // TODO: Check authentication and authorization
+
+  try {
+    await sendVerificationEmail({
+      userId,
+      email,
+    });
+  } catch (error) {
+    console.error(error);
+    return { error: 'There was a problem sending the email.' };
+  }
 }

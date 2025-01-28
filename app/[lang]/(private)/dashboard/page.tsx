@@ -2,7 +2,7 @@ import { Locale } from '@/i18n-config';
 import React, { Suspense } from 'react';
 import UserDetails from './user-details';
 import { auth } from '@/server/data/auth';
-import { getUserById } from '@/server/data/user';
+import { getUserDetailsById } from '@/server/data/user';
 import { SessionData } from '@/lib/types';
 import { getDictionary } from '@/lib/dictionaries';
 import ProfileList from './profile-list';
@@ -19,7 +19,7 @@ export default async function DashboardPage({
   const session = await auth();
   const isVerified = session?.emailVerified;
 
-  const user = await getUserById((session as SessionData)?.userId);
+  const user = await getUserDetailsById((session as SessionData)?.userId);
 
   if (!user) return null;
 
@@ -29,7 +29,11 @@ export default async function DashboardPage({
       {!isVerified && (
         <div className='bg-destructive text-destructive-foreground p-4 text-sm flex flex-col gap-2 rounded-xl'>
           <p>{dictionary.warning}</p>
-          <ResendButton text={dictionary.resend} userId={user.id} />
+          <ResendButton
+            text={dictionary.resend}
+            userId={user.id}
+            email={user.email}
+          />
         </div>
       )}
       <Suspense fallback={<div>Loading user details...</div>}>

@@ -7,7 +7,11 @@ import {
   registerSchema,
   RegisterSchemaType,
 } from '@/lib/schemas';
-import { createUser, getUserByEmail } from '../data/user';
+import {
+  createUser,
+  getUserByEmail,
+  sendVerificationEmail,
+} from '../data/user';
 import * as bcrypt from 'bcryptjs';
 import { Role } from '@prisma/client';
 import { cookies } from 'next/headers';
@@ -66,6 +70,10 @@ export async function registerAction(payload: RegisterSchemaType) {
         role: result.data.role,
         emailVerified: false,
       };
+      await sendVerificationEmail({
+        userId: created.userId!,
+        email: result.data.email,
+      });
       const session = await createSession(sessionData);
       if (session.success) {
         return { success: 'User registered successfully' };
@@ -73,7 +81,6 @@ export async function registerAction(payload: RegisterSchemaType) {
         return { error: session.error };
       }
     }
-    // TODO: send verification email
   }
 }
 

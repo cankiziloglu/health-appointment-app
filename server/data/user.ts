@@ -3,6 +3,9 @@ import { db } from '@/prisma/prisma';
 import { RegisterSchemaType } from '@/lib/schemas';
 import * as bcrypt from 'bcryptjs';
 import { User } from '@prisma/client';
+import { createVerificationToken } from './auth';
+import { verificationEmail } from '@/lib/emails';
+import { resend } from '@/lib/utils';
 
 export async function getUserByEmail(email: string | undefined) {
   if (!email) return null;
@@ -10,11 +13,17 @@ export async function getUserByEmail(email: string | undefined) {
     where: {
       email: email,
     },
+    select: {
+      id: true,
+      name: true,
+      emailVerified: true,
+      password: true
+    },
   });
   return user;
 }
 
-export async function getUserById(id: string | undefined) {
+export async function getUserDetailsById(id: string | undefined) {
   if (!id) return null;
   const user = await db.user.findUnique({
     where: {
@@ -97,6 +106,47 @@ export async function changeUserPassword(data: {
       },
       data: {
         password: hashedPassword,
+      },
+    });
+    return user;
+  } catch {
+    return null;
+  }
+}
+
+export async function sendVerificationEmail({
+  userId,
+  email,
+}: {
+  userId: string;
+  email: string;
+}) {
+  const token = await createVerificationToken({ userId, email });
+  const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/verify-email?token=${token}`;
+
+  const emailContent = verificationEmail(verificationUrl);
+
+  await resend.emails.send({
+    from: 'no-reply@cankiziloglu.com',
+    to: email,
+    subject: 'Verify Your Email Address | Eposta Adresinizi Doğrulayın',
+    html: emailContent,
+  });
+}
+
+export async function verifyEmail(userId: string) {
+  const now = new Date();
+  try {
+    const user = await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        emailVerified: now,
+      },
+      select: {
+        id: true,
+        emailVerified: true,
       },
     });
     return user;

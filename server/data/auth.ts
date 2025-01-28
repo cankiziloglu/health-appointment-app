@@ -33,3 +33,17 @@ export async function encrypt(sessionData: SessionData) {
     .setExpirationTime('7d')
     .sign(encodedKey);
 }
+
+export async function createVerificationToken({
+  userId,
+  email,
+}: {
+  userId: string;
+  email: string;
+}) {
+  return new SignJWT({ userId, email })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('1h') // Token valid for 1 hour
+    .sign(encodedKey);
+}

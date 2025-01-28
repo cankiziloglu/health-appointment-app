@@ -7,13 +7,15 @@ import React from 'react';
 export default function ResendButton({
   text,
   userId,
+  email,
 }: {
   text: string;
   userId: string;
+  email: string;
 }) {
   const handleClick = (userId: string) => {
-    const result = sendVerifyEmailAction(userId);
-    console.log(result);
+    const result = sendVerifyEmailAction({ userId, email });
+    
     // TODO: Toast to display result
   };
   return (
