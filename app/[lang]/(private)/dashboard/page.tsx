@@ -25,7 +25,7 @@ export default async function DashboardPage({
   if (!user) return null;
 
   return (
-    <div className='mx-auto py-8 px-4 md:px-6 flex flex-col justify-center gap-6'>
+    <div className='py-8 px-4 md:px-6 flex flex-col justify-center items-center gap-6'>
       <h1 className='text-2xl font-bold'>{user.name}</h1>
       {!isVerified && (
         <div className='bg-destructive text-destructive-foreground p-4 text-sm flex flex-col gap-2 rounded-xl'>

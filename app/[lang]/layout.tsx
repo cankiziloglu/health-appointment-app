@@ -41,7 +41,7 @@ export default async function RootLayout({
       >
         <Providers attribute='class' defaultTheme='system' enableSystem>
           <Header dictionary={dict.header} lang={lang} />
-          <main className='font-sans max-w-3xl mx-auto overflow-hidden'>{children}</main>
+          <main className='font-sans max-w-5xl'>{children}</main>
           <Footer dictionary={dict.footer} lang={lang} />
           <Toaster />
         </Providers>

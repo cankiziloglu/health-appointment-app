@@ -36,7 +36,7 @@ export function ChangePass({
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<changePassFormSchemaType> = async (data) => {
+  const onPassChangeSubmit: SubmitHandler<changePassFormSchemaType> = async (data) => {
     const payload = { ...data, userId: user.id };
     const submitted = await changePasswordAction(payload);
     if (submitted && 'errors' in submitted) {
@@ -70,7 +70,7 @@ export function ChangePass({
     <Card>
       <CardHeader></CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onPassChangeSubmit)}>
           <div className='flex flex-col gap-6'>
             <div className='grid gap-2'>
               <Label htmlFor='password'>{dictionary.password}</Label>

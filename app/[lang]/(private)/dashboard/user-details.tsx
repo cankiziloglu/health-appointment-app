@@ -60,9 +60,6 @@ export default function UserDetails({
 
   const onSubmit: SubmitHandler<updateUserFormSchemaType> = async (data) => {
     if (data.email === user.email && data.name === user.name) {
-      toast('Not Updated', {
-        description: 'User details not changed',
-      });
       setIsEditing(false);
       reset();
       return;
@@ -103,7 +100,7 @@ export default function UserDetails({
 
   return (
     <>
-      <Card>
+      <Card className='w-full'>
         <CardHeader>
           <CardTitle className='text-2xl'>{dictionary.account}</CardTitle>
           <CardDescription>{dictionary.description}</CardDescription>
@@ -184,7 +181,7 @@ export default function UserDetails({
                       </Button>
                     )}
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className='max-w-sm'>
                     <DialogHeader>
                       <DialogTitle>{dictionary.change}</DialogTitle>
                       <DialogDescription></DialogDescription>
