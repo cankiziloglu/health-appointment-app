@@ -2,28 +2,27 @@
 
 import { Button } from '@/components/ui/button';
 import { sendVerifyEmailAction } from '@/server/actions/userActions';
-import React from 'react';
-import { toast } from 'sonner';
+import React, { useState } from 'react';
 
 export default function ResendButton({
   text,
   userId,
   email,
 }: {
-  text: string;
+  text: { idle: string; success: string; error: string };
   userId: string;
   email: string;
 }) {
+  const [status, setStatus] = useState('idle');
+
   const handleClick = async (userId: string) => {
     const result = await sendVerifyEmailAction({ userId, email });
     if (result && 'error' in result) {
-      toast('Failed', {
-        description: result.error,
-      });
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 3000);
     } else {
-      toast('Success', {
-        description: 'Verification email sent',
-      });
+      setStatus('success');
+      setTimeout(() => setStatus('idle'), 3000);
     }
   };
   return (
@@ -32,7 +31,11 @@ export default function ResendButton({
       className='text-foreground'
       onClick={() => handleClick(userId)}
     >
-      {text}
+      {status === 'idle'
+        ? text.idle
+        : status === 'success'
+        ? text.success
+        : text.error}
     </Button>
   );
 }

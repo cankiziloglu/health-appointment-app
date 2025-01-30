@@ -12,8 +12,9 @@ import {
   getUserByEmail,
   sendVerificationEmail,
   updateUser,
+  verifyEmail,
 } from '../data/user';
-import { auth } from '../data/auth';
+import { auth, decrypt, updateSession } from '../data/auth';
 
 export async function updateUserAction(data: updateUserSchemaType) {
   const session = await auth();
@@ -110,5 +111,56 @@ export async function sendVerifyEmailAction({
   } catch (error) {
     console.error(error);
     return { error: 'There was a problem sending the email.' };
+  }
+}
+
+export async function verifyEmailAction(token: string | null): Promise<string> {
+  if (!token) {
+    return 'Token is required';
+  }
+
+  try {
+    const session = await auth();
+    const payload = (await decrypt(token))?.payload;
+    if (!payload) {
+      return 'Invalid token';
+    }
+
+    const { userId, email } = payload as unknown as {
+      userId: string;
+      email: string;
+    };
+
+    if (!email || !userId) {
+      return 'Invalid token';
+    }
+
+    const user = await getUserByEmail(email);
+    if (user?.id !== userId) {
+      return 'Invalid token';
+    }
+
+    if (user.emailVerified) {
+      return 'Email already verified';
+    }
+
+    const verifiedUser = await verifyEmail(userId);
+
+    if (!verifiedUser) {
+      return 'User not found';
+    }
+
+    if (session) {
+      await updateSession({
+        userId: verifiedUser.id,
+        role: verifiedUser.role,
+        emailVerified: !!verifiedUser.emailVerified,
+      });
+    }
+
+    return 'Email verified successfully';
+  } catch (error) {
+    console.error(error);
+    return 'Invalid or expired token.';
   }
 }

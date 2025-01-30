@@ -4,7 +4,7 @@ import { db } from '@/prisma/prisma';
 import { RegisterSchemaType } from '@/lib/schemas';
 import * as bcrypt from 'bcryptjs';
 import { User } from '@prisma/client';
-import { auth, createVerificationToken, updateSession } from './auth';
+import { createVerificationToken } from './auth';
 import { verificationEmail } from '@/lib/emails';
 import { Resend } from 'resend';
 
@@ -155,12 +155,10 @@ export async function sendVerificationEmail({
   if (error) {
     return { error: 'Error sending email.' };
   }
-  return data;
+  return { success: 'Email sent', data };
 }
 
 export async function verifyEmail(userId: string) {
-  const session = await auth();
-
   const now = new Date();
   try {
     const user = await db.user.update({
@@ -176,14 +174,6 @@ export async function verifyEmail(userId: string) {
         emailVerified: true,
       },
     });
-    if (session && user) {
-      const updatedSession = await updateSession({
-        userId: user.id,
-        role: user.role,
-        emailVerified: !!user.emailVerified,
-      });
-      return updatedSession;
-    }
     return user;
   } catch {
     return null;

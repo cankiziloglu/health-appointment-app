@@ -73,10 +73,10 @@ export async function registerAction(payload: RegisterSchemaType) {
         userId: created.userId!,
         email: result.data.email,
       });
-      if (session.success && (sentEmail && 'error' in sentEmail)) {
+      if (session.success && sentEmail.success) {
         return { success: 'User registered successfully' };
       } else {
-        return { error: session.error };
+        return { error: session.error || sentEmail.error };
       }
     }
   }

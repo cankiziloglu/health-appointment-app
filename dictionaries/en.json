@@ -72,7 +72,11 @@
     "hcp": "Hospital / Clinic",
     "null": "You haven't created any profile yet.",
     "edt": "Edit",
-    "resend": "Resend"
+    "resend": {
+      "idle": "Resend Verification email",
+      "success": "Email sent successfully",
+      "error": "Failed to send email"
+    }
   },
   "Verify": {
     "Token is required": "Token is required",

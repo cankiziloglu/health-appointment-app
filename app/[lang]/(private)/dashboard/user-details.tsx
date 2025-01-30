@@ -198,7 +198,7 @@ export default function UserDetails({
                 </Dialog>
               </div>
               {errors.root && (
-                <div className='rounded-xl w-full bg-destructive/20 text-destructive p-2 text-sm font-medium'>
+                <div className='rounded-xl w-full bg-destructive/20 text-destructive px-4 py-2 text-sm font-medium'>
                   {errors.root.message}
                 </div>
               )}

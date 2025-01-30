@@ -28,7 +28,7 @@ export default async function DashboardPage({
     <div className='py-8 px-4 md:px-6 flex flex-col justify-center items-center gap-6'>
       <h1 className='text-2xl font-bold'>{user.name}</h1>
       {!isVerified && (
-        <div className='bg-destructive text-destructive-foreground p-4 text-sm flex flex-col gap-2 rounded-xl'>
+        <div className='text-destructive font-medium p-4 text-sm flex flex-col gap-2 rounded-xl border-2 border-destructive max-w-md'>
           <p>{dictionary.warning}</p>
           <ResendButton
             text={dictionary.resend}
@@ -37,12 +37,14 @@ export default async function DashboardPage({
           />
         </div>
       )}
-      <Suspense fallback={<div>Loading user details...</div>}>
-        <UserDetails dictionary={dictionary} user={user} />
-      </Suspense>
-      <Suspense fallback={<div>Loading profiles...</div>}>
-        <ProfileList dictionary={dictionary} user={user} lang={lang} />
-      </Suspense>
+      <div className='flex flex-col md:flex-row gap-6'>
+        <Suspense fallback={<div>Loading user details...</div>}>
+          <UserDetails dictionary={dictionary} user={user} />
+        </Suspense>
+        <Suspense fallback={<div>Loading profiles...</div>}>
+          <ProfileList dictionary={dictionary} user={user} lang={lang} />
+        </Suspense>
+      </div>
     </div>
   );
 }
