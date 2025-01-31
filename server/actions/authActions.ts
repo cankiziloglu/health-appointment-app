@@ -13,7 +13,8 @@ import {
   sendVerificationEmail,
 } from '../data/user';
 import * as bcrypt from 'bcryptjs';
-import { createSession, deleteSession } from '../data/auth';
+import { createSession, deleteSession, updateSession } from '../data/auth';
+import { SessionData } from '@/lib/types';
 
 export async function signInAction(payload: SignInSchemaType) {
   const result = signInSchema.safeParse(payload);
@@ -84,4 +85,8 @@ export async function registerAction(payload: RegisterSchemaType) {
 
 export async function signOutAction() {
   await deleteSession();
+}
+
+export async function updateSessionAction(user: SessionData) {
+  await updateSession(user);
 }

@@ -1,40 +1,42 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { SessionData } from '@/lib/types';
+import { updateSessionAction } from '@/server/actions/authActions';
 import { useRouter } from 'next/navigation';
-import { DictionaryType } from '@/lib/types';
-import { verifyEmailAction } from '@/server/actions/userActions';
+import { useEffect, useState } from 'react';
 
 export default function VerifyClient({
-  token,
-  dictionary,
+  text,
+  user,
 }: {
-  token: string | null;
-  dictionary: DictionaryType['Verify'];
+  text: { messageTranslated: string; redir: string };
+  user: SessionData | null;
 }) {
   const router = useRouter();
-  const [text, setText] = useState<{ message: string; redir: string }>({
-    message: '',
-    redir: '',
-  });
+  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
-    verifyEmailAction(token).then((messageEn) => {
-      const message =
-        (dictionary as Record<string, string>)[messageEn] || messageEn;
-      const redir = dictionary.redirect;
-      setText({ message, redir });
-    });
+    if (!isVerified && user) {
+      const handleUpdateSession = async () => {
+        await updateSessionAction(user);
+        // Remove the token from URL
+        window.history.replaceState({}, '', window.location.pathname);
+        setIsVerified(true);
+      };
+
+      handleUpdateSession();
+    }
+
     const timer = setTimeout(() => {
       router.push('/');
     }, 3000); // Redirect after 3 seconds
 
     return () => clearTimeout(timer); // Cleanup timer on unmount
-  }, [router, token, dictionary]);
+  }, [router, user, isVerified]);
 
   return (
     <div className='flex flex-col items-center justify-center h-screen gap-6'>
-      <p className='text'>{text.message}</p>
+      <p className='text'>{text.messageTranslated}</p>
       <p className='text-sm text-muted-foreground'>{text.redir}</p>
     </div>
   );

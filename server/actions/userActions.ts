@@ -14,7 +14,8 @@ import {
   updateUser,
   verifyEmail,
 } from '../data/user';
-import { auth, decrypt, updateSession } from '../data/auth';
+import { auth, decrypt } from '../data/auth';
+import { User } from '@prisma/client';
 
 export async function updateUserAction(data: updateUserSchemaType) {
   const session = await auth();
@@ -114,16 +115,17 @@ export async function sendVerifyEmailAction({
   }
 }
 
-export async function verifyEmailAction(token: string | null): Promise<string> {
+export async function verifyEmailAction(
+  token: string | null
+): Promise<{ verifiedUser: Partial<User> | null; message: string }> {
   if (!token) {
-    return 'Token is required';
+    return { verifiedUser: null, message: 'Token is required' };
   }
 
   try {
-    const session = await auth();
     const payload = (await decrypt(token))?.payload;
     if (!payload) {
-      return 'Invalid token';
+      return { verifiedUser: null, message: 'Invalid token' }
     }
 
     const { userId, email } = payload as unknown as {
@@ -132,35 +134,27 @@ export async function verifyEmailAction(token: string | null): Promise<string> {
     };
 
     if (!email || !userId) {
-      return 'Invalid token';
+      return { verifiedUser: null, message: 'Invalid token' };
     }
 
     const user = await getUserByEmail(email);
     if (user?.id !== userId) {
-      return 'Invalid token';
+      return { verifiedUser: null, message: 'Invalid token' };
     }
 
     if (user.emailVerified) {
-      return 'Email already verified';
+      return { verifiedUser: null, message: 'Email already verified' };
     }
 
     const verifiedUser = await verifyEmail(userId);
 
     if (!verifiedUser) {
-      return 'User not found';
+      return { verifiedUser: null, message: 'User not found' };
     }
 
-    if (session) {
-      await updateSession({
-        userId: verifiedUser.id,
-        role: verifiedUser.role,
-        emailVerified: !!verifiedUser.emailVerified,
-      });
-    }
-
-    return 'Email verified successfully';
+    return { verifiedUser, message: 'Email verified successfully' };
   } catch (error) {
     console.error(error);
-    return 'Invalid or expired token.';
+    return { verifiedUser: null, message: 'Invalid or expired token.' };
   }
 }
