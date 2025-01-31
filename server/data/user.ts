@@ -7,10 +7,11 @@ import { User } from '@prisma/client';
 import { createVerificationToken } from './auth';
 import { verificationEmail } from '@/lib/emails';
 import { Resend } from 'resend';
+import { cache } from 'react';
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function getUserByEmail(email: string | undefined) {
+export const getUserByEmail = cache(async (email: string | undefined) => {
   if (!email) return null;
   const user = await db.user.findUnique({
     where: {
@@ -25,9 +26,9 @@ export async function getUserByEmail(email: string | undefined) {
     },
   });
   return user;
-}
+});
 
-export async function getUserDetailsById(id: string | undefined) {
+export const getUserDetailsById = cache(async (id: string | undefined) => {
   if (!id) return null;
   const user = await db.user.findUnique({
     where: {
@@ -55,9 +56,9 @@ export async function getUserDetailsById(id: string | undefined) {
     },
   });
   return user;
-}
+});
 
-export async function getUserById(id: string | undefined) {
+export const getUserById = cache(async (id: string | undefined) => {
   if (!id) return null;
   const user = await db.user.findUnique({
     where: {
@@ -71,7 +72,7 @@ export async function getUserById(id: string | undefined) {
     },
   });
   return user;
-}
+});
 
 export async function createUser(data: RegisterSchemaType) {
   const { name, email, password, role } = data;
