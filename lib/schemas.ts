@@ -41,6 +41,7 @@ export const updateUserSchema = z.object({
   userId: z.string().cuid(),
   name: z.string().min(2, 'Must be at least 2 characters'),
   email: z.string().email(),
+  emailVerified: z.boolean(),
 });
 export type updateUserSchemaType = z.infer<typeof updateUserSchema>;
 

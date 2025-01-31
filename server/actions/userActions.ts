@@ -14,8 +14,8 @@ import {
   updateUser,
   verifyEmail,
 } from '../data/user';
-import { auth, decrypt } from '../data/auth';
-import { User } from '@prisma/client';
+import { auth, decrypt, updateSession } from '../data/auth';
+import { Role, User } from '@prisma/client';
 
 export async function updateUserAction(data: updateUserSchemaType) {
   const session = await auth();
@@ -40,12 +40,25 @@ export async function updateUserAction(data: updateUserSchemaType) {
     if (existingUser && existingUser.id !== result.data.userId) {
       return { error: 'Email is already in use' };
     }
-    const { userId, name, email } = result.data;
+    const { userId, name, email, emailVerified } = result.data;
     const updated = await updateUser({
       userId: userId,
       name: name,
       email: email,
+      emailVerified: emailVerified,
     });
+
+    if (emailVerified === false) {
+      const newSession = await updateSession({
+        userId: session.userId,
+        role: session.role as Role,
+        emailVerified,
+      });
+      const sentEmail = await sendVerificationEmail({ userId, email });
+      if (newSession.error) return { error: 'Could not refresh session' };
+      if (sentEmail.error)
+        return { error: 'Failed to send verification email' };
+    }
     if (!updated) {
       return { error: 'Something went wrong. Try again.' };
     } else {
@@ -125,7 +138,7 @@ export async function verifyEmailAction(
   try {
     const payload = (await decrypt(token))?.payload;
     if (!payload) {
-      return { verifiedUser: null, message: 'Invalid token' }
+      return { verifiedUser: null, message: 'Invalid token' };
     }
 
     const { userId, email } = payload as unknown as {

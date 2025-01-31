@@ -41,6 +41,7 @@ export default function UserDetails({
   user: User;
 }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
 
   const {
     register,
@@ -64,7 +65,10 @@ export default function UserDetails({
       reset();
       return;
     }
-    const payload = { ...data, userId: user.id };
+
+    if (data.email === user.email) setEmailVerified(true);
+
+    const payload = { ...data, userId: user.id, emailVerified };
     const submitted = await updateUserAction(payload);
 
     if (submitted && 'errors' in submitted) {

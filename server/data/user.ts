@@ -98,18 +98,33 @@ export async function updateUser(data: {
   userId: string;
   name: string;
   email: string;
+  emailVerified: boolean;
 }): Promise<User | null> {
   try {
-    const user = await db.user.update({
-      where: {
-        id: data.userId,
-      },
-      data: {
-        name: data.name,
-        email: data.email,
-      },
-    });
-    return user;
+    if (data.emailVerified === false) {
+      const user = await db.user.update({
+        where: {
+          id: data.userId,
+        },
+        data: {
+          name: data.name,
+          email: data.email,
+          emailVerified: null,
+        },
+      });
+      return user;
+    } else {
+      const user = await db.user.update({
+        where: {
+          id: data.userId,
+        },
+        data: {
+          name: data.name,
+          email: data.email,
+        },
+      });
+      return user;
+    }
   } catch {
     return null;
   }
