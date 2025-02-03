@@ -1,4 +1,4 @@
-export function verificationEmail(url: string) {
+export const verificationEmail = (url: string) => {
   const email = `
   <!DOCTYPE html>
 <html>

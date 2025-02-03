@@ -9,12 +9,14 @@ import {
 } from '@/lib/schemas';
 import {
   changeUserPassword,
+  deleteUser,
   getUserByEmail,
+  getUserDetailsById,
   sendVerificationEmail,
   updateUser,
   verifyEmail,
 } from '../data/user';
-import { auth, decrypt, updateSession } from '../data/auth';
+import { auth, decrypt, deleteSession, updateSession } from '../data/auth';
 import { Role, User } from '@prisma/client';
 
 export async function updateUserAction(data: updateUserSchemaType) {
@@ -169,5 +171,28 @@ export async function verifyEmailAction(
   } catch (error) {
     console.error(error);
     return { verifiedUser: null, message: 'Invalid or expired token.' };
+  }
+}
+
+export async function deleteUserAction(userId: string) {
+  const session = await auth();
+  if (!session) {
+    return { error: 'Not authenticated' };
+  }
+  if (session.userId !== userId) {
+    return { error: 'Invalid user credentials' };
+  }
+  const userDetails = await getUserDetailsById(userId);
+  if (userDetails?.doctor_id || userDetails?.provider_id) {
+    return { error: 'Failed to delete account. User has active profiles' };
+  }
+  try {
+    const result = await deleteUser(userId);
+    if (result.success) {
+      await deleteSession();
+    }
+    return result;
+  } catch (err) {
+    return { error: 'an unknown error occured.', err };
   }
 }

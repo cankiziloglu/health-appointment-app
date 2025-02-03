@@ -30,7 +30,7 @@ export default function ProfileList({
   const router = useRouter();
 
   return (
-    <Card className='w-full'>
+    <Card className='w-full min-w-[340px]'>
       <CardHeader>
         <CardTitle className='text-2xl'>{dictionary.profiles}</CardTitle>
         <CardDescription>{dictionary.profile_desc}</CardDescription>

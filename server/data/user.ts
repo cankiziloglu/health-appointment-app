@@ -74,7 +74,7 @@ export const getUserById = cache(async (id: string | undefined) => {
   return user;
 });
 
-export async function createUser(data: RegisterSchemaType) {
+export const createUser = async (data: RegisterSchemaType) => {
   const { name, email, password, role } = data;
   const hashedPassword = await bcrypt.hash(password, 10);
   try {
@@ -92,14 +92,14 @@ export async function createUser(data: RegisterSchemaType) {
       error instanceof Error ? error.message : 'Unknown error occurred';
     return { error: `Error creating user: ${errorMessage}` };
   }
-}
+};
 
-export async function updateUser(data: {
+export const updateUser = async (data: {
   userId: string;
   name: string;
   email: string;
   emailVerified: boolean;
-}): Promise<User | null> {
+}): Promise<User | null> => {
   try {
     if (data.emailVerified === false) {
       const user = await db.user.update({
@@ -128,12 +128,12 @@ export async function updateUser(data: {
   } catch {
     return null;
   }
-}
+};
 
-export async function changeUserPassword(data: {
+export const changeUserPassword = async (data: {
   userId: string;
   password: string;
-}) {
+}) => {
   const hashedPassword = await bcrypt.hash(data.password, 10);
   try {
     const user = await db.user.update({
@@ -148,15 +148,15 @@ export async function changeUserPassword(data: {
   } catch {
     return null;
   }
-}
+};
 
-export async function sendVerificationEmail({
+export const sendVerificationEmail = async ({
   userId,
   email,
 }: {
   userId: string;
   email: string;
-}) {
+}) => {
   const token = await createVerificationToken({ userId, email });
   const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${token}`;
 
@@ -172,9 +172,9 @@ export async function sendVerificationEmail({
     return { error: 'Error sending email.' };
   }
   return { success: 'Email sent', data };
-}
+};
 
-export async function verifyEmail(userId: string) {
+export const verifyEmail = async (userId: string) => {
   const now = new Date();
   try {
     const user = await db.user.update({
@@ -194,4 +194,19 @@ export async function verifyEmail(userId: string) {
   } catch {
     return null;
   }
-}
+};
+
+export const deleteUser = async (userId: string) => {
+  try {
+    const user = await db.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+    console.log(user);
+    return { success: 'User account deleted successfully' };
+  } catch (error) {
+    console.error(error);
+    return { error: 'Error deleting user account' };
+  }
+};

@@ -103,113 +103,107 @@ export default function UserDetails({
   };
 
   return (
-    <>
-      <Card className='w-full'>
-        <CardHeader>
-          <CardTitle className='text-2xl'>{dictionary.account}</CardTitle>
-          <CardDescription>{dictionary.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className='flex flex-col gap-6'>
-              <div className='grid gap-2'>
-                <Label htmlFor='name'>{dictionary.name}</Label>
-                <Input
-                  {...register('name')}
-                  type='text'
-                  disabled={!isEditing}
-                />
-                {errors.name && (
-                  <span className='text-sm font-medium text-destructive'>
-                    {errors.name.message}
-                  </span>
-                )}
-              </div>
-              <div className='grid gap-2'>
-                <Label htmlFor='email'>{dictionary.email}</Label>
-                <Input
-                  {...register('email')}
-                  type='email'
-                  disabled={!isEditing}
-                />
-                {errors.email && (
-                  <span className='text-sm font-medium text-destructive'>
-                    {errors.email.message}
-                  </span>
-                )}
-              </div>
-              <div className='flex gap-4'>
-                {!isEditing && (
-                  <Button
-                    type='button'
-                    className='w-full'
-                    disabled={isSubmitting}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    {dictionary.edit}
-                  </Button>
-                )}
-                {isEditing && (
-                  <Button
-                    type='button'
-                    className='w-full'
-                    variant='outline'
-                    disabled={isSubmitting}
-                    onClick={() => {
-                      setIsEditing(false);
-                      reset();
-                    }}
-                  >
-                    {dictionary.cancel}
-                  </Button>
-                )}
-                {isEditing && (
-                  <Button
-                    type='submit'
-                    className='w-full'
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting && <LoaderCircle className='animate-spin' />}
-                    {dictionary.save}
-                  </Button>
-                )}
-                <Dialog>
-                  <DialogTrigger asChild>
-                    {!isEditing && (
-                      <Button
-                        type='button'
-                        className='w-full'
-                        disabled={isSubmitting || isEditing}
-                      >
-                        {dictionary.change}
-                      </Button>
-                    )}
-                  </DialogTrigger>
-                  <DialogContent className='max-w-sm'>
-                    <DialogHeader>
-                      <DialogTitle>{dictionary.change}</DialogTitle>
-                      <DialogDescription></DialogDescription>
-                    </DialogHeader>
-                    <ChangePass dictionary={dictionary} user={user} />
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button type='button' variant='outline'>
-                          {dictionary.cancel}
-                        </Button>
-                      </DialogClose>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </div>
-              {errors.root && (
-                <div className='rounded-xl w-full bg-destructive/20 text-destructive px-4 py-2 text-sm font-medium'>
-                  {errors.root.message}
-                </div>
+    <Card className='w-full min-w-[340px]'>
+      <CardHeader>
+        <CardTitle className='text-2xl'>{dictionary.account}</CardTitle>
+        <CardDescription>{dictionary.description}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className='flex flex-col gap-6'>
+            <div className='grid gap-2'>
+              <Label htmlFor='name'>{dictionary.name}</Label>
+              <Input {...register('name')} type='text' disabled={!isEditing} />
+              {errors.name && (
+                <span className='text-sm font-medium text-destructive'>
+                  {errors.name.message}
+                </span>
               )}
             </div>
-          </form>
-        </CardContent>
-      </Card>
-    </>
+            <div className='grid gap-2'>
+              <Label htmlFor='email'>{dictionary.email}</Label>
+              <Input
+                {...register('email')}
+                type='email'
+                disabled={!isEditing}
+              />
+              {errors.email && (
+                <span className='text-sm font-medium text-destructive'>
+                  {errors.email.message}
+                </span>
+              )}
+            </div>
+            <div className='flex gap-4'>
+              {!isEditing && (
+                <Button
+                  type='button'
+                  className='w-full'
+                  disabled={isSubmitting}
+                  onClick={() => setIsEditing(true)}
+                >
+                  {dictionary.edit}
+                </Button>
+              )}
+              {isEditing && (
+                <Button
+                  type='button'
+                  className='w-full'
+                  variant='outline'
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    setIsEditing(false);
+                    reset();
+                  }}
+                >
+                  {dictionary.cancel}
+                </Button>
+              )}
+              {isEditing && (
+                <Button
+                  type='submit'
+                  className='w-full'
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting && <LoaderCircle className='animate-spin' />}
+                  {dictionary.save}
+                </Button>
+              )}
+              <Dialog>
+                <DialogTrigger asChild>
+                  {!isEditing && (
+                    <Button
+                      type='button'
+                      className='w-full'
+                      disabled={isSubmitting || isEditing}
+                    >
+                      {dictionary.change}
+                    </Button>
+                  )}
+                </DialogTrigger>
+                <DialogContent className='max-w-sm'>
+                  <DialogHeader>
+                    <DialogTitle>{dictionary.change}</DialogTitle>
+                    <DialogDescription></DialogDescription>
+                  </DialogHeader>
+                  <ChangePass dictionary={dictionary} user={user} />
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button type='button' variant='outline'>
+                        {dictionary.cancel}
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+            {errors.root && (
+              <div className='rounded-xl w-full bg-destructive/20 text-destructive px-4 py-2 text-sm font-medium'>
+                {errors.root.message}
+              </div>
+            )}
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
