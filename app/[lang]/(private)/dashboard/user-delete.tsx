@@ -69,7 +69,7 @@ const UserDelete = ({
               {dictionary.deleteButton}
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent>
+          <AlertDialogContent className=''>
             <AlertDialogHeader>
               <AlertDialogTitle>{dictionary.alertTitle}</AlertDialogTitle>
               <AlertDialogDescription>

@@ -88,15 +88,18 @@
     "deleteUnableToast": "Unable to Delete Account",
     "deleteUnableToastDesc": "Please delete any profile before deleting the user account",
     "deleteErrorToast": "Error Deleting Account",
-    "deleteErrorToastDesc": "An error occured deleting your account. Please delete any profile and try again."
+    "deleteErrorToastDesc": "An error occured deleting your account. Please delete any profile and try again.",
+    "createProfileForm": {
+
+    }
   },
-  "Verify": {
-    "Token is required": "Token is required",
-    "Invalid token": "Invalid token",
-    "Email already verified": "Email already verified",
-    "User not found": "User not found",
-    "Email verified successfully": "Email verified successfully",
-    "Invalid or expired token": "Invalid or expired token",
-    "redirect": "Redirecting to the homepage in 3 seconds..."
-  }
+    "Verify": {
+      "Token is required": "Token is required",
+      "Invalid token": "Invalid token",
+      "Email already verified": "Email already verified",
+      "User not found": "User not found",
+      "Email verified successfully": "Email verified successfully",
+      "Invalid or expired token": "Invalid or expired token",
+      "redirect": "Redirecting to the homepage in 3 seconds..."
+    }
 }

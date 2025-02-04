@@ -79,3 +79,12 @@ export const changePassSchema = z
     path: ['cpassword'],
   });
 export type changePassSchemaType = z.infer<typeof changePassSchema>;
+
+export const createPrivatePractitioner = z
+  .object({
+    title: z.string().min(1, 'Title is required'),
+    firstName: z.string().min(2, 'Must be at least 2 characters'),
+    lastName: z.string().min(2, 'Must be at least 2 characters'),
+    email: z.string().email(),
+    phone: z.string().
+  })

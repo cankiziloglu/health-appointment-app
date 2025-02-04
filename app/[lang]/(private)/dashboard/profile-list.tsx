@@ -9,10 +9,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Locale } from '@/i18n-config';
 import { DictionaryType, UserWithProfilesType } from '@/lib/types';
 import { CircleUser } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import CreatePrivatePractitionerForm from './create-private-practitioner-form';
+import CreateHealthcareProviderForm from './create-healthcare-provider-form';
 
 export default function ProfileList({
   dictionary,
@@ -42,10 +51,31 @@ export default function ProfileList({
               {role === 'PP' ? dictionary.pp : dictionary.hcp}
             </h3>
             {doctor == null || provider == null ? (
-              // TODO: Create a dialog to create a profile
-              <Button variant='outline' size='sm' disabled={!isVerified}>
-                {dictionary.create}
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant='outline' size='sm' disabled={!isVerified}>
+                    {dictionary.create}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className='sr-only'>
+                      Create Profile
+                    </DialogTitle>
+                  </DialogHeader>
+                  {role === 'PP' ? (
+                    <CreatePrivatePractitionerForm
+                      dictionary={dictionary.createProfileForm}
+                      lang={lang}
+                    />
+                  ) : (
+                    <CreateHealthcareProviderForm
+                    dictionary={dictionary.createProfileForm}
+                    lang={lang}
+                  />
+                  )}
+                </DialogContent>
+              </Dialog>
             ) : null}
           </div>
           {role === 'PP' && doctor == null ? (
