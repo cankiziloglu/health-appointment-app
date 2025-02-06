@@ -49,38 +49,39 @@ const CreateHealthcareProviderForm = ({
   const onSubmit: SubmitHandler<createHealthcareProviderSchemaType> = async (
     data
   ) => {
-    // const submitted = await createHealthcareProviderAction(data);
-    // if (submitted && 'errors' in submitted) {
-    //   setError('root', {
-    //     type: 'custom',
-    //     message:
-    //       submitted.errors?.formErrors[0] ||
-    //       'Server returned an error, please try again',
-    //   });
-    //   setError('email', {
-    //     type: 'custom',
-    //     message: submitted.errors?.fieldErrors.email?.[0] || 'Invalid email',
-    //   });
-    //   setError('phone', {
-    //     type: 'custom',
-    //     message: submitted.errors?.fieldErrors.phone?.[0] || 'Invalid phone',
-    //   });
-    //   setError('name', {
-    //     type: 'custom',
-    //     message: submitted.errors?.fieldErrors.name?.[0] || 'Invalid name',
-    //   });
-    // }
-    // if (submitted && 'error' in submitted) {
-    //   setError('root', {
-    //     type: 'custom',
-    //     message: submitted.error,
-    //   });
-    // }
-    // if (submitted?.success) {
-    //   reset();
-    //   router.push(`/${lang}/dashboard`);
-    // }
-    console.log(data)
+    const submitted = await createHealthcareProviderAction(data);
+    if (submitted && 'errors' in submitted) {
+      setError('root', {
+        type: 'custom',
+        message:
+          submitted.errors?.formErrors[0] ||
+          'Server returned an error, please try again',
+      });
+      setError('email', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.email?.[0] || 'Invalid email',
+      });
+      setError('phone', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.phone?.[0] || 'Invalid phone',
+      });
+      setError('name', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.name?.[0] || 'Invalid name',
+      });
+    }
+    if (submitted && 'error' in submitted) {
+      setError('root', {
+        type: 'custom',
+        message: submitted.error,
+      });
+    }
+    if (submitted?.success) {
+      reset();
+      router.push(`/${lang}/dashboard`);
+    }
+    console.log(data);
+    console.log(submitted);
   };
 
   return (

@@ -125,11 +125,10 @@ model Location {
   id          String              @id @default(cuid())
   provider    HealthcareProvider? @relation(fields: [provider_id], references: [id])
   provider_id String?
-  city        City                @relation(fields: [city_id], references: [id])
-  city_id     String
+  city        String
   address     String
   district    String
-  postal_code String
+  postal_code String?
   latitude    Float?
   longitude   Float?
   doctors     Doctor[]
@@ -137,17 +136,6 @@ model Location {
   updated_at  DateTime            @updatedAt
 
   @@index([provider_id])
-  @@index([city_id])
-}
-
-model City {
-  id         String     @id @default(cuid())
-  name       String     @unique
-  locations  Location[]
-  created_at DateTime   @default(now())
-  updated_at DateTime   @updatedAt
-
-  @@index([name])
 }
 
 enum Role {

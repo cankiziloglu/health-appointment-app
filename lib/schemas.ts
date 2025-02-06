@@ -81,7 +81,7 @@ export const changePassSchema = z
   });
 export type changePassSchemaType = z.infer<typeof changePassSchema>;
 
-export const createPrivatePractitionerSchema = z.object({
+export const createDoctorSchema = z.object({
   title: z.string().min(1, 'Title is required'),
   firstName: z.string().min(2, 'Must be at least 2 characters'),
   lastName: z.string().min(2, 'Must be at least 2 characters'),
@@ -93,10 +93,12 @@ export const createPrivatePractitionerSchema = z.object({
     .refine((value) => isPossiblePhoneNumber(value), {
       message: 'Invalid phone number',
     }),
+  city: z.string().min(2, 'City is required'),
+  address: z.string().min(2, 'Address is required'),
+  district: z.string().min(2, 'District is required'),
+  postalCode: z.string().optional(),
 });
-export type createPrivatePractitionerSchemaType = z.infer<
-  typeof createPrivatePractitionerSchema
->;
+export type createDoctorSchemaType = z.infer<typeof createDoctorSchema>;
 
 export const createHealthcareProviderSchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -111,3 +113,11 @@ export const createHealthcareProviderSchema = z.object({
 export type createHealthcareProviderSchemaType = z.infer<
   typeof createHealthcareProviderSchema
 >;
+
+export const createLocationSchema = z.object({
+  city: z.string().min(2, 'City is required'),
+  address: z.string().min(2, 'Address is required'),
+  district: z.string().min(2, 'District is required'),
+  postalCode: z.string().optional(),
+});
+export type createLocationSchemaType = z.infer<typeof createLocationSchema>;
