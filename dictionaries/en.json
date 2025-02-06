@@ -90,16 +90,25 @@
     "deleteErrorToast": "Error Deleting Account",
     "deleteErrorToastDesc": "An error occured deleting your account. Please delete any profile and try again.",
     "createProfileForm": {
-
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone Number",
+      "create": "Create",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "medical_unit": "Medical Unit",
+      "hcp_title": "Create Heaclthcare Provider",
+      "pp_title": "Create Private Practitioner",
+      "description": "Please provide the details below to create the profile"
     }
   },
-    "Verify": {
-      "Token is required": "Token is required",
-      "Invalid token": "Invalid token",
-      "Email already verified": "Email already verified",
-      "User not found": "User not found",
-      "Email verified successfully": "Email verified successfully",
-      "Invalid or expired token": "Invalid or expired token",
-      "redirect": "Redirecting to the homepage in 3 seconds..."
-    }
+  "Verify": {
+    "Token is required": "Token is required",
+    "Invalid token": "Invalid token",
+    "Email already verified": "Email already verified",
+    "User not found": "User not found",
+    "Email verified successfully": "Email verified successfully",
+    "Invalid or expired token": "Invalid or expired token",
+    "redirect": "Redirecting to the homepage in 3 seconds..."
+  }
 }

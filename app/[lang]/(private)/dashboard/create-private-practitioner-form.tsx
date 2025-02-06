@@ -6,9 +6,9 @@ const CreatePrivatePractitionerForm = ({
   dictionary,
   lang,
 }: {
-  dictionary: DictionaryType['CreateProfileForm'];
+  dictionary: DictionaryType['Dashboard']['createProfileForm'];
   lang: Locale['key'];
-  }) => {
+}) => {
   
   const {
       register,

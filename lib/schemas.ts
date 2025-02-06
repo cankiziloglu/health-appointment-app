@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { isPossiblePhoneNumber } from 'react-phone-number-input';
 
 export const signInSchema = z.object({
   email: z.string().email(),
@@ -80,11 +81,33 @@ export const changePassSchema = z
   });
 export type changePassSchemaType = z.infer<typeof changePassSchema>;
 
-export const createPrivatePractitioner = z
-  .object({
-    title: z.string().min(1, 'Title is required'),
-    firstName: z.string().min(2, 'Must be at least 2 characters'),
-    lastName: z.string().min(2, 'Must be at least 2 characters'),
-    email: z.string().email(),
-    phone: z.string().
-  })
+export const createPrivatePractitionerSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  firstName: z.string().min(2, 'Must be at least 2 characters'),
+  lastName: z.string().min(2, 'Must be at least 2 characters'),
+  email: z.string().email(),
+  medicalUnit: z.string().min(1, 'Medical Unit is required'),
+  phone: z
+    .string()
+    .nonempty('Phone number is required')
+    .refine((value) => isPossiblePhoneNumber(value), {
+      message: 'Invalid phone number',
+    }),
+});
+export type createPrivatePractitionerSchemaType = z.infer<
+  typeof createPrivatePractitionerSchema
+>;
+
+export const createHealthcareProviderSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  email: z.string().email(),
+  phone: z
+    .string()
+    .nonempty('Phone number is required')
+    .refine((value) => isPossiblePhoneNumber(value), {
+      message: 'Invalid phone number',
+    }),
+});
+export type createHealthcareProviderSchemaType = z.infer<
+  typeof createHealthcareProviderSchema
+>;
