@@ -13,13 +13,19 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { changePasswordAction } from '@/server/actions/userActions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { DialogCloseProps } from '@radix-ui/react-dialog';
+import { ForwardRefExoticComponent, RefAttributes } from 'react';
 
 export function ChangePass({
   dictionary,
   user,
+  DialogClose,
 }: {
   dictionary: DictionaryType['Dashboard'];
   user: User;
+  DialogClose: ForwardRefExoticComponent<
+    DialogCloseProps & RefAttributes<HTMLButtonElement>
+  >;
 }) {
   const {
     register,
@@ -36,7 +42,9 @@ export function ChangePass({
 
   const router = useRouter();
 
-  const onPassChangeSubmit: SubmitHandler<changePassFormSchemaType> = async (data) => {
+  const onPassChangeSubmit: SubmitHandler<changePassFormSchemaType> = async (
+    data
+  ) => {
     const payload = { ...data, userId: user.id };
     const submitted = await changePasswordAction(payload);
     if (submitted && 'errors' in submitted) {
@@ -95,7 +103,12 @@ export function ChangePass({
                 {errors.root.message}
               </div>
             )}
-            <div className='flex justify-end'>
+            <div className='w-full flex gap-4'>
+              <DialogClose asChild>
+                <Button type='button' variant='outline' className='w-1/2'>
+                  {dictionary.cancel}
+                </Button>
+              </DialogClose>
               <Button type='submit' className='w-1/2' disabled={isSubmitting}>
                 {isSubmitting && <LoaderCircle className='animate-spin' />}
                 {dictionary.save}

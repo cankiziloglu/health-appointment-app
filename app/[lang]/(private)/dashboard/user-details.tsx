@@ -27,7 +27,6 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -185,14 +184,11 @@ export default function UserDetails({
                     <DialogTitle>{dictionary.change}</DialogTitle>
                     <DialogDescription></DialogDescription>
                   </DialogHeader>
-                  <ChangePass dictionary={dictionary} user={user} />
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button type='button' variant='outline'>
-                        {dictionary.cancel}
-                      </Button>
-                    </DialogClose>
-                  </DialogFooter>
+                  <ChangePass
+                    dictionary={dictionary}
+                    user={user}
+                    DialogClose={DialogClose}
+                  />
                 </DialogContent>
               </Dialog>
             </div>

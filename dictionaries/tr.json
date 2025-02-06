@@ -96,10 +96,16 @@
       "create": "Create",
       "first_name": "First Name",
       "last_name": "Last Name",
+      "title": "Title",
       "medical_unit": "Medical Unit",
       "hcp_title": "Create Heaclthcare Provider",
       "pp_title": "Create Private Practitioner",
-      "description": "Please provide the details below to create the profile"
+      "description": "Please provide the details below to create the profile",
+      "city": "City",
+      "district": "District",
+      "address": "Address",
+      "postal_code": "Postal Code",
+      "cancel": "Cancel"
     }
   },
   "Verify": {

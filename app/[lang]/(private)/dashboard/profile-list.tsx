@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/card';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -22,15 +23,18 @@ import { CircleUser } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import CreatePrivatePractitionerForm from './create-private-practitioner-form';
 import CreateHealthcareProviderForm from './create-healthcare-provider-form';
+import { MedicalUnit } from '@prisma/client';
 
 export default function ProfileList({
   dictionary,
   user,
   lang,
+  medicalUnits,
 }: {
   dictionary: DictionaryType['Dashboard'];
   user: UserWithProfilesType;
   lang: Locale['key'];
+  medicalUnits: MedicalUnit[]
 }) {
   const doctor = user.doctor;
   const provider = user.provider;
@@ -67,12 +71,15 @@ export default function ProfileList({
                     <CreatePrivatePractitionerForm
                       dictionary={dictionary.createProfileForm}
                       lang={lang}
+                      medicalUnits={medicalUnits}
+                      DialogClose={DialogClose}
                     />
                   ) : (
                     <CreateHealthcareProviderForm
-                    dictionary={dictionary.createProfileForm}
-                    lang={lang}
-                  />
+                      dictionary={dictionary.createProfileForm}
+                        lang={lang}
+                        DialogClose={DialogClose}
+                    />
                   )}
                 </DialogContent>
               </Dialog>

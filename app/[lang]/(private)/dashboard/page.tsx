@@ -8,6 +8,7 @@ import { getDictionary } from '@/lib/dictionaries';
 import ProfileList from './profile-list';
 import ResendButton from './resend-button';
 import UserDelete from './user-delete';
+import { getAllMedicalUnits } from '@/server/data/medical-unit';
 
 export default async function DashboardPage({
   params,
@@ -22,6 +23,8 @@ export default async function DashboardPage({
   const isVerified = session?.emailVerified;
 
   const user = await getUserDetailsById((session as SessionData)?.userId);
+
+  const medicalUnits = await getAllMedicalUnits();
 
   if (!user) return null;
 
@@ -43,10 +46,15 @@ export default async function DashboardPage({
           <UserDetails dictionary={dictionary} user={user} />
         </Suspense>
         <Suspense fallback={<div>Loading profiles...</div>}>
-          <ProfileList dictionary={dictionary} user={user} lang={lang} />
+          <ProfileList
+            dictionary={dictionary}
+            user={user}
+            lang={lang}
+            medicalUnits={medicalUnits}
+          />
         </Suspense>
       </div>
-        <UserDelete dictionary={dictionary} user={user} lang={lang} />
+      <UserDelete dictionary={dictionary} user={user} lang={lang} />
     </div>
   );
 }
