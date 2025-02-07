@@ -1,4 +1,4 @@
-import { createDoctorSchemaType } from '@/lib/schemas';
+import { createPrivatePractitionerSchemaType } from '@/lib/schemas';
 import { db } from '@/prisma/prisma';
 import { cache } from 'react';
 import 'server-only';
@@ -13,7 +13,8 @@ export const getDoctorByEmail = cache(async (email: string) => {
 });
 
 export const createPrivatePractitioner = async (
-  data: createDoctorSchemaType
+  data: createPrivatePractitionerSchemaType,
+  userId: string
 ) => {
   const {
     title,
@@ -53,6 +54,9 @@ export const createPrivatePractitioner = async (
         medical_unit_id: medicalUnit,
         provider_id: providerId,
         location_id: location.id,
+        user: {
+          connect: { id: userId },
+        },
       },
     });
     return PrivatePractitioner;

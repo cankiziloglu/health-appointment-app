@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/card';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -25,6 +24,7 @@ import { useRouter } from 'next/navigation';
 import CreatePrivatePractitionerForm from './create-private-practitioner-form';
 import CreateHealthcareProviderForm from './create-healthcare-provider-form';
 import { MedicalUnit } from '@prisma/client';
+import { useState } from 'react';
 
 export default function ProfileList({
   dictionary,
@@ -42,6 +42,9 @@ export default function ProfileList({
   const role = user.role;
   const isVerified = user.emailVerified;
   const router = useRouter();
+  const [ isOpen, setIsOpen ] = useState(false);
+  
+  console.log(doctor, provider)
 
   return (
     <Card className='w-full min-w-[340px]'>
@@ -55,8 +58,8 @@ export default function ProfileList({
             <h3 className='text-lg font-semibold'>
               {role === 'PP' ? dictionary.pp : dictionary.hcp}
             </h3>
-            {doctor == null || provider == null ? (
-              <Dialog>
+            {doctor == null && provider == null ? (
+              <Dialog open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
                 <DialogTrigger asChild>
                   <Button variant='outline' size='sm' disabled={!isVerified}>
                     {dictionary.create}
@@ -74,13 +77,13 @@ export default function ProfileList({
                       dictionary={dictionary.createProfileForm}
                       lang={lang}
                       medicalUnits={medicalUnits}
-                      DialogClose={DialogClose}
+                      setIsOpen={setIsOpen}
                     />
                   ) : (
                     <CreateHealthcareProviderForm
                       dictionary={dictionary.createProfileForm}
                       lang={lang}
-                      DialogClose={DialogClose}
+                      setIsOpen={setIsOpen}
                     />
                   )}
                 </DialogContent>

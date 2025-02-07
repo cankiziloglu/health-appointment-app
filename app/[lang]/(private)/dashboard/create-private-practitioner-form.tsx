@@ -25,14 +25,11 @@ import {
   createPrivatePractitionerSchemaType,
 } from '@/lib/schemas';
 import { DictionaryType } from '@/lib/types';
-// import { createPrivatePractitionerAction } from '@/server/actions/doctorActions';
-// import { getAllMedicalUnits } from '@/server/data/medical-unit';
+import { createPrivatePractitionerAction } from '@/server/actions/doctorActions';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MedicalUnit } from '@prisma/client';
-import { DialogCloseProps } from '@radix-ui/react-dialog';
 import { LoaderCircle } from 'lucide-react';
-// import { useRouter } from 'next/navigation';
-import React, { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { useRouter } from 'next/navigation';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input/input';
 
@@ -40,21 +37,19 @@ const CreatePrivatePractitionerForm = ({
   dictionary,
   lang,
   medicalUnits,
-  DialogClose,
+  setIsOpen,
 }: {
   dictionary: DictionaryType['Dashboard']['createProfileForm'];
   lang: Locale['key'];
   medicalUnits: MedicalUnit[];
-  DialogClose: ForwardRefExoticComponent<
-    DialogCloseProps & RefAttributes<HTMLButtonElement>
-  >;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const {
     register,
     handleSubmit,
-    // setError,
+    setError,
     control,
-    // reset,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<createPrivatePractitionerSchemaType>({
     resolver: zodResolver(createPrivatePractitionerSchema),
@@ -72,44 +67,78 @@ const CreatePrivatePractitionerForm = ({
     },
   });
 
-  // const router = useRouter();
+  const router = useRouter();
   // TODO: Change onSubmit function
   const onSubmit: SubmitHandler<createPrivatePractitionerSchemaType> = async (
     data
   ) => {
-    // const submitted = await createPrivatePractitionerAction(data);
-    // if (submitted && 'errors' in submitted) {
-    //   setError('root', {
-    //     type: 'custom',
-    //     message:
-    //       submitted.errors?.formErrors[0] ||
-    //       'Server returned an error, please try again',
-    //   });
-    //   setError('email', {
-    //     type: 'custom',
-    //     message: submitted.errors?.fieldErrors.email?.[0] || 'Invalid email',
-    //   });
-    //   setError('phone', {
-    //     type: 'custom',
-    //     message: submitted.errors?.fieldErrors.phone?.[0] || 'Invalid phone',
-    //   });
-    //   setError('name', {
-    //     type: 'custom',
-    //     message: submitted.errors?.fieldErrors.name?.[0] || 'Invalid name',
-    //   });
-    // }
-    // if (submitted && 'error' in submitted) {
-    //   setError('root', {
-    //     type: 'custom',
-    //     message: submitted.error,
-    //   });
-    // }
-    // if (submitted?.success) {
-    //   reset();
-    //   router.push(`/${lang}/dashboard`);
-    // }
-    console.log(data);
-    // console.log(submitted);
+    const submitted = await createPrivatePractitionerAction(data);
+    if (submitted && 'errors' in submitted) {
+      setError('root', {
+        type: 'custom',
+        message:
+          submitted.errors?.formErrors[0] ||
+          'Server returned an error, please try again',
+      });
+      setError('email', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.email?.[0] || 'Invalid email',
+      });
+      setError('phone', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.phone?.[0] || 'Invalid phone',
+      });
+      setError('firstName', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.firstName?.[0] || 'Invalid name',
+      });
+      setError('title', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.title?.[0] || 'Invalid title',
+      });
+      setError('lastName', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.lastName?.[0] || 'Invalid name',
+      });
+      setError('medicalUnit', {
+        type: 'custom',
+        message:
+          submitted.errors?.fieldErrors.medicalUnit?.[0] ||
+          'Invalid medical unit',
+      });
+      setError('city', {
+        type: 'custom',
+        message: submitted.errors?.fieldErrors.city?.[0] || 'Invalid city',
+      });
+      setError('district', {
+        type: 'custom',
+        message:
+          submitted.errors?.fieldErrors.district?.[0] || 'Invalid district',
+      });
+      setError('address', {
+        type: 'custom',
+        message:
+          submitted.errors?.fieldErrors.address?.[0] || 'Invalid address',
+      });
+      setError('postalCode', {
+        type: 'custom',
+        message:
+          submitted.errors?.fieldErrors.postalCode?.[0] ||
+          'Invalid postal code',
+      });
+    }
+    if (submitted && 'error' in submitted) {
+      setError('root', {
+        type: 'custom',
+        message: submitted.error,
+      });
+    }
+    if (submitted?.success) {
+      reset();
+      setIsOpen(false);
+      router.push(`/${lang}/dashboard`);
+    }
+    console.log(submitted);
   };
 
   return (
@@ -276,11 +305,15 @@ const CreatePrivatePractitionerForm = ({
               </div>
             )}
             <div className='w-full flex gap-4'>
-              <DialogClose asChild>
-                <Button type='button' variant='outline' className='w-1/2'>
-                  {dictionary.cancel}
-                </Button>
-              </DialogClose>
+              <Button
+                type='button'
+                variant='outline'
+                className='w-1/2'
+                onClick={() => setIsOpen(false)}
+              >
+                {dictionary.cancel}
+              </Button>
+
               <Button type='submit' className='w-1/2' disabled={isSubmitting}>
                 {isSubmitting && <LoaderCircle className='animate-spin' />}
                 {dictionary.create}

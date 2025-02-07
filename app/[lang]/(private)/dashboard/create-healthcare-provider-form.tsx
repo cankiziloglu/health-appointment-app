@@ -18,23 +18,19 @@ import {
 import { DictionaryType } from '@/lib/types';
 import { createHealthcareProviderAction } from '@/server/actions/providerActions';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DialogCloseProps } from '@radix-ui/react-dialog';
 import { LoaderCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input/input';
 
 const CreateHealthcareProviderForm = ({
   dictionary,
   lang,
-  DialogClose,
+  setIsOpen,
 }: {
   dictionary: DictionaryType['Dashboard']['createProfileForm'];
   lang: Locale['key'];
-  DialogClose: ForwardRefExoticComponent<
-    DialogCloseProps & RefAttributes<HTMLButtonElement>
-  >;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const {
     register,
@@ -86,6 +82,7 @@ const CreateHealthcareProviderForm = ({
     }
     if (submitted?.success) {
       reset();
+      setIsOpen(false);
       router.push(`/${lang}/dashboard`);
     }
     console.log(data);
@@ -145,11 +142,15 @@ const CreateHealthcareProviderForm = ({
               </div>
             )}
             <div className='w-full flex gap-4'>
-              <DialogClose asChild>
-                <Button type='button' variant='outline' className='w-1/2'>
-                  {dictionary.cancel}
-                </Button>
-              </DialogClose>
+              <Button
+                type='button'
+                variant='outline'
+                className='w-1/2'
+                onClick={() => setIsOpen(false)}
+              >
+                {dictionary.cancel}
+              </Button>
+
               <Button type='submit' className='w-1/2' disabled={isSubmitting}>
                 {isSubmitting && <LoaderCircle className='animate-spin' />}
                 {dictionary.create}

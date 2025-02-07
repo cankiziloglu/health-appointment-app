@@ -1,5 +1,4 @@
 import { Locale } from '@/i18n-config';
-import React, { Suspense } from 'react';
 import UserDetails from './user-details';
 import { auth } from '@/server/data/auth';
 import { getUserDetailsById } from '@/server/data/user';
@@ -29,7 +28,7 @@ export default async function DashboardPage({
   if (!user) return null;
 
   return (
-    <div className='py-8 px-4 md:px-6 flex flex-col justify-between items-center gap-6'>
+    <div className='py-8 px-4 md:px-6 w-full flex flex-col justify-between gap-6'>
       <h1 className='text-2xl font-bold'>{user.name}</h1>
       {!isVerified && (
         <div className='text-destructive font-medium p-4 text-sm flex flex-col gap-2 rounded-xl border-2 border-destructive'>
@@ -42,17 +41,13 @@ export default async function DashboardPage({
         </div>
       )}
       <div className='flex flex-col md:flex-row gap-6 w-full'>
-        <Suspense fallback={<div>Loading user details...</div>}>
-          <UserDetails dictionary={dictionary} user={user} />
-        </Suspense>
-        <Suspense fallback={<div>Loading profiles...</div>}>
-          <ProfileList
-            dictionary={dictionary}
-            user={user}
-            lang={lang}
-            medicalUnits={medicalUnits}
-          />
-        </Suspense>
+        <UserDetails dictionary={dictionary} user={user} />
+        <ProfileList
+          dictionary={dictionary}
+          user={user}
+          lang={lang}
+          medicalUnits={medicalUnits}
+        />
       </div>
       <UserDelete dictionary={dictionary} user={user} lang={lang} />
     </div>

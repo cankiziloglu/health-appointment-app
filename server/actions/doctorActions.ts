@@ -8,10 +8,7 @@ import 'server-only';
 import { auth } from '../data/auth';
 import { getUserDetailsById } from '../data/user';
 import { SessionData } from '@/lib/types';
-import {
-  createPrivatePractitioner,
-  getPrivatePractitionerByEmail,
-} from '../data/doctor';
+import { createPrivatePractitioner, getDoctorByEmail } from '../data/doctor';
 
 export const createPrivatePractitionerAction = async (
   payload: createPrivatePractitionerSchemaType
@@ -34,17 +31,12 @@ export const createPrivatePractitionerAction = async (
     return { errors: result.error.flatten() };
   }
   if (result.success) {
-    const existingProvider = await getPrivatePractitionerByEmail(
-      result.data.email
-    );
+    const existingProvider = await getDoctorByEmail(result.data.email);
     if (existingProvider) {
       return { error: 'Email is already in use' };
     }
     try {
-      const PrivatePractitioner = await createPrivatePractitioner(
-        result.data,
-        (session as SessionData)?.userId
-      );
+      const PrivatePractitioner = await createPrivatePractitioner(result.data, user.id);
       if (PrivatePractitioner && 'error' in PrivatePractitioner) {
         return { error: PrivatePractitioner.error };
       }

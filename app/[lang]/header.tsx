@@ -24,7 +24,7 @@ export async function Header({
   const image = user?.image ?? '';
 
   return (
-    <header className='flex items-center justify-between w-full max-w-5xl px-4 lg:px-6 py-4 h-16'>
+    <header className='flex mx-auto justify-between w-full max-w-5xl px-4 lg:px-6 py-4 h-16'>
       <Link href={`/${lang}/`}>
         <Stethoscope className='h-8 w-8' />
         <span className='sr-only'>{dictionary.title}</span>

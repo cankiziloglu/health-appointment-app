@@ -37,11 +37,11 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <body
-        className={`${ubuntuSans.variable} ${ubuntuSansMono.variable} antialiased min-h-screen flex flex-col justify-between items-center`}
+        className={`${ubuntuSans.variable} ${ubuntuSansMono.variable} antialiased min-h-screen flex flex-col justify-between`}
       >
         <Providers attribute='class' defaultTheme='system' enableSystem>
           <Header dictionary={dict.header} lang={lang} />
-          <main className='font-sans max-w-5xl'>{children}</main>
+          <main className='font-sans max-w-5xl mx-auto w-full'>{children}</main>
           <Footer dictionary={dict.footer} lang={lang} />
           <Toaster />
         </Providers>
