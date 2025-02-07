@@ -12,7 +12,7 @@ export default async function SignInPage({
 
 
   return (
-    <div className='h-full w-full max-w-md flex flex-col justify-center items-center p-6 md:p-10'>
+    <div className='h-full w-full mx-auto max-w-md flex flex-col justify-center p-6 md:p-10'>
       <SignInForm dictionary={dictionary.signInForm} lang={lang} />
     </div>
   );
