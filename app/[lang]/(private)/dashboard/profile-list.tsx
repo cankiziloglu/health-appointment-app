@@ -13,6 +13,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -34,7 +35,7 @@ export default function ProfileList({
   dictionary: DictionaryType['Dashboard'];
   user: UserWithProfilesType;
   lang: Locale['key'];
-  medicalUnits: MedicalUnit[]
+  medicalUnits: MedicalUnit[];
 }) {
   const doctor = user.doctor;
   const provider = user.provider;
@@ -61,11 +62,12 @@ export default function ProfileList({
                     {dictionary.create}
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className='max-h-[90vh]'>
                   <DialogHeader>
                     <DialogTitle className='sr-only'>
                       Create Profile
                     </DialogTitle>
+                    <DialogDescription className='sr-only'></DialogDescription>
                   </DialogHeader>
                   {role === 'PP' ? (
                     <CreatePrivatePractitionerForm
@@ -77,8 +79,8 @@ export default function ProfileList({
                   ) : (
                     <CreateHealthcareProviderForm
                       dictionary={dictionary.createProfileForm}
-                        lang={lang}
-                        DialogClose={DialogClose}
+                      lang={lang}
+                      DialogClose={DialogClose}
                     />
                   )}
                 </DialogContent>

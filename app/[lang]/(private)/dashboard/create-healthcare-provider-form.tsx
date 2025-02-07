@@ -18,17 +18,23 @@ import {
 import { DictionaryType } from '@/lib/types';
 import { createHealthcareProviderAction } from '@/server/actions/providerActions';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { DialogCloseProps } from '@radix-ui/react-dialog';
 import { LoaderCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input/input';
 
 const CreateHealthcareProviderForm = ({
   dictionary,
   lang,
+  DialogClose,
 }: {
   dictionary: DictionaryType['Dashboard']['createProfileForm'];
   lang: Locale['key'];
+  DialogClose: ForwardRefExoticComponent<
+    DialogCloseProps & RefAttributes<HTMLButtonElement>
+  >;
 }) => {
   const {
     register,
@@ -138,10 +144,17 @@ const CreateHealthcareProviderForm = ({
                 {errors.root.message}
               </div>
             )}
-            <Button type='submit' className='w-full' disabled={isSubmitting}>
-              {isSubmitting && <LoaderCircle className='animate-spin' />}
-              {dictionary.create}
-            </Button>
+            <div className='w-full flex gap-4'>
+              <DialogClose asChild>
+                <Button type='button' variant='outline' className='w-1/2'>
+                  {dictionary.cancel}
+                </Button>
+              </DialogClose>
+              <Button type='submit' className='w-1/2' disabled={isSubmitting}>
+                {isSubmitting && <LoaderCircle className='animate-spin' />}
+                {dictionary.create}
+              </Button>
+            </div>
           </div>
         </form>
       </CardContent>

@@ -19,18 +19,19 @@ import {
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Locale } from '@/i18n-config';
+import { cities } from '@/lib/constants';
 import {
-  createDoctorSchema,
+  createPrivatePractitionerSchema,
   createPrivatePractitionerSchemaType,
 } from '@/lib/schemas';
 import { DictionaryType } from '@/lib/types';
-import { createPrivatePractitionerAction } from '@/server/actions/doctorActions';
-import { getAllMedicalUnits } from '@/server/data/medical-unit';
+// import { createPrivatePractitionerAction } from '@/server/actions/doctorActions';
+// import { getAllMedicalUnits } from '@/server/data/medical-unit';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MedicalUnit } from '@prisma/client';
 import { DialogCloseProps } from '@radix-ui/react-dialog';
 import { LoaderCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import React, { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import PhoneInput from 'react-phone-number-input/input';
@@ -51,12 +52,12 @@ const CreatePrivatePractitionerForm = ({
   const {
     register,
     handleSubmit,
-    setError,
+    // setError,
     control,
-    reset,
+    // reset,
     formState: { errors, isSubmitting },
   } = useForm<createPrivatePractitionerSchemaType>({
-    resolver: zodResolver(createDoctorSchema),
+    resolver: zodResolver(createPrivatePractitionerSchema),
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -71,7 +72,7 @@ const CreatePrivatePractitionerForm = ({
     },
   });
 
-  const router = useRouter();
+  // const router = useRouter();
   // TODO: Change onSubmit function
   const onSubmit: SubmitHandler<createPrivatePractitionerSchemaType> = async (
     data
@@ -112,7 +113,7 @@ const CreatePrivatePractitionerForm = ({
   };
 
   return (
-    <Card>
+    <Card className='max-h-[80vh] overflow-y-auto'>
       <CardHeader>
         <CardTitle className='text-2xl'>{dictionary.pp_title}</CardTitle>
         <CardDescription>{dictionary.description}</CardDescription>
@@ -120,8 +121,8 @@ const CreatePrivatePractitionerForm = ({
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className='flex flex-col gap-6'>
-            <div className='w-full flex gap-2'>
-              <div className='grid gap-2 w-1/5'>
+            <div className='w-full flex flex-col md:flex-row gap-2'>
+              <div className='grid gap-2 md:w-1/5'>
                 <Label htmlFor='name'>{dictionary.title}</Label>
                 <Input {...register('title')} type='text' />
                 {errors.title && (
@@ -130,7 +131,7 @@ const CreatePrivatePractitionerForm = ({
                   </span>
                 )}
               </div>
-              <div className='grid gap-2 w-2/5'>
+              <div className='grid gap-2 md:w-2/5'>
                 <Label htmlFor='name'>{dictionary.first_name}</Label>
                 <Input {...register('firstName')} type='text' />
                 {errors.firstName && (
@@ -139,7 +140,7 @@ const CreatePrivatePractitionerForm = ({
                   </span>
                 )}
               </div>
-              <div className='grid gap-2 w-2/5'>
+              <div className='grid gap-2 md:w-2/5'>
                 <Label htmlFor='name'>{dictionary.last_name}</Label>
                 <Input {...register('lastName')} type='text' />
                 {errors.lastName && (
@@ -149,8 +150,8 @@ const CreatePrivatePractitionerForm = ({
                 )}
               </div>
             </div>
-            <div className='w-full flex gap-2'>
-              <div className='grid gap-2 w-1/2'>
+            <div className='w-full flex flex-col md:flex-row gap-2'>
+              <div className='grid gap-2 md:w-1/2'>
                 <Label htmlFor='email'>{dictionary.email}</Label>
                 <Input {...register('email')} type='email' />
                 {errors.email && (
@@ -159,7 +160,7 @@ const CreatePrivatePractitionerForm = ({
                   </span>
                 )}
               </div>
-              <div className='grid gap-2 w-1/2'>
+              <div className='grid gap-2 md:w-1/2'>
                 <Label htmlFor='phone'>{dictionary.phone}</Label>
                 <Controller
                   name='phone'
@@ -182,20 +183,26 @@ const CreatePrivatePractitionerForm = ({
             </div>
             <div className='grid gap-2'>
               <Label htmlFor='medicalUnit'>{dictionary.medical_unit}</Label>
-              <Select {...register('medicalUnit')}>
-                <SelectTrigger>
-                  <SelectValue placeholder='Select...' />
-                </SelectTrigger>
-                <SelectContent>
-                  {medicalUnits.map((medicalUnit) => (
-                    <SelectItem value={medicalUnit.id} key={medicalUnit.id}>
-                      {lang === 'tr'
-                        ? medicalUnit.name_tr
-                        : medicalUnit.name_en}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Controller
+                name='medicalUnit'
+                control={control}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger>
+                      <SelectValue placeholder='Select...' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {medicalUnits.map((medicalUnit) => (
+                        <SelectItem value={medicalUnit.id} key={medicalUnit.id}>
+                          {lang === 'tr'
+                            ? medicalUnit.name_tr
+                            : medicalUnit.name_en}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
               {errors.medicalUnit && (
                 <span className='text-sm font-medium text-destructive'>
                   {errors.medicalUnit.message}
@@ -203,28 +210,65 @@ const CreatePrivatePractitionerForm = ({
               )}
             </div>
             <div className='grid gap-2'>
-              <p>Address</p>
+              <p className='font-bold'>Address</p>
               <Separator />
-              <Label htmlFor='medicalUnit'>{dictionary.medical_unit}</Label>
-              <Select {...register('medicalUnit')}>
-                <SelectTrigger>
-                  <SelectValue placeholder='Select...' />
-                </SelectTrigger>
-                <SelectContent>
-                  {medicalUnits.map((medicalUnit) => (
-                    <SelectItem value={medicalUnit.id} key={medicalUnit.id}>
-                      {lang === 'tr'
-                        ? medicalUnit.name_tr
-                        : medicalUnit.name_en}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.medicalUnit && (
-                <span className='text-sm font-medium text-destructive'>
-                  {errors.medicalUnit.message}
-                </span>
-              )}
+            </div>
+            <div className='w-full flex flex-col md:flex-row gap-2'>
+              <div className='grid gap-2 md:w-1/2'>
+                <Label htmlFor='city'>{dictionary.city}</Label>
+                <Controller
+                  name='city'
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select...' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities.map((city) => (
+                          <SelectItem value={city.id} key={city.id}>
+                            {city.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.city && (
+                  <span className='text-sm font-medium text-destructive'>
+                    {errors.city.message}
+                  </span>
+                )}
+              </div>
+              <div className='grid gap-2 md:w-1/2'>
+                <Label htmlFor='district'>{dictionary.district}</Label>
+                <Input {...register('district')} type='text' />
+                {errors.district && (
+                  <span className='text-sm font-medium text-destructive'>
+                    {errors.district.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className='w-full flex flex-col md:flex-row gap-2'>
+              <div className='grid gap-2 md:w-3/4'>
+                <Label htmlFor='address'>{dictionary.address}</Label>
+                <Input {...register('address')} type='text' />
+                {errors.address && (
+                  <span className='text-sm font-medium text-destructive'>
+                    {errors.address.message}
+                  </span>
+                )}
+              </div>
+              <div className='grid gap-2 md:w-1/4'>
+                <Label htmlFor='postalCode'>{dictionary.postal_code}</Label>
+                <Input {...register('postalCode')} type='text' />
+                {errors.postalCode && (
+                  <span className='text-sm font-medium text-destructive'>
+                    {errors.postalCode.message}
+                  </span>
+                )}
+              </div>
             </div>
             {errors.root && (
               <div className='rounded-xl w-full bg-destructive/20 text-destructive p-2 text-sm font-medium'>
