@@ -122,3 +122,7 @@ export const createDoctorSchema = z.object({
   phone: z.string().min(10, 'Invalid phone number'),
 });
 export type createDoctorSchemaType = z.infer<typeof createDoctorSchema>;
+
+export const deleteUserSchema = z.object({
+  confirm: z.string().refine((data) => data === 'DELETE'),
+});

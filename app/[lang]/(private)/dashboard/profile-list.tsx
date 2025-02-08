@@ -42,9 +42,7 @@ export default function ProfileList({
   const role = user.role;
   const isVerified = user.emailVerified;
   const router = useRouter();
-  const [ isOpen, setIsOpen ] = useState(false);
-  
-  console.log(doctor, provider)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Card className='w-full min-w-[340px]'>
@@ -94,16 +92,18 @@ export default function ProfileList({
             <p>{dictionary.null}</p>
           ) : role === 'PP' && doctor !== null ? (
             <div className='flex justify-between items-center'>
-              <Avatar className='size-10 p-2 cursor-pointer hover:text-muted-foreground'>
-                <AvatarImage
-                  src={doctor.photo_url ?? ''}
-                  className='rounded-full'
-                />
-                <AvatarFallback>
-                  <CircleUser />
-                </AvatarFallback>
-              </Avatar>
-              <span>{`${doctor.title} ${doctor.first_name} ${doctor.last_name}`}</span>
+              <div className='flex gap-2 items-center'>
+                <Avatar className='size-10 p-2 cursor-pointer hover:text-muted-foreground'>
+                  <AvatarImage
+                    src={doctor.photo_url ?? ''}
+                    className='rounded-full'
+                  />
+                  <AvatarFallback>
+                    <CircleUser />
+                  </AvatarFallback>
+                </Avatar>
+                <span>{`${doctor.title} ${doctor.first_name} ${doctor.last_name}`}</span>
+              </div>
               <Button
                 variant='outline'
                 size='sm'
@@ -121,16 +121,18 @@ export default function ProfileList({
             <p>{dictionary.null}</p>
           ) : role === 'HCP' && provider !== null ? (
             <div className='flex justify-between items-center'>
-              <Avatar className='size-10 p-2 cursor-pointer hover:text-muted-foreground'>
-                <AvatarImage
-                  src={provider.logo_url ?? ''}
-                  className='rounded-full'
-                />
-                <AvatarFallback>
-                  <CircleUser />
-                </AvatarFallback>
-              </Avatar>
-              <span>{provider.name}</span>
+              <div className='flex gap-2 items-center'>
+                <Avatar className='size-10 p-2 cursor-pointer hover:text-muted-foreground'>
+                  <AvatarImage
+                    src={provider.logo_url ?? ''}
+                    className='rounded-full'
+                  />
+                  <AvatarFallback>
+                    <CircleUser />
+                  </AvatarFallback>
+                </Avatar>
+                <span>{provider.name}</span>
+              </div>
               <Button
                 variant='outline'
                 size='sm'

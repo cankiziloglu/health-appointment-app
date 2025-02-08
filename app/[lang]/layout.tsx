@@ -43,8 +43,8 @@ export default async function RootLayout({
           <Header dictionary={dict.header} lang={lang} />
           <main className='font-sans max-w-5xl mx-auto w-full'>{children}</main>
           <Footer dictionary={dict.footer} lang={lang} />
-          <Toaster />
         </Providers>
+          <Toaster />
       </body>
     </html>
   );

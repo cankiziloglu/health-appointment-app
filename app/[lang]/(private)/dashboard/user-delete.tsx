@@ -19,10 +19,14 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { Locale } from '@/i18n-config';
+import { deleteUserSchema } from '@/lib/schemas';
 import { DictionaryType, UserWithProfilesType } from '@/lib/types';
 import { deleteUserAction } from '@/server/actions/userActions';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 const UserDelete = ({
@@ -41,6 +45,7 @@ const UserDelete = ({
       toast(`${dictionary.deleteUnableToast}`, {
         description: `${dictionary.deleteUnableToastDesc}`,
       });
+      console.log('toast');
       return;
     }
     const result = await deleteUserAction(user.id);
@@ -54,8 +59,19 @@ const UserDelete = ({
     });
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, isValid },
+  } = useForm({
+    resolver: zodResolver(deleteUserSchema),
+    defaultValues: {
+      confirm: '',
+    },
+  });
+
   return (
-    <Card className='w-full min-w-[340px] border-2 border-destructive'>
+    <Card className='w-full min-w-[340px]'>
       <CardHeader>
         <CardTitle className='sr-only'>{dictionary.deleteTitle}</CardTitle>
         <CardDescription className='text-destructive'>
@@ -65,25 +81,41 @@ const UserDelete = ({
       <CardContent>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button variant='destructive' className=''>
+            <Button variant='destructive' size='sm' className=''>
               {dictionary.deleteButton}
             </Button>
           </AlertDialogTrigger>
-          <AlertDialogContent className=''>
+          <AlertDialogContent className='w-full mx-auto'>
             <AlertDialogHeader>
               <AlertDialogTitle>{dictionary.alertTitle}</AlertDialogTitle>
-              <AlertDialogDescription>
-                {dictionary.alertDescription}
+              <AlertDialogDescription className='flex flex-col gap-2'>
+                <span>{dictionary.alertDescription}</span>
+                <span className='font-bold'>
+                  {dictionary.alertDescription2}
+                </span>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>{dictionary.alertCancel}</AlertDialogCancel>
-              <AlertDialogAction
-                className='bg-destructive'
-                onClick={() => handleDeleteUser()}
+              <form
+                onSubmit={handleSubmit(handleDeleteUser)}
+                className='flex flex-col md:flex-row gap-2 w-full'
               >
-                {dictionary.alertContinue}
-              </AlertDialogAction>
+                <Input
+                  type='text'
+                  {...register('confirm')}
+                  className='text-destructive border-destructive font-bold'
+                />
+                <AlertDialogCancel>{dictionary.alertCancel}</AlertDialogCancel>
+                <AlertDialogAction asChild>
+                  <Button
+                    type='submit'
+                    disabled={!isValid || isSubmitting}
+                    className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                  >
+                    {dictionary.alertContinue}
+                  </Button>
+                </AlertDialogAction>
+              </form>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
