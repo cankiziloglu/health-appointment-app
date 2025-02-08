@@ -45,7 +45,6 @@ const UserDelete = ({
       toast(`${dictionary.deleteUnableToast}`, {
         description: `${dictionary.deleteUnableToastDesc}`,
       });
-      console.log('toast');
       return;
     }
     const result = await deleteUserAction(user.id);
