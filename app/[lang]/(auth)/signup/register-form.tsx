@@ -1,7 +1,7 @@
 'use client';
 
 import { DictionaryType } from '@/lib/types';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema, RegisterSchemaType } from '@/lib/schemas';
 
@@ -32,6 +32,7 @@ export default function RegisterForm({
   const {
     register,
     handleSubmit,
+    control,
     setError,
     reset,
     formState: { errors, isSubmitting },
@@ -49,6 +50,7 @@ export default function RegisterForm({
   const router = useRouter();
 
   const onSubmit: SubmitHandler<RegisterSchemaType> = async (data) => {
+    console.log(data);
     const submitted = await registerAction(data);
     if (submitted && 'errors' in submitted) {
       setError('root', {
@@ -134,20 +136,26 @@ export default function RegisterForm({
                 )}
               </div>
               <div className='py-4'>
-                <RadioGroup
-                  defaultValue='PP'
-                  {...register('role')}
-                  className='flex flex-col gap-4'
-                >
-                  <div className='flex items-center space-x-2'>
-                    <RadioGroupItem value='PP' />
-                    <Label htmlFor='PP'>{dictionary.pp}</Label>
-                  </div>
-                  <div className='flex items-center space-x-2'>
-                    <RadioGroupItem value='HCP' />
-                    <Label htmlFor='HCP'>{dictionary.hcp}</Label>
-                  </div>
-                </RadioGroup>
+                <Controller
+                  control={control}
+                  name='role'
+                  render={({ field }) => (
+                    <RadioGroup
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      className='flex flex-col gap-4'
+                    >
+                      <div className='flex items-center space-x-2'>
+                        <RadioGroupItem value='PP' />
+                        <Label htmlFor='PP'>{dictionary.pp}</Label>
+                      </div>
+                      <div className='flex items-center space-x-2'>
+                        <RadioGroupItem value='HCP' />
+                        <Label htmlFor='HCP'>{dictionary.hcp}</Label>
+                      </div>
+                    </RadioGroup>
+                  )}
+                />
               </div>
               {errors.root && (
                 <div className='rounded-xl w-full bg-destructive/20 text-destructive p-2 text-sm font-medium'>
