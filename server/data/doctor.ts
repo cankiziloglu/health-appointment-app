@@ -66,3 +66,35 @@ export const createPrivatePractitioner = async (
     return { error: `Error creating provider: ${errorMessage}` };
   }
 };
+
+// Get inactive private practitioners for Admin Dashboard
+export const getInactivePrivatePractitioners = cache(async () => {
+  const providerId = (await privatePractitionerProvider())?.id;
+  if (!providerId) {
+    return { error: 'No private practitioner provider available' };
+  }
+
+  return await db.doctor.findMany({
+    where: {
+      provider_id: providerId,
+      is_active: false,
+    },
+  });
+});
+
+// Activate private practitioner (Admin only)
+export const activatePrivatePractitioner = async (doctorId: string) => {
+  try {
+    const doctor = await db.doctor.update({
+      where: { id: doctorId },
+      data: {
+        is_active: true,
+      },
+    });
+    return doctor;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    return { error: `Error activating provider: ${errorMessage}` };
+  }
+};
