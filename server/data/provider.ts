@@ -54,3 +54,29 @@ export const createHealthcareProvider = async (
     return { error: `Error creating provider: ${errorMessage}` };
   }
 };
+
+// Get unverified healthcare providers for Admin Dashboard
+export const getUnverifiedHealthcareProviders = cache(async () => {
+  return await db.healthcareProvider.findMany({
+    where: {
+      is_verified: false,
+    },
+  });
+});
+
+// Verify healthcare provider (Admin only)
+export const verifyHealthcareProvider = async (providerId: string) => {
+  try {
+    const provider = await db.healthcareProvider.update({
+      where: { id: providerId },
+      data: {
+        is_verified: true,
+      },
+    });
+    return provider;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    return { error: `Error verifying provider: ${errorMessage}` };
+  }
+}

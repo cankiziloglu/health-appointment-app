@@ -8,6 +8,7 @@ import ProfileList from './profile-list';
 import ResendButton from './resend-button';
 import UserDelete from './user-delete';
 import { getAllMedicalUnits } from '@/server/data/medical-unit';
+import { redirect } from 'next/navigation';
 
 export default async function DashboardPage({
   params,
@@ -26,6 +27,10 @@ export default async function DashboardPage({
   const medicalUnits = await getAllMedicalUnits();
 
   if (!user) return null;
+
+  if (user.role === 'ADMIN') {
+    redirect(`/${lang}/dashboard/admin`);
+  }
 
   return (
     <div className='py-8 px-4 md:px-6 w-full flex flex-col justify-between gap-6'>
