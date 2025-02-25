@@ -4,16 +4,15 @@ import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { SessionData } from '@/lib/types';
 import { Role } from '@prisma/client';
-import { cache } from 'react';
 
 const secretKey = process.env.AUTH_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
 
-export const auth = cache(async () => {
+export const auth = async () => {
   const cookie = (await cookies()).get('session')?.value;
   const session = await decrypt(cookie);
   return session?.payload;
-})
+};
 
 export async function decrypt(session: string | undefined = '') {
   try {

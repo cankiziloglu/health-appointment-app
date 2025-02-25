@@ -40,7 +40,6 @@ export default function UserDetails({
   user: User;
 }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
 
   const {
     register,
@@ -65,9 +64,14 @@ export default function UserDetails({
       return;
     }
 
-    if (data.email === user.email) setEmailVerified(true);
+    // Only set emailVerified to false if email is changed
+    const isEmailChanged = data.email !== user.email;
+    const payload = {
+      ...data,
+      userId: user.id,
+      emailVerified: isEmailChanged ? false : true,
+    };
 
-    const payload = { ...data, userId: user.id, emailVerified };
     const submitted = await updateUserAction(payload);
 
     if (submitted && 'errors' in submitted) {
