@@ -7,6 +7,7 @@ import { User } from '@prisma/client';
 import { createVerificationToken } from './auth';
 import { verificationEmail } from '@/lib/emails';
 import { Resend } from 'resend';
+import { cache } from 'react';
 
 export const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -209,3 +210,12 @@ export const deleteUser = async (userId: string) => {
     return { error: 'Error deleting user account' };
   }
 };
+
+// Get all users for admin dashboard
+export const getAllUsers = cache(async () => {
+  return await db.user.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+});

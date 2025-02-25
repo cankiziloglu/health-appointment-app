@@ -98,3 +98,12 @@ export const activatePrivatePractitioner = async (doctorId: string) => {
     return { error: `Error activating provider: ${errorMessage}` };
   }
 };
+
+// Get all doctors for admin dashboard
+export const getAllDoctors = cache(async () => {
+  return await db.doctor.findMany({
+    orderBy: {
+      created_at: 'desc',
+    },
+  });
+});

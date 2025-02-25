@@ -1,16 +1,30 @@
-import React from 'react';
+'use client';
+
+import { DataTable } from '@/components/ui/data-table';
+import { userColumns } from './columns';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { User } from '@prisma/client';
+import { DictionaryType } from '@/lib/types';
 
 interface UsersTabProps {
-  dictionary: any;
+  dictionary: DictionaryType['Dashboard'];
+  users: User[];
 }
 
-const UsersTab = ({ dictionary }: UsersTabProps) => {
+export default function UsersTab({ dictionary, users }: UsersTabProps) {
   return (
-    <div className='p-4'>
-      <h2 className='text-2xl font-bold mb-4'>Users</h2>
-      {/* Users content will go here */}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{dictionary.admin.tabs.users}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <DataTable
+          columns={userColumns}
+          data={users}
+          searchField='email'
+          dictionary={dictionary}
+        />
+      </CardContent>
+    </Card>
   );
-};
-
-export default UsersTab;
+}

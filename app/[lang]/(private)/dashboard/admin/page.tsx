@@ -1,15 +1,21 @@
 import { Locale } from '@/i18n-config';
 import { getDictionary } from '@/lib/dictionaries';
 import { auth } from '@/server/data/auth';
-import { getInactivePrivatePractitioners } from '@/server/data/doctor';
-import { getUnverifiedHealthcareProviders } from '@/server/data/provider';
+import {
+  getInactivePrivatePractitioners,
+  getAllDoctors,
+} from '@/server/data/doctor';
+import {
+  getUnverifiedHealthcareProviders,
+  getAllHealthcareProviders,
+} from '@/server/data/provider';
+import { getAllUsers, getUserDetailsById } from '@/server/data/user';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UsersTab from './users-tab';
 import ProvidersTab from './providers-tab';
 import PractitionersTab from './practitioners-tab';
 import AccountTab from './account-tab';
 import PendingVerifications from './pending-verifications';
-import { getUserDetailsById } from '@/server/data/user';
 import { redirect } from 'next/navigation';
 import { DictionaryType } from '@/lib/types';
 
@@ -34,10 +40,16 @@ const AdminPage = async ({
     redirect(`/${lang}/signin`);
   }
 
+  // Fetch all the necessary data
   const unverifiedProviders = await getUnverifiedHealthcareProviders();
   const inactivePrivatePractitioners = await getInactivePrivatePractitioners();
   const practitioners =
     'error' in inactivePrivatePractitioners ? [] : inactivePrivatePractitioners;
+
+  // Fetch data for tables
+  const users = await getAllUsers();
+  const providers = await getAllHealthcareProviders();
+  const allPractitioners = await getAllDoctors();
 
   return (
     <div className='container mx-auto py-6 px-4'>
@@ -81,15 +93,18 @@ const AdminPage = async ({
         </TabsContent>
 
         <TabsContent value='users'>
-          <UsersTab dictionary={dictionary} />
+          <UsersTab dictionary={dictionary} users={users} />
         </TabsContent>
 
         <TabsContent value='providers'>
-          <ProvidersTab dictionary={dictionary} />
+          <ProvidersTab dictionary={dictionary} providers={providers} />
         </TabsContent>
 
         <TabsContent value='practitioners'>
-          <PractitionersTab dictionary={dictionary} />
+          <PractitionersTab
+            dictionary={dictionary}
+            practitioners={allPractitioners}
+          />
         </TabsContent>
       </Tabs>
     </div>

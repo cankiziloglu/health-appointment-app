@@ -1,16 +1,34 @@
+'use client';
+
 import React from 'react';
+import { DataTable } from '@/components/ui/data-table';
+import { practitionerColumns } from './columns';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Doctor } from '@prisma/client';
+import { DictionaryType } from '@/lib/types';
 
 interface PractitionersTabProps {
-  dictionary: any;
+  dictionary: DictionaryType['Dashboard'];
+  practitioners: Doctor[];
 }
 
-const PractitionersTab = ({ dictionary }: PractitionersTabProps) => {
+export default function PractitionersTab({
+  dictionary,
+  practitioners,
+}: PractitionersTabProps) {
   return (
-    <div className='p-4'>
-      <h2 className='text-2xl font-bold mb-4'>Private Practitioners</h2>
-      {/* Private Practitioners content will go here */}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{dictionary.admin.tabs.practitioners}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <DataTable
+          columns={practitionerColumns}
+          data={practitioners}
+          searchField='email'
+          dictionary={dictionary}
+        />
+      </CardContent>
+    </Card>
   );
-};
-
-export default PractitionersTab;
+}

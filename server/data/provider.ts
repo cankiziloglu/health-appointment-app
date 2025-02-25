@@ -1,3 +1,4 @@
+'use server';
 import { createHealthcareProviderSchemaType } from '@/lib/schemas';
 import { db } from '@/prisma/prisma';
 import { cache } from 'react';
@@ -79,4 +80,13 @@ export const verifyHealthcareProvider = async (providerId: string) => {
       error instanceof Error ? error.message : 'Unknown error occurred';
     return { error: `Error verifying provider: ${errorMessage}` };
   }
-}
+};
+
+// Get all healthcare providers for admin dashboard
+export const getAllHealthcareProviders = cache(async () => {
+  return await db.healthcareProvider.findMany({
+    orderBy: {
+      created_at: 'desc',
+    },
+  });
+});

@@ -1,16 +1,33 @@
-import React from 'react';
+'use client';
+
+import { DataTable } from '@/components/ui/data-table';
+import { providerColumns } from './columns';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { HealthcareProvider } from '@prisma/client';
+import { DictionaryType } from '@/lib/types';
 
 interface ProvidersTabProps {
-  dictionary: any;
+  dictionary: DictionaryType['Dashboard'];
+  providers: HealthcareProvider[];
 }
 
-const ProvidersTab = ({ dictionary }: ProvidersTabProps) => {
+export default function ProvidersTab({
+  dictionary,
+  providers,
+}: ProvidersTabProps) {
   return (
-    <div className='p-4'>
-      <h2 className='text-2xl font-bold mb-4'>Healthcare Providers</h2>
-      {/* Healthcare Providers content will go here */}
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{dictionary.admin.tabs.providers}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <DataTable
+          columns={providerColumns}
+          data={providers}
+          searchField='email'
+          dictionary={dictionary}
+        />
+      </CardContent>
+    </Card>
   );
-};
-
-export default ProvidersTab;
+}

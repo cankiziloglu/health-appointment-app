@@ -128,12 +128,32 @@
       "email": "E-posta",
       "phone": "Telefon",
       "title_field": "Ünvan",
+      "view": "Görüntüle",
+      "toggle_columns": "Sütunları göster/gizle",
+      "columns": {
+        "email": "e-posta",
+        "name": "isim",
+        "role": "rol",
+        "phone": "telefon",
+        "title": "ünvan",
+        "status": "durum"
+      },
+      "filter": "Filtrele",
+      "no_results": "Sonuç bulunamadı.",
+      "row_selected": "satır seçildi.",
+      "of": "/",
+      "per_page": "Sayfa başına",
+      "go_first": "İlk sayfaya git",
+      "go_last": "Son sayfaya git",
+      "go_prev": "Önceki sayfaya git",
+      "go_next": "Sonraki sayfaya git",
       "tabs": {
         "users": "Kullanıcılar",
         "providers": "Sağlık Kuruluşları",
         "practitioners": "Özel Doktorlar",
         "account": "Hesap"
-      }
+      },
+      "page": "Sayfa"
     }
   },
   "Verify": {
