@@ -107,6 +107,33 @@
       "address": "Address",
       "postal_code": "Postal Code",
       "cancel": "Cancel"
+    },
+    "admin": {
+      "title": "Admin Dashboard",
+      "pendingTitle": "Pending Verifications",
+      "reviewTitle": "Healthcare Provider Details",
+      "reviewTitlePractitioner": "Private Practitioner Details",
+      "provider": "Provider",
+      "practitioner": "Practitioner",
+      "name": "Name",
+      "type": "Type",
+      "actions": "Actions",
+      "review": "Review",
+      "verify": "Verify",
+      "verifySuccess": "Provider verified successfully",
+      "verifyError": "Failed to verify provider",
+      "activateSuccess": "Practitioner activated successfully",
+      "activateError": "Failed to activate practitioner",
+      "verifyGenericError": "An error occurred during verification",
+      "email": "Email",
+      "phone": "Phone",
+      "title_field": "Title",
+      "tabs": {
+        "users": "Users",
+        "providers": "Healthcare Providers",
+        "practitioners": "Private Practitioners",
+        "account": "Account"
+      }
     }
   },
   "Verify": {

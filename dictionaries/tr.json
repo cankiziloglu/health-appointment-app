@@ -107,6 +107,33 @@
       "address": "Address",
       "postal_code": "Postal Code",
       "cancel": "Cancel"
+    },
+    "admin": {
+      "title": "Yönetici Paneli",
+      "pendingTitle": "Onay Bekleyenler",
+      "reviewTitle": "Sağlık Kuruluşu Detayları",
+      "reviewTitlePractitioner": "Özel Doktor Detayları",
+      "provider": "Sağlık Kuruluşu",
+      "practitioner": "Özel Doktor",
+      "name": "İsim",
+      "type": "Tür",
+      "actions": "İşlemler",
+      "review": "İncele",
+      "verify": "Onayla",
+      "verifySuccess": "Sağlık kuruluşu başarıyla onaylandı",
+      "verifyError": "Sağlık kuruluşu onaylanamadı",
+      "activateSuccess": "Özel doktor başarıyla onaylandı",
+      "activateError": "Özel doktor onaylanamadı",
+      "verifyGenericError": "Onaylama işlemi sırasında bir hata oluştu",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "title_field": "Ünvan",
+      "tabs": {
+        "users": "Kullanıcılar",
+        "providers": "Sağlık Kuruluşları",
+        "practitioners": "Özel Doktorlar",
+        "account": "Hesap"
+      }
     }
   },
   "Verify": {
