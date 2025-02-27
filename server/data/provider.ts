@@ -82,6 +82,22 @@ export const verifyHealthcareProvider = async (providerId: string) => {
   }
 };
 
+// Unverify healthcare provider (Admin only)
+export const unverifyHealthcareProvider = async (id: string) => {
+  try {
+    const provider = await db.healthcareProvider.update({
+      where: { id },
+      data: {
+        is_verified: false,
+      },
+    });
+    return provider;
+  } catch (error) {
+    console.error('Error unverifying healthcare provider:', error);
+    return { error: 'Failed to unverify healthcare provider' };
+  }
+};
+
 // Get all healthcare providers for admin dashboard
 export const getAllHealthcareProviders = cache(async () => {
   return await db.healthcareProvider.findMany({

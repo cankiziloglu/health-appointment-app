@@ -46,6 +46,12 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { deleteUserSchema } from '@/lib/schemas';
 import { useRouter } from 'next/navigation';
+import {
+  verifyProviderAction,
+  unverifyProviderAction,
+  activatePractitionerAction,
+  deactivatePractitionerAction,
+} from '@/server/actions/adminActions';
 
 interface UserActionsProps {
   user: User;
@@ -455,6 +461,24 @@ export const createProviderColumns = (
   dictionary: DictionaryType['Dashboard']
 ): ColumnDef<HealthcareProvider>[] => [
   {
+    id: 'avatar',
+    header: () => <span className='sr-only'>Avatar</span>,
+    cell: ({ row }) => {
+      const provider = row.original;
+      const initial = provider.name?.charAt(0).toUpperCase() || '';
+
+      return (
+        <Avatar className='h-8 w-8'>
+          <AvatarImage
+            src={provider.logo_url || ''}
+            alt={provider.name || ''}
+          />
+          <AvatarFallback>{initial}</AvatarFallback>
+        </Avatar>
+      );
+    },
+  },
+  {
     accessorKey: 'name',
     header: ({ column }) => (
       <DataTableColumnHeader
@@ -523,38 +547,179 @@ export const createProviderColumns = (
         dictionary={dictionary}
       />
     ),
-    cell: ({ row }) => {
-      const provider = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(provider.id)}
-            >
-              {dictionary.admin.copyId}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>{dictionary.admin.view}</DropdownMenuItem>
-            <DropdownMenuItem>{dictionary.admin.verify}</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => (
+      <ProviderActions provider={row.original} dictionary={dictionary} />
+    ),
   },
 ];
+
+interface ProviderActionsProps {
+  provider: HealthcareProvider;
+  dictionary: DictionaryType['Dashboard'];
+}
+
+const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
+  const [showDetails, setShowDetails] = useState(false);
+  const router = useRouter();
+
+  const handleVerifyToggle = async () => {
+    try {
+      const result = provider.is_verified
+        ? await unverifyProviderAction(provider.id)
+        : await verifyProviderAction(provider.id);
+
+      if (result && 'success' in result) {
+        toast(
+          provider.is_verified
+            ? dictionary.admin.unverifySuccess
+            : dictionary.admin.verifySuccess
+        );
+        router.refresh();
+        return;
+      }
+      toast(dictionary.admin.verifyError, {
+        description: result?.error || dictionary.admin.verifyGenericError,
+      });
+    } catch {
+      toast(dictionary.admin.verifyError, {
+        description: dictionary.admin.verifyGenericError,
+      });
+    }
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' className='h-8 w-8 p-0'>
+            <span className='sr-only'>Open menu</span>
+            <MoreHorizontal className='h-4 w-4' />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() => {
+              navigator.clipboard.writeText(provider.id);
+              toast(dictionary.admin.idCopiedToast);
+            }}
+          >
+            {dictionary.admin.copyId}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setShowDetails(true)}>
+            {dictionary.admin.view}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleVerifyToggle}>
+            {provider.is_verified
+              ? dictionary.admin.unverify
+              : dictionary.admin.verify}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Provider Details Dialog */}
+      <Dialog open={showDetails} onOpenChange={setShowDetails}>
+        <DialogContent className='sm:max-w-[600px]'>
+          <DialogHeader>
+            <DialogTitle>{dictionary.admin.viewProviderDetails}</DialogTitle>
+            <DialogDescription>
+              {dictionary.admin.viewProviderDetailsDesc}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className='space-y-4'>
+            <div className='flex items-center gap-4'>
+              <Avatar className='h-16 w-16'>
+                <AvatarImage
+                  src={provider.logo_url || ''}
+                  alt={provider.name || ''}
+                />
+                <AvatarFallback>
+                  {provider.name?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+
+              <div>
+                <h3 className='font-medium text-lg'>{provider.name}</h3>
+                <p className='text-sm text-muted-foreground'>
+                  {provider.email}
+                </p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>ID</p>
+                <p className='text-sm text-muted-foreground break-all'>
+                  {provider.id}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>
+                  {dictionary.admin.columns.phone}
+                </p>
+                <p className='text-sm text-muted-foreground'>
+                  {provider.phone}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>
+                  {dictionary.admin.columns.verified}
+                </p>
+                <p className='text-sm text-muted-foreground'>
+                  {provider.is_verified
+                    ? dictionary.admin.verifiedStatus
+                    : dictionary.admin.notVerifiedStatus}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>
+                  {dictionary.admin.columns.created}
+                </p>
+                <p className='text-sm text-muted-foreground'>
+                  {format(new Date(provider.created_at), 'PP')}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>Website</p>
+                <p className='text-sm text-muted-foreground'>
+                  {provider.website || '-'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};
 
 // Private Practitioners Table Columns
 export const createPractitionerColumns = (
   dictionary: DictionaryType['Dashboard']
 ): ColumnDef<Doctor>[] => [
+  {
+    id: 'avatar',
+    header: () => <span className='sr-only'>Avatar</span>,
+    cell: ({ row }) => {
+      const practitioner = row.original;
+      const initials =
+        `${practitioner.first_name[0]}${practitioner.last_name[0]}`.toUpperCase();
+
+      return (
+        <Avatar className='h-8 w-8'>
+          <AvatarImage
+            src={practitioner.photo_url || ''}
+            alt={`${practitioner.first_name} ${practitioner.last_name}`}
+          />
+          <AvatarFallback>{initials}</AvatarFallback>
+        </Avatar>
+      );
+    },
+  },
   {
     id: 'name',
     header: ({ column }) => (
@@ -635,30 +800,162 @@ export const createPractitionerColumns = (
         dictionary={dictionary}
       />
     ),
-    cell: ({ row }) => {
-      const practitioner = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <MoreHorizontal className='h-4 w-4' />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(practitioner.id)}
-            >
-              {dictionary.admin.copyId}
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>{dictionary.admin.view}</DropdownMenuItem>
-            <DropdownMenuItem>{dictionary.admin.verify}</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => (
+      <PractitionerActions
+        practitioner={row.original}
+        dictionary={dictionary}
+      />
+    ),
   },
 ];
+
+interface PractitionerActionsProps {
+  practitioner: Doctor;
+  dictionary: DictionaryType['Dashboard'];
+}
+
+const PractitionerActions = ({
+  practitioner,
+  dictionary,
+}: PractitionerActionsProps) => {
+  const [showDetails, setShowDetails] = useState(false);
+  const router = useRouter();
+
+  const handleActivationToggle = async () => {
+    try {
+      const result = practitioner.is_active
+        ? await deactivatePractitionerAction(practitioner.id)
+        : await activatePractitionerAction(practitioner.id);
+
+      if (result && 'success' in result) {
+        toast(
+          practitioner.is_active
+            ? dictionary.admin.deactivateSuccess
+            : dictionary.admin.activateSuccess
+        );
+        router.refresh();
+        return;
+      }
+      toast(dictionary.admin.activateError, {
+        description: result?.error || dictionary.admin.activateGenericError,
+      });
+    } catch {
+      toast(dictionary.admin.activateError, {
+        description: dictionary.admin.activateGenericError,
+      });
+    }
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' className='h-8 w-8 p-0'>
+            <span className='sr-only'>Open menu</span>
+            <MoreHorizontal className='h-4 w-4' />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
+          <DropdownMenuItem
+            onClick={() => {
+              navigator.clipboard.writeText(practitioner.id);
+              toast(dictionary.admin.idCopiedToast);
+            }}
+          >
+            {dictionary.admin.copyId}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setShowDetails(true)}>
+            {dictionary.admin.view}
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={handleActivationToggle}>
+            {practitioner.is_active
+              ? dictionary.admin.deactivate
+              : dictionary.admin.activate}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      {/* Practitioner Details Dialog */}
+      <Dialog open={showDetails} onOpenChange={setShowDetails}>
+        <DialogContent className='sm:max-w-[600px]'>
+          <DialogHeader>
+            <DialogTitle>
+              {dictionary.admin.viewPractitionerDetails}
+            </DialogTitle>
+            <DialogDescription>
+              {dictionary.admin.viewPractitionerDetailsDesc}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className='space-y-4'>
+            <div className='flex items-center gap-4'>
+              <Avatar className='h-16 w-16'>
+                <AvatarImage
+                  src={practitioner.photo_url || ''}
+                  alt={`${practitioner.first_name} ${practitioner.last_name}`}
+                />
+                <AvatarFallback>
+                  {`${practitioner.first_name[0]}${practitioner.last_name[0]}`.toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+
+              <div>
+                <h3 className='font-medium text-lg'>{`${practitioner.first_name} ${practitioner.last_name}`}</h3>
+                <p className='text-sm text-muted-foreground'>
+                  {practitioner.email}
+                </p>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>ID</p>
+                <p className='text-sm text-muted-foreground break-all'>
+                  {practitioner.id}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>
+                  {dictionary.admin.columns.phone}
+                </p>
+                <p className='text-sm text-muted-foreground'>
+                  {practitioner.phone}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>
+                  {dictionary.admin.columns.title}
+                </p>
+                <p className='text-sm text-muted-foreground'>
+                  {practitioner.title}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>
+                  {dictionary.admin.columns.active}
+                </p>
+                <p className='text-sm text-muted-foreground'>
+                  {practitioner.is_active
+                    ? dictionary.admin.activeStatus
+                    : dictionary.admin.inactiveStatus}
+                </p>
+              </div>
+              <div className='space-y-1'>
+                <p className='text-sm font-medium'>
+                  {dictionary.admin.columns.created}
+                </p>
+                <p className='text-sm text-muted-foreground'>
+                  {format(new Date(practitioner.created_at), 'PP')}
+                </p>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+};

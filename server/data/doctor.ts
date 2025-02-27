@@ -99,6 +99,23 @@ export const activatePrivatePractitioner = async (doctorId: string) => {
   }
 };
 
+// Deactivate private practitioner (Admin only)
+export const deactivatePrivatePractitioner = async (doctorId: string) => {
+  try {
+    const doctor = await db.doctor.update({
+      where: { id: doctorId },
+      data: {
+        is_active: false,
+      },
+    });
+    return doctor;
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+    return { error: `Error deactivating practitioner: ${errorMessage}` };
+  }
+};
+
 // Get all doctors for admin dashboard
 export const getAllDoctors = cache(async () => {
   return await db.doctor.findMany({
