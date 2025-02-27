@@ -136,7 +136,11 @@
         "role": "rol",
         "phone": "telefon",
         "title": "ünvan",
-        "status": "durum"
+        "status": "durum",
+        "verified": "doğrulanmış",
+        "active": "aktif",
+        "created": "oluşturulma",
+        "actions": "işlemler"
       },
       "filter": "Filtrele",
       "no_results": "Sonuç bulunamadı.",

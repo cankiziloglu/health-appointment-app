@@ -1,7 +1,7 @@
 'use client';
 
 import { DataTable } from '@/components/ui/data-table';
-import { userColumns } from './columns';
+import { createUserColumns } from './columns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User } from '@prisma/client';
 import { DictionaryType } from '@/lib/types';
@@ -12,6 +12,9 @@ interface UsersTabProps {
 }
 
 export default function UsersTab({ dictionary, users }: UsersTabProps) {
+  // Create columns with dictionary for translations
+  const userColumns = createUserColumns(dictionary);
+
   return (
     <Card>
       <CardHeader>
@@ -21,7 +24,7 @@ export default function UsersTab({ dictionary, users }: UsersTabProps) {
         <DataTable
           columns={userColumns}
           data={users}
-          searchField='email'
+          searchField='name'
           dictionary={dictionary}
         />
       </CardContent>

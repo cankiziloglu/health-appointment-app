@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { DataTable } from '@/components/ui/data-table';
-import { practitionerColumns } from './columns';
+import { createPractitionerColumns } from './columns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Doctor } from '@prisma/client';
 import { DictionaryType } from '@/lib/types';
@@ -16,6 +16,9 @@ export default function PractitionersTab({
   dictionary,
   practitioners,
 }: PractitionersTabProps) {
+  // Create columns with dictionary for translations
+  const practitionerColumns = createPractitionerColumns(dictionary);
+
   return (
     <Card>
       <CardHeader>
@@ -25,7 +28,7 @@ export default function PractitionersTab({
         <DataTable
           columns={practitionerColumns}
           data={practitioners}
-          searchField='email'
+          searchField='name'
           dictionary={dictionary}
         />
       </CardContent>

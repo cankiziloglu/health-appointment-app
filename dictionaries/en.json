@@ -136,7 +136,11 @@
         "role": "role",
         "phone": "phone",
         "title": "title",
-        "status": "status"
+        "status": "status",
+        "verified": "verified",
+        "active": "active",
+        "created": "created",
+        "actions": "actions"
       },
       "filter": "Filter",
       "no_results": "No results.",

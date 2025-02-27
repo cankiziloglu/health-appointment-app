@@ -3,7 +3,6 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { User, HealthcareProvider, Doctor } from '@prisma/client';
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, CheckCircle, XCircle } from 'lucide-react';
 import {
@@ -15,50 +14,32 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { format } from 'date-fns';
+import { DictionaryType } from '@/lib/types';
 
-// Users Table Columns
-export const userColumns: ColumnDef<User>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Select row'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+// Function to create columns with dictionary for translations
+export const createUserColumns = (dictionary: DictionaryType['Dashboard']): ColumnDef<User>[] => [
   {
     accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='name' />
+      <DataTableColumnHeader column={column} title='name' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'email',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='email' />
+      <DataTableColumnHeader column={column} title='email' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'role',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='role' />
+      <DataTableColumnHeader column={column} title='role' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'emailVerified',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='verified' />
+      <DataTableColumnHeader column={column} title='verified' dictionary={dictionary} />
     ),
     cell: ({ row }) => (
       <div className='flex items-center'>
@@ -73,12 +54,15 @@ export const userColumns: ColumnDef<User>[] = [
   {
     accessorKey: 'createdAt',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='created' />
+      <DataTableColumnHeader column={column} title='created' dictionary={dictionary} />
     ),
     cell: ({ row }) => format(new Date(row.getValue('createdAt')), 'PP'),
   },
   {
     id: 'actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='actions' dictionary={dictionary} />
+    ),
     cell: ({ row }) => {
       const user = row.original;
 
@@ -91,15 +75,14 @@ export const userColumns: ColumnDef<User>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>actions</DropdownMenuLabel>
+            <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(user.id)}
             >
-              copy_id
+              {dictionary.admin.view} ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>view</DropdownMenuItem>
-            <DropdownMenuItem>delete</DropdownMenuItem>
+            <DropdownMenuItem>{dictionary.admin.view}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -108,48 +91,29 @@ export const userColumns: ColumnDef<User>[] = [
 ];
 
 // Healthcare Providers Table Columns
-export const providerColumns: ColumnDef<HealthcareProvider>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Select row'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+export const createProviderColumns = (dictionary: DictionaryType['Dashboard']): ColumnDef<HealthcareProvider>[] => [
   {
     accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='name' />
+      <DataTableColumnHeader column={column} title='name' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'email',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='email' />
+      <DataTableColumnHeader column={column} title='email' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'phone',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='phone' />
+      <DataTableColumnHeader column={column} title='phone' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'is_verified',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='verified' />
+      <DataTableColumnHeader column={column} title='verified' dictionary={dictionary} />
     ),
     cell: ({ row }) => (
       <div className='flex items-center'>
@@ -164,12 +128,15 @@ export const providerColumns: ColumnDef<HealthcareProvider>[] = [
   {
     accessorKey: 'created_at',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='created' />
+      <DataTableColumnHeader column={column} title='created' dictionary={dictionary} />
     ),
     cell: ({ row }) => format(new Date(row.getValue('created_at')), 'PP'),
   },
   {
     id: 'actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='actions' dictionary={dictionary} />
+    ),
     cell: ({ row }) => {
       const provider = row.original;
 
@@ -182,15 +149,15 @@ export const providerColumns: ColumnDef<HealthcareProvider>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>actions</DropdownMenuLabel>
+            <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(provider.id)}
             >
-              copy_id
+              {dictionary.admin.view} ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>view</DropdownMenuItem>
-            <DropdownMenuItem>verify</DropdownMenuItem>
+            <DropdownMenuItem>{dictionary.admin.view}</DropdownMenuItem>
+            <DropdownMenuItem>{dictionary.admin.verify}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -199,55 +166,36 @@ export const providerColumns: ColumnDef<HealthcareProvider>[] = [
 ];
 
 // Private Practitioners Table Columns
-export const practitionerColumns: ColumnDef<Doctor>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected()}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label='Select all'
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label='Select row'
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+export const createPractitionerColumns = (dictionary: DictionaryType['Dashboard']): ColumnDef<Doctor>[] => [
   {
     id: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='name' />
+      <DataTableColumnHeader column={column} title='name' dictionary={dictionary} />
     ),
     accessorFn: (row) => `${row.first_name} ${row.last_name}`,
   },
   {
+    accessorKey: 'title',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='title' dictionary={dictionary} />
+    ),
+  },
+  {
     accessorKey: 'email',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='email' />
+      <DataTableColumnHeader column={column} title='email' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'phone',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='phone' />
-    ),
-  },
-  {
-    accessorKey: 'title',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='title' />
+      <DataTableColumnHeader column={column} title='phone' dictionary={dictionary} />
     ),
   },
   {
     accessorKey: 'is_active',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='active' />
+      <DataTableColumnHeader column={column} title='active' dictionary={dictionary} />
     ),
     cell: ({ row }) => (
       <div className='flex items-center'>
@@ -262,12 +210,15 @@ export const practitionerColumns: ColumnDef<Doctor>[] = [
   {
     accessorKey: 'created_at',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='created' />
+      <DataTableColumnHeader column={column} title='created' dictionary={dictionary} />
     ),
     cell: ({ row }) => format(new Date(row.getValue('created_at')), 'PP'),
   },
   {
     id: 'actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='actions' dictionary={dictionary} />
+    ),
     cell: ({ row }) => {
       const practitioner = row.original;
 
@@ -280,15 +231,15 @@ export const practitionerColumns: ColumnDef<Doctor>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>actions</DropdownMenuLabel>
+            <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(practitioner.id)}
             >
-              copy_id
+              {dictionary.admin.view} ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>view</DropdownMenuItem>
-            <DropdownMenuItem>activate</DropdownMenuItem>
+            <DropdownMenuItem>{dictionary.admin.view}</DropdownMenuItem>
+            <DropdownMenuItem>{dictionary.admin.verify}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

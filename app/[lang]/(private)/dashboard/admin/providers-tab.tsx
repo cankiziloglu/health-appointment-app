@@ -1,7 +1,7 @@
 'use client';
 
 import { DataTable } from '@/components/ui/data-table';
-import { providerColumns } from './columns';
+import { createProviderColumns } from './columns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { HealthcareProvider } from '@prisma/client';
 import { DictionaryType } from '@/lib/types';
@@ -15,6 +15,9 @@ export default function ProvidersTab({
   dictionary,
   providers,
 }: ProvidersTabProps) {
+  // Create columns with dictionary for translations
+  const providerColumns = createProviderColumns(dictionary);
+
   return (
     <Card>
       <CardHeader>
@@ -24,7 +27,7 @@ export default function ProvidersTab({
         <DataTable
           columns={providerColumns}
           data={providers}
-          searchField='email'
+          searchField='name'
           dictionary={dictionary}
         />
       </CardContent>
