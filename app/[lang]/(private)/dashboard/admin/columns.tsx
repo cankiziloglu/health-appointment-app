@@ -335,7 +335,7 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
           <AlertDialogHeader>
             <AlertDialogTitle>{dictionary.alertTitle}</AlertDialogTitle>
             <AlertDialogDescription className='flex flex-col gap-2'>
-              <span>{dictionary.alertDescription}</span>
+              <span>{dictionary.alertDescriptionUser}</span>
               <span className='font-bold'>{dictionary.alertDescription2}</span>
             </AlertDialogDescription>
           </AlertDialogHeader>

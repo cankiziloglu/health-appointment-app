@@ -82,6 +82,7 @@
     "deleteButton": "Delete Account",
     "alertTitle": "Are you sure?",
     "alertDescription": "This action cannot be undone. This will permanently delete your account and remove your data from our servers. Be sure to delete any profile you have before deleting your account.",
+    "alertDescriptionUser": "This action cannot be undone. This will permanently delete the user and remove the user data from our servers. Be sure to delete any profile the user has before deleting the user.",
     "alertDescription2": "Please type 'DELETE' to confirm.",
     "alertCancel": "Cancel",
     "alertContinue": "Delete Account",

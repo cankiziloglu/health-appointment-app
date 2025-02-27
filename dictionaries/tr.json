@@ -82,6 +82,7 @@
     "deleteButton": "Hesabı Sil",
     "alertTitle": "Emin misiniz?",
     "alertDescription": "Bu işlem geri alınamaz. Bu hesabınızı kalıcı olarak silecek ve verilerinizi sunucularımızdan kaldıracaktır. Hesabınızı silmeden önce tüm profillerinizi sildiğinizden emin olun.",
+    "alertDescriptionUser": "Bu işlem geri alınamaz. Bu kullanıcı hesabını kalıcı olarak silecek ve verilerini sunucularımızdan kaldıracaktır. Hesabını silmeden önce hesaba ait tüm profilleri sildiğinizden emin olun.",
     "alertDescription2": "Onaylamak için 'DELETE' yazın.",
     "alertCancel": "İptal",
     "alertContinue": "Hesabı Sil",
