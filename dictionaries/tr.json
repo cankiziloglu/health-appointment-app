@@ -114,7 +114,8 @@
       "reviewTitle": "Sağlık Kuruluşu Detayları",
       "reviewTitlePractitioner": "Özel Doktor Detayları",
       "provider": "Sağlık Kuruluşu",
-      "practitioner": "Özel Doktor",
+      "allProviders": "Tüm Sağlık Kuruluşları",
+      "doctor": "Doktor",
       "name": "İsim",
       "type": "Tür",
       "actions": "İşlemler",
@@ -143,8 +144,8 @@
       "viewUserDetailsDesc": "Bu kullanıcı hakkında tam bilgileri görüntüle",
       "viewProviderDetails": "Sağlık Kuruluşu Detayları",
       "viewProviderDetailsDesc": "Sağlık kuruluşunun tüm bilgilerini görüntüle",
-      "viewPractitionerDetails": "Özel Doktor Detayları",
-      "viewPractitionerDetailsDesc": "Bu özel doktor hakkındaki tüm bilgileri görüntüle",
+      "viewDoctorDetails": "Doktor Detayları",
+      "viewDoctorDetailsDesc": "Bu doktor hakkındaki tüm bilgileri görüntüle",
       "makeAdminSuccess": "Kullanıcı rolü yönetici olarak güncellendi",
       "makeAdminError": "Kullanıcı rolü güncellenemedi",
       "makeAdminErrorDesc": "Kullanıcı zaten yönetici",
@@ -165,7 +166,15 @@
         "verified": "onaylı",
         "active": "aktif",
         "created": "oluşturulma",
-        "actions": "işlemler"
+        "actions": "işlemler",
+        "is_Active": "aktif",
+        "is_Verified": "onaylı",
+        "created_At": "oluşturulma",
+        "is_verified": "onaylı",
+        "is_active": "aktif",
+        "emailVerified": "e-posta onaylı",
+        "created_at": "oluşturulma",
+        "createdAt": "oluşturulma"
       },
       "filter": "Filtrele",
       "no_results": "Sonuç bulunamadı",
@@ -180,7 +189,7 @@
       "tabs": {
         "users": "Kullanıcılar",
         "providers": "Sağlık Kuruluşları",
-        "practitioners": "Özel Doktorlar",
+        "doctors": "Doktorlar",
         "account": "Hesap"
       }
     }

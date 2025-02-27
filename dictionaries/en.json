@@ -114,7 +114,8 @@
       "reviewTitle": "Healthcare Provider Details",
       "reviewTitlePractitioner": "Private Practitioner Details",
       "provider": "Provider",
-      "practitioner": "Practitioner",
+      "allProviders": "All Providers",
+      "doctor": "Doctor",
       "name": "Name",
       "type": "Type",
       "actions": "Actions",
@@ -143,8 +144,8 @@
       "viewUserDetailsDesc": "View complete information about this user",
       "viewProviderDetails": "Provider Details",
       "viewProviderDetailsDesc": "View complete information about this provider",
-      "viewPractitionerDetails": "Practitioner Details",
-      "viewPractitionerDetailsDesc": "View complete information about this practitioner",
+      "viewDoctorDetails": "Doctor Details",
+      "viewDoctorDetailsDesc": "View complete information about this doctor",
       "makeAdminSuccess": "User role updated to admin successfully",
       "makeAdminError": "Failed to update user role",
       "makeAdminErrorDesc": "User is already an admin",
@@ -165,7 +166,15 @@
         "verified": "verified",
         "active": "active",
         "created": "created",
-        "actions": "actions"
+        "actions": "actions",
+        "is_Active": "active",
+        "is_Verified": "verified",
+        "created_At": "created At",
+        "is_verified": "verified",
+        "is_active": "active",
+        "emailVerified": "email verified",
+        "created_at": "created at",
+        "createdAt": "created at"
       },
       "filter": "Filter",
       "no_results": "No results",
@@ -180,7 +189,7 @@
       "tabs": {
         "users": "Users",
         "providers": "Healthcare Providers",
-        "practitioners": "Private Practitioners",
+        "doctors": "Doctors",
         "account": "Account"
       }
     }

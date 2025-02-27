@@ -13,7 +13,7 @@ import { getAllUsers, getUserDetailsById } from '@/server/data/user';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import UsersTab from './users-tab';
 import ProvidersTab from './providers-tab';
-import PractitionersTab from './practitioners-tab';
+import DoctorsTab from './doctors-tab';
 import AccountTab from './account-tab';
 import PendingVerifications from './pending-verifications';
 import { redirect } from 'next/navigation';
@@ -40,6 +40,11 @@ const AdminPage = async ({
     redirect(`/${lang}/signin`);
   }
 
+  // Check if user is admin, if not redirect to dashboard
+  if (session.role !== 'ADMIN') {
+    redirect(`/${lang}/dashboard`);
+  }
+
   // Fetch all the necessary data
   const unverifiedProviders = await getUnverifiedHealthcareProviders();
   const inactivePrivatePractitioners = await getInactivePrivatePractitioners();
@@ -49,7 +54,7 @@ const AdminPage = async ({
   // Fetch data for tables
   const users = await getAllUsers();
   const providers = await getAllHealthcareProviders();
-  const allPractitioners = await getAllDoctors();
+  const allDoctors = await getAllDoctors();
 
   return (
     <div className='container mx-auto py-6 px-4'>
@@ -74,11 +79,8 @@ const AdminPage = async ({
             <TabsTrigger value='providers' className='flex-grow sm:flex-grow-0'>
               {dictionary.admin.tabs.providers}
             </TabsTrigger>
-            <TabsTrigger
-              value='practitioners'
-              className='flex-grow sm:flex-grow-0'
-            >
-              {dictionary.admin.tabs.practitioners}
+            <TabsTrigger value='doctors' className='flex-grow sm:flex-grow-0'>
+              {dictionary.admin.tabs.doctors}
             </TabsTrigger>
           </div>
         </TabsList>
@@ -100,10 +102,11 @@ const AdminPage = async ({
           <ProvidersTab dictionary={dictionary} providers={providers} />
         </TabsContent>
 
-        <TabsContent value='practitioners'>
-          <PractitionersTab
+        <TabsContent value='doctors'>
+          <DoctorsTab
             dictionary={dictionary}
-            practitioners={allPractitioners}
+            doctors={allDoctors}
+            providers={providers}
           />
         </TabsContent>
       </Tabs>

@@ -230,7 +230,7 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                   </p>
                 </div>
                 <div className='space-y-1'>
-                  <p className='text-sm font-medium'>
+                  <p className='text-sm font-medium capitalize'>
                     {dictionary.admin.columns.role}
                   </p>
                   <p className='text-sm text-muted-foreground'>
@@ -238,7 +238,7 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                   </p>
                 </div>
                 <div className='space-y-1'>
-                  <p className='text-sm font-medium'>
+                  <p className='text-sm font-medium capitalize'>
                     {dictionary.admin.columns.verified}
                   </p>
                   <p className='text-sm text-muted-foreground'>
@@ -248,7 +248,7 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                   </p>
                 </div>
                 <div className='space-y-1'>
-                  <p className='text-sm font-medium'>
+                  <p className='text-sm font-medium capitalize'>
                     {dictionary.admin.columns.created}
                   </p>
                   <p className='text-sm text-muted-foreground'>
@@ -263,23 +263,29 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                 <>
                   <Separator />
                   <h4 className='font-medium'>
-                    {dictionary.admin.tabs.practitioners} Profile
+                    {dictionary.admin.tabs.doctors} Profile
                   </h4>
                   <div className='grid grid-cols-2 gap-4'>
                     <div className='space-y-1'>
-                      <p className='text-sm font-medium'>Name</p>
+                      <p className='text-sm font-medium capitalize'>
+                        {dictionary.admin.columns.name}
+                      </p>
                       <p className='text-sm text-muted-foreground'>
                         {`${userDetails.doctor.first_name} ${userDetails.doctor.last_name}`}
                       </p>
                     </div>
                     <div className='space-y-1'>
-                      <p className='text-sm font-medium'>Title</p>
+                      <p className='text-sm font-medium capitalize'>
+                        {dictionary.admin.columns.title}
+                      </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.doctor.title || 'N/A'}
                       </p>
                     </div>
                     <div className='space-y-1'>
-                      <p className='text-sm font-medium'>Status</p>
+                      <p className='text-sm font-medium capitalize'>
+                        {dictionary.admin.columns.active}
+                      </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.doctor.is_active
                           ? dictionary.admin.activeStatus
@@ -298,13 +304,17 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                   </h4>
                   <div className='grid grid-cols-2 gap-4'>
                     <div className='space-y-1'>
-                      <p className='text-sm font-medium'>Name</p>
+                      <p className='text-sm font-medium capitalize'>
+                        {dictionary.admin.columns.name}
+                      </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.provider.name}
                       </p>
                     </div>
                     <div className='space-y-1'>
-                      <p className='text-sm font-medium'>Status</p>
+                      <p className='text-sm font-medium capitalize'>
+                        {dictionary.admin.columns.verified}
+                      </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.provider.is_verified
                           ? dictionary.admin.verifiedStatus
@@ -658,7 +668,7 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
                 </p>
               </div>
               <div className='space-y-1'>
-                <p className='text-sm font-medium'>
+                <p className='text-sm font-medium capitalize'>
                   {dictionary.admin.columns.phone}
                 </p>
                 <p className='text-sm text-muted-foreground'>
@@ -666,7 +676,7 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
                 </p>
               </div>
               <div className='space-y-1'>
-                <p className='text-sm font-medium'>
+                <p className='text-sm font-medium capitalize'>
                   {dictionary.admin.columns.verified}
                 </p>
                 <p className='text-sm text-muted-foreground'>
@@ -676,7 +686,7 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
                 </p>
               </div>
               <div className='space-y-1'>
-                <p className='text-sm font-medium'>
+                <p className='text-sm font-medium capitalize'>
                   {dictionary.admin.columns.created}
                 </p>
                 <p className='text-sm text-muted-foreground'>
@@ -697,23 +707,23 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
   );
 };
 
-// Private Practitioners Table Columns
-export const createPractitionerColumns = (
+// Doctors Table Columns
+export const createDoctorColumns = (
   dictionary: DictionaryType['Dashboard']
 ): ColumnDef<Doctor>[] => [
   {
     id: 'avatar',
     header: () => <span className='sr-only'>Avatar</span>,
     cell: ({ row }) => {
-      const practitioner = row.original;
+      const doctor = row.original;
       const initials =
-        `${practitioner.first_name[0]}${practitioner.last_name[0]}`.toUpperCase();
+        `${doctor.first_name[0]}${doctor.last_name[0]}`.toUpperCase();
 
       return (
         <Avatar className='h-8 w-8'>
           <AvatarImage
-            src={practitioner.photo_url || ''}
-            alt={`${practitioner.first_name} ${practitioner.last_name}`}
+            src={doctor.photo_url || ''}
+            alt={`${doctor.first_name} ${doctor.last_name}`}
           />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
@@ -801,35 +811,29 @@ export const createPractitionerColumns = (
       />
     ),
     cell: ({ row }) => (
-      <PractitionerActions
-        practitioner={row.original}
-        dictionary={dictionary}
-      />
+      <DoctorActions doctor={row.original} dictionary={dictionary} />
     ),
   },
 ];
 
-interface PractitionerActionsProps {
-  practitioner: Doctor;
+interface DoctorActionsProps {
+  doctor: Doctor;
   dictionary: DictionaryType['Dashboard'];
 }
 
-const PractitionerActions = ({
-  practitioner,
-  dictionary,
-}: PractitionerActionsProps) => {
+const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const router = useRouter();
 
   const handleActivationToggle = async () => {
     try {
-      const result = practitioner.is_active
-        ? await deactivatePractitionerAction(practitioner.id)
-        : await activatePractitionerAction(practitioner.id);
+      const result = doctor.is_active
+        ? await deactivatePractitionerAction(doctor.id)
+        : await activatePractitionerAction(doctor.id);
 
       if (result && 'success' in result) {
         toast(
-          practitioner.is_active
+          doctor.is_active
             ? dictionary.admin.deactivateSuccess
             : dictionary.admin.activateSuccess
         );
@@ -859,7 +863,7 @@ const PractitionerActions = ({
           <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => {
-              navigator.clipboard.writeText(practitioner.id);
+              navigator.clipboard.writeText(doctor.id);
               toast(dictionary.admin.idCopiedToast);
             }}
           >
@@ -870,22 +874,20 @@ const PractitionerActions = ({
             {dictionary.admin.view}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleActivationToggle}>
-            {practitioner.is_active
+            {doctor.is_active
               ? dictionary.admin.deactivate
               : dictionary.admin.activate}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Practitioner Details Dialog */}
+      {/* Doctor Details Dialog */}
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className='sm:max-w-[600px]'>
           <DialogHeader>
-            <DialogTitle>
-              {dictionary.admin.viewPractitionerDetails}
-            </DialogTitle>
+            <DialogTitle>{dictionary.admin.viewDoctorDetails}</DialogTitle>
             <DialogDescription>
-              {dictionary.admin.viewPractitionerDetailsDesc}
+              {dictionary.admin.viewDoctorDetailsDesc}
             </DialogDescription>
           </DialogHeader>
 
@@ -893,19 +895,17 @@ const PractitionerActions = ({
             <div className='flex items-center gap-4'>
               <Avatar className='h-16 w-16'>
                 <AvatarImage
-                  src={practitioner.photo_url || ''}
-                  alt={`${practitioner.first_name} ${practitioner.last_name}`}
+                  src={doctor.photo_url || ''}
+                  alt={`${doctor.first_name} ${doctor.last_name}`}
                 />
                 <AvatarFallback>
-                  {`${practitioner.first_name[0]}${practitioner.last_name[0]}`.toUpperCase()}
+                  {`${doctor.first_name[0]}${doctor.last_name[0]}`.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
 
               <div>
-                <h3 className='font-medium text-lg'>{`${practitioner.first_name} ${practitioner.last_name}`}</h3>
-                <p className='text-sm text-muted-foreground'>
-                  {practitioner.email}
-                </p>
+                <h3 className='font-medium text-lg'>{`${doctor.first_name} ${doctor.last_name}`}</h3>
+                <p className='text-sm text-muted-foreground'>{doctor.email}</p>
               </div>
             </div>
 
@@ -915,41 +915,37 @@ const PractitionerActions = ({
               <div className='space-y-1'>
                 <p className='text-sm font-medium'>ID</p>
                 <p className='text-sm text-muted-foreground break-all'>
-                  {practitioner.id}
+                  {doctor.id}
                 </p>
               </div>
               <div className='space-y-1'>
-                <p className='text-sm font-medium'>
+                <p className='text-sm font-medium capitalize'>
                   {dictionary.admin.columns.phone}
                 </p>
-                <p className='text-sm text-muted-foreground'>
-                  {practitioner.phone}
-                </p>
+                <p className='text-sm text-muted-foreground'>{doctor.phone}</p>
               </div>
               <div className='space-y-1'>
-                <p className='text-sm font-medium'>
+                <p className='text-sm font-medium capitalize'>
                   {dictionary.admin.columns.title}
                 </p>
-                <p className='text-sm text-muted-foreground'>
-                  {practitioner.title}
-                </p>
+                <p className='text-sm text-muted-foreground'>{doctor.title}</p>
               </div>
               <div className='space-y-1'>
-                <p className='text-sm font-medium'>
+                <p className='text-sm font-medium capitalize'>
                   {dictionary.admin.columns.active}
                 </p>
                 <p className='text-sm text-muted-foreground'>
-                  {practitioner.is_active
+                  {doctor.is_active
                     ? dictionary.admin.activeStatus
                     : dictionary.admin.inactiveStatus}
                 </p>
               </div>
               <div className='space-y-1'>
-                <p className='text-sm font-medium'>
+                <p className='text-sm font-medium capitalize'>
                   {dictionary.admin.columns.created}
                 </p>
                 <p className='text-sm text-muted-foreground'>
-                  {format(new Date(practitioner.created_at), 'PP')}
+                  {format(new Date(doctor.created_at), 'PP')}
                 </p>
               </div>
             </div>
