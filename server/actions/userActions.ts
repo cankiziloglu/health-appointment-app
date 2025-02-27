@@ -179,20 +179,48 @@ export async function deleteUserAction(userId: string) {
   if (!session) {
     return { error: 'Not authenticated' };
   }
-  if (session.userId !== userId) {
+
+  // Allow admin users to delete any user
+  if (session.userId !== userId && session.role !== 'ADMIN') {
     return { error: 'Invalid user credentials' };
   }
+
   const userDetails = await getUserDetailsById(userId);
   if (userDetails?.doctor_id || userDetails?.provider_id) {
     return { error: 'Failed to delete account. User has active profiles' };
   }
   try {
     const result = await deleteUser(userId);
-    if (result.success) {
+    if (result.success && session.userId === userId) {
       await deleteSession();
     }
     return result;
   } catch (err) {
     return { error: 'an unknown error occured.', err };
+  }
+}
+
+export async function getUserDetailsAction(userId: string) {
+  // Check authentication
+  const session = await auth();
+  if (!session) {
+    return { error: 'Not authenticated' };
+  }
+
+  // Only admins or the user themselves can access user details
+  if (session.userId !== userId && session.role !== 'ADMIN') {
+    return { error: 'Not authorized' };
+  }
+
+  try {
+    const userDetails = await getUserDetailsById(userId);
+    if (!userDetails) {
+      return { error: 'User not found' };
+    }
+
+    return { success: true, user: userDetails };
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    return { error: 'Failed to fetch user details' };
   }
 }

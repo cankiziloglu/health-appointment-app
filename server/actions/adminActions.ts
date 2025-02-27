@@ -3,6 +3,7 @@
 import { auth } from '../data/auth';
 import { activatePrivatePractitioner } from '../data/doctor';
 import { verifyHealthcareProvider } from '../data/provider';
+import { db } from '@/prisma/prisma';
 
 export const verifyProviderAction = async (providerId: string) => {
   const session = await auth();
@@ -41,5 +42,41 @@ export const activatePractitionerAction = async (practitionerId: string) => {
     return { success: 'Practitioner activated successfully' };
   } catch {
     return { error: 'Failed to activate practitioner' };
+  }
+};
+
+export const makeUserAdminAction = async (userId: string) => {
+  const session = await auth();
+
+  // Authentication check
+  if (!session) {
+    return { error: 'Not authenticated' };
+  }
+
+  // Authorization check - only admins can make other users admin
+  if (session.role !== 'ADMIN') {
+    return { error: 'Not authorized' };
+  }
+
+  try {
+    // Update user role to ADMIN
+    const user = await db.user.update({
+      where: { id: userId },
+      data: { role: 'ADMIN' },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      },
+    });
+
+    return {
+      success: 'User role updated to admin successfully',
+      user: user,
+    };
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    return { error: 'Failed to update user role' };
   }
 };

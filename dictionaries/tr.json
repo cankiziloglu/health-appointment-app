@@ -129,6 +129,13 @@
       "phone": "Telefon",
       "title_field": "Ünvan",
       "view": "Görüntüle",
+      "copyId": "ID Kopyala",
+      "makeAdmin": "Yönetici Yap",
+      "deleteUser": "Kullanıcıyı Sil",
+      "viewUserDetails": "Kullanıcı Detayları",
+      "viewUserDetailsDesc": "Bu kullanıcı hakkında tam bilgileri görüntüle",
+      "makeAdminSuccess": "Kullanıcı rolü yönetici olarak güncellendi",
+      "makeAdminError": "Kullanıcı rolü güncellenemedi",
       "toggle_columns": "Sütunları göster/gizle",
       "columns": {
         "email": "e-posta",
@@ -157,16 +164,23 @@
         "practitioners": "Özel Doktorlar",
         "account": "Hesap"
       },
-      "page": "Sayfa"
+      "page": "Sayfa",
+      "makeAdminErrorDesc": "Kullanıcı zaten yönetici",
+      "idCopiedToast": "ID kopyalandı",
+      "notVerifiedText": "Doğrulanmamış",
+      "activeStatus": "Aktif",
+      "inactiveStatus": "İnaktif",
+      "verifiedStatus": "Doğrulanmış",
+      "notVerifiedStatus": "Doğrulanmamış"
     }
   },
   "Verify": {
-    "Token is required": "Token is required",
-    "Invalid token": "Invalid token",
-    "Email already verified": "Email already verified",
-    "User not found": "User not found",
-    "Email verified successfully": "Email verified successfully",
-    "Invalid or expired token": "Invalid or expired token",
+    "Token is required": "Token gerekli",
+    "Invalid token": "Geçersiz token",
+    "Email already verified": "E-posta zaten doğrulanmış",
+    "User not found": "Kullanıcı bulunamadı",
+    "Email verified successfully": "E-posta başarıyla doğrulandı",
+    "Invalid or expired token": "Geçersiz veya süresi dolmuş token",
     "redirect": "3 saniye içinde Ana Sayfaya yönlendiriliyorsunuz..."
   }
 }
