@@ -5,12 +5,12 @@ import UserDelete from '../user-delete';
 import { UserWithProfilesType, DictionaryType } from '@/lib/types';
 import { Locale } from '@/i18n-config';
 
-interface AccountTabProps {
+type AccountTabProps = {
   dictionary: DictionaryType['Dashboard'];
   user: UserWithProfilesType;
   lang: Locale['key'];
   isVerified: boolean;
-}
+};
 
 const AccountTab = ({
   dictionary,

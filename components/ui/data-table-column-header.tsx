@@ -7,12 +7,11 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { DictionaryType } from '@/lib/types';
 
-interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
+type DataTableColumnHeaderProps<TData, TValue> = React.HTMLAttributes<HTMLDivElement> & {
   column: Column<TData, TValue>;
   title: string;
   dictionary?: DictionaryType['Dashboard'];
-}
+};
 
 export function DataTableColumnHeader<TData, TValue>({
   column,

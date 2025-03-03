@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { HealthcareProvider } from '@prisma/client';
 import { DictionaryType } from '@/lib/types';
 
-interface ProvidersTabProps {
+type ProvidersTabProps = {
   dictionary: DictionaryType['Dashboard'];
   providers: HealthcareProvider[];
 }

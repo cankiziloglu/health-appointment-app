@@ -8,7 +8,7 @@ import { Doctor, HealthcareProvider } from '@prisma/client';
 import { DictionaryType } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-interface DoctorsTabProps {
+type DoctorsTabProps = {
   dictionary: DictionaryType['Dashboard'];
   doctors: Doctor[];
   providers: HealthcareProvider[];

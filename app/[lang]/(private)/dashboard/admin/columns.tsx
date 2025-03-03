@@ -53,10 +53,10 @@ import {
   deactivatePractitionerAction,
 } from '@/server/actions/adminActions';
 
-interface UserActionsProps {
+type UserActionsProps = {
   user: User;
   dictionary: DictionaryType['Dashboard'];
-}
+};
 
 // Separate component for user actions to properly use React hooks
 const UserActions = ({ user, dictionary }: UserActionsProps) => {
@@ -563,7 +563,7 @@ export const createProviderColumns = (
   },
 ];
 
-interface ProviderActionsProps {
+type ProviderActionsProps = {
   provider: HealthcareProvider;
   dictionary: DictionaryType['Dashboard'];
 }
@@ -816,7 +816,7 @@ export const createDoctorColumns = (
   },
 ];
 
-interface DoctorActionsProps {
+type DoctorActionsProps = {
   doctor: Doctor;
   dictionary: DictionaryType['Dashboard'];
 }
