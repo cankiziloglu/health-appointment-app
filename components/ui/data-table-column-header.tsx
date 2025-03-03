@@ -5,12 +5,12 @@ import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDown } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { DictionaryType } from '@/lib/types';
+import { DataTableDictionaryType } from '@/lib/types';
 
 type DataTableColumnHeaderProps<TData, TValue> = React.HTMLAttributes<HTMLDivElement> & {
   column: Column<TData, TValue>;
   title: string;
-  dictionary?: DictionaryType['Dashboard'];
+  dictionary: DataTableDictionaryType
 };
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -20,7 +20,7 @@ export function DataTableColumnHeader<TData, TValue>({
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   // Get translated column title from dictionary or use the original title as fallback
-  const translatedTitle = dictionary?.admin?.columns?.[title] || title;
+  const translatedTitle = dictionary.columns[title]
 
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{translatedTitle}</div>;

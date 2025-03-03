@@ -15,7 +15,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { DictionaryType } from '@/lib/types';
+import { DataTableDictionaryType } from '@/lib/types';
 
 import {
   Table,
@@ -34,7 +34,7 @@ type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   searchField?: string;
-  dictionary: DictionaryType['Dashboard'];
+  dictionary: DataTableDictionaryType
 }
 
 export function DataTable<TData, TValue>({
@@ -74,7 +74,7 @@ export function DataTable<TData, TValue>({
       <div className='flex items-center gap-2'>
         {searchField && (
           <Input
-            placeholder={`${dictionary.admin.filter} ${dictionary.admin.columns[searchField]}...`}
+            placeholder={`${dictionary.filter} ${dictionary.columns[searchField]}...`}
             value={
               (table.getColumn(searchField)?.getFilterValue() as string) ?? ''
             }
@@ -126,7 +126,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className='h-24 text-center'
                 >
-                  {dictionary.admin.no_results}
+                  {dictionary.no_results}
                 </TableCell>
               </TableRow>
             )}

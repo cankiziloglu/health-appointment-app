@@ -7,7 +7,7 @@ import { User } from '@prisma/client';
 import { DictionaryType } from '@/lib/types';
 
 type UsersTabProps = {
-  dictionary: DictionaryType['Dashboard'];
+  dictionary: DictionaryType['Dashboard']['admin'];
   users: User[];
 }
 
@@ -18,14 +18,14 @@ export default function UsersTab({ dictionary, users }: UsersTabProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{dictionary.admin.tabs.users}</CardTitle>
+        <CardTitle>{dictionary.tabs.users}</CardTitle>
       </CardHeader>
       <CardContent>
         <DataTable
           columns={userColumns}
           data={users}
           searchField='name'
-          dictionary={dictionary}
+          dictionary={dictionary.dataTable}
         />
       </CardContent>
     </Card>

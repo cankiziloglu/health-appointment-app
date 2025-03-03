@@ -95,16 +95,16 @@ const AdminPage = async ({
         </TabsContent>
 
         <TabsContent value='users'>
-          <UsersTab dictionary={dictionary} users={users} />
+          <UsersTab dictionary={dictionary.admin} users={users} />
         </TabsContent>
 
         <TabsContent value='providers'>
-          <ProvidersTab dictionary={dictionary} providers={providers} />
+          <ProvidersTab dictionary={dictionary.admin} providers={providers} />
         </TabsContent>
 
         <TabsContent value='doctors'>
           <DoctorsTab
-            dictionary={dictionary}
+            dictionary={dictionary.admin}
             doctors={allDoctors}
             providers={providers}
           />

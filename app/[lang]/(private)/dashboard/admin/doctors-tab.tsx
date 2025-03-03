@@ -9,7 +9,7 @@ import { DictionaryType } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type DoctorsTabProps = {
-  dictionary: DictionaryType['Dashboard'];
+  dictionary: DictionaryType['Dashboard']['admin'];
   doctors: Doctor[];
   providers: HealthcareProvider[];
 }
@@ -32,13 +32,13 @@ export default function DoctorsTab({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-        <CardTitle>{dictionary.admin.tabs.doctors}</CardTitle>
+        <CardTitle>{dictionary.tabs.doctors}</CardTitle>
         <Select onValueChange={setSelectedProvider} defaultValue="all">
           <SelectTrigger className="w-[200px]">
-            <SelectValue placeholder={dictionary.admin.provider} />
+            <SelectValue placeholder={dictionary.provider} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{dictionary.admin.allProviders}</SelectItem>
+            <SelectItem value="all">{dictionary.allProviders}</SelectItem>
             {providers.map((provider) => (
               <SelectItem key={provider.id} value={provider.id}>
                 {provider.name}
@@ -52,7 +52,7 @@ export default function DoctorsTab({
           columns={doctorColumns}
           data={filteredDoctors}
           searchField="name"
-          dictionary={dictionary}
+          dictionary={dictionary.dataTable}
         />
       </CardContent>
     </Card>

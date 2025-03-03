@@ -55,7 +55,7 @@ import {
 
 type UserActionsProps = {
   user: User;
-  dictionary: DictionaryType['Dashboard'];
+  dictionary: DictionaryType['Dashboard']['admin'];
 };
 
 // Separate component for user actions to properly use React hooks
@@ -92,9 +92,9 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
         setShowUserDetails(true);
       }
     } catch (error) {
-      toast(dictionary.admin.verifyGenericError, {
+      toast(dictionary.verifyGenericError, {
         description:
-          error instanceof Error ? error.message : dictionary.admin.verifyError,
+          error instanceof Error ? error.message : dictionary.verifyError,
       });
     } finally {
       setIsLoading(false);
@@ -104,9 +104,9 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
   // Make user admin
   const handleMakeAdmin = async () => {
     if (user.role === 'ADMIN') {
-      toast(dictionary.admin.makeAdminError, {
+      toast(dictionary.makeAdminError, {
         description:
-          dictionary.admin.makeAdminErrorDesc || 'User is already an admin',
+          dictionary.makeAdminErrorDesc || 'User is already an admin',
       });
       return;
     }
@@ -114,16 +114,16 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
     try {
       const result = await makeUserAdminAction(user.id);
       if (result && 'success' in result) {
-        toast(dictionary.admin.makeAdminSuccess);
+        toast(dictionary.makeAdminSuccess);
         router.refresh();
         return;
       }
-      toast(dictionary.admin.makeAdminError, {
-        description: result?.error || dictionary.admin.verifyGenericError,
+      toast(dictionary.makeAdminError, {
+        description: result?.error || dictionary.verifyGenericError,
       });
     } catch {
-      toast(dictionary.admin.makeAdminError, {
-        description: dictionary.admin.verifyGenericError,
+      toast(dictionary.makeAdminError, {
+        description: dictionary.verifyGenericError,
       });
     }
   };
@@ -158,29 +158,29 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
+          <DropdownMenuLabel>{dictionary.actions}</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard.writeText(user.id);
-              toast(dictionary.admin.idCopiedToast);
+              toast(dictionary.idCopiedToast);
             }}
           >
-            {dictionary.admin.copyId}
+            {dictionary.copyId}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={fetchUserDetails} disabled={isLoading}>
-            {dictionary.admin.view}
+            {dictionary.view}
           </DropdownMenuItem>
           {user.role !== 'ADMIN' && (
             <DropdownMenuItem onClick={handleMakeAdmin}>
-              {dictionary.admin.makeAdmin}
+              {dictionary.makeAdmin}
             </DropdownMenuItem>
           )}
           <DropdownMenuItem
             onClick={() => setShowDeleteDialog(true)}
             className='text-destructive'
           >
-            {dictionary.admin.deleteUser}
+            {dictionary.deleteUser}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -189,9 +189,9 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
       <Dialog open={showUserDetails} onOpenChange={setShowUserDetails}>
         <DialogContent className='sm:max-w-[600px]'>
           <DialogHeader>
-            <DialogTitle>{dictionary.admin.viewUserDetails}</DialogTitle>
+            <DialogTitle>{dictionary.viewUserDetails}</DialogTitle>
             <DialogDescription>
-              {dictionary.admin.viewUserDetailsDesc}
+              {dictionary.viewUserDetailsDesc}
             </DialogDescription>
           </DialogHeader>
 
@@ -231,7 +231,7 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                 </div>
                 <div className='space-y-1'>
                   <p className='text-sm font-medium capitalize'>
-                    {dictionary.admin.columns.role}
+                    {dictionary.dataTable.columns.role}
                   </p>
                   <p className='text-sm text-muted-foreground'>
                     {userDetails?.role}
@@ -239,17 +239,17 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                 </div>
                 <div className='space-y-1'>
                   <p className='text-sm font-medium capitalize'>
-                    {dictionary.admin.columns.verified}
+                    {dictionary.dataTable.columns.verified}
                   </p>
                   <p className='text-sm text-muted-foreground'>
                     {userDetails?.emailVerified
                       ? format(new Date(userDetails.emailVerified), 'PP')
-                      : dictionary.admin.notVerifiedText}
+                      : dictionary.notVerifiedText}
                   </p>
                 </div>
                 <div className='space-y-1'>
                   <p className='text-sm font-medium capitalize'>
-                    {dictionary.admin.columns.created}
+                    {dictionary.dataTable.columns.created}
                   </p>
                   <p className='text-sm text-muted-foreground'>
                     {userDetails?.createdAt &&
@@ -263,12 +263,12 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                 <>
                   <Separator />
                   <h4 className='font-medium'>
-                    {dictionary.admin.tabs.doctors} Profile
+                    {dictionary.tabs.doctors} Profile
                   </h4>
                   <div className='grid grid-cols-2 gap-4'>
                     <div className='space-y-1'>
                       <p className='text-sm font-medium capitalize'>
-                        {dictionary.admin.columns.name}
+                        {dictionary.dataTable.columns.name}
                       </p>
                       <p className='text-sm text-muted-foreground'>
                         {`${userDetails.doctor.first_name} ${userDetails.doctor.last_name}`}
@@ -276,7 +276,7 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                     </div>
                     <div className='space-y-1'>
                       <p className='text-sm font-medium capitalize'>
-                        {dictionary.admin.columns.title}
+                        {dictionary.dataTable.columns.title}
                       </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.doctor.title || 'N/A'}
@@ -284,12 +284,12 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                     </div>
                     <div className='space-y-1'>
                       <p className='text-sm font-medium capitalize'>
-                        {dictionary.admin.columns.active}
+                        {dictionary.dataTable.columns.active}
                       </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.doctor.is_active
-                          ? dictionary.admin.activeStatus
-                          : dictionary.admin.inactiveStatus}
+                          ? dictionary.activeStatus
+                          : dictionary.inactiveStatus}
                       </p>
                     </div>
                   </div>
@@ -300,12 +300,12 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                 <>
                   <Separator />
                   <h4 className='font-medium'>
-                    {dictionary.admin.tabs.providers} Profile
+                    {dictionary.tabs.providers} Profile
                   </h4>
                   <div className='grid grid-cols-2 gap-4'>
                     <div className='space-y-1'>
                       <p className='text-sm font-medium capitalize'>
-                        {dictionary.admin.columns.name}
+                        {dictionary.dataTable.columns.name}
                       </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.provider.name}
@@ -313,12 +313,12 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
                     </div>
                     <div className='space-y-1'>
                       <p className='text-sm font-medium capitalize'>
-                        {dictionary.admin.columns.verified}
+                        {dictionary.dataTable.columns.verified}
                       </p>
                       <p className='text-sm text-muted-foreground'>
                         {userDetails.provider.is_verified
-                          ? dictionary.admin.verifiedStatus
-                          : dictionary.admin.notVerifiedStatus}
+                          ? dictionary.verifiedStatus
+                          : dictionary.notVerifiedStatus}
                       </p>
                     </div>
                   </div>
@@ -369,7 +369,7 @@ const UserActions = ({ user, dictionary }: UserActionsProps) => {
 
 // Function to create columns with dictionary for translations
 export const createUserColumns = (
-  dictionary: DictionaryType['Dashboard']
+  dictionary: DictionaryType['Dashboard']['admin']
 ): ColumnDef<User>[] => [
   {
     id: 'avatar',
@@ -397,7 +397,7 @@ export const createUserColumns = (
       <DataTableColumnHeader
         column={column}
         title='name'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -407,7 +407,7 @@ export const createUserColumns = (
       <DataTableColumnHeader
         column={column}
         title='email'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -417,7 +417,7 @@ export const createUserColumns = (
       <DataTableColumnHeader
         column={column}
         title='role'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -427,7 +427,7 @@ export const createUserColumns = (
       <DataTableColumnHeader
         column={column}
         title='verified'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => (
@@ -446,7 +446,7 @@ export const createUserColumns = (
       <DataTableColumnHeader
         column={column}
         title='created'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => format(new Date(row.getValue('createdAt')), 'PP'),
@@ -457,7 +457,7 @@ export const createUserColumns = (
       <DataTableColumnHeader
         column={column}
         title='actions'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => (
@@ -468,7 +468,7 @@ export const createUserColumns = (
 
 // Healthcare Providers Table Columns
 export const createProviderColumns = (
-  dictionary: DictionaryType['Dashboard']
+  dictionary: DictionaryType['Dashboard']['admin']
 ): ColumnDef<HealthcareProvider>[] => [
   {
     id: 'avatar',
@@ -494,7 +494,7 @@ export const createProviderColumns = (
       <DataTableColumnHeader
         column={column}
         title='name'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -504,7 +504,7 @@ export const createProviderColumns = (
       <DataTableColumnHeader
         column={column}
         title='email'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -514,7 +514,7 @@ export const createProviderColumns = (
       <DataTableColumnHeader
         column={column}
         title='phone'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -524,7 +524,7 @@ export const createProviderColumns = (
       <DataTableColumnHeader
         column={column}
         title='verified'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => (
@@ -543,7 +543,7 @@ export const createProviderColumns = (
       <DataTableColumnHeader
         column={column}
         title='created'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => format(new Date(row.getValue('created_at')), 'PP'),
@@ -554,7 +554,7 @@ export const createProviderColumns = (
       <DataTableColumnHeader
         column={column}
         title='actions'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => (
@@ -565,7 +565,7 @@ export const createProviderColumns = (
 
 type ProviderActionsProps = {
   provider: HealthcareProvider;
-  dictionary: DictionaryType['Dashboard'];
+  dictionary: DictionaryType['Dashboard']['admin'];
 }
 
 const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
@@ -581,18 +581,18 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
       if (result && 'success' in result) {
         toast(
           provider.is_verified
-            ? dictionary.admin.unverifySuccess
-            : dictionary.admin.verifySuccess
+            ? dictionary.unverifySuccess
+            : dictionary.verifySuccess
         );
         router.refresh();
         return;
       }
-      toast(dictionary.admin.verifyError, {
-        description: result?.error || dictionary.admin.verifyGenericError,
+      toast(dictionary.verifyError, {
+        description: result?.error || dictionary.verifyGenericError,
       });
     } catch {
-      toast(dictionary.admin.verifyError, {
-        description: dictionary.admin.verifyGenericError,
+      toast(dictionary.verifyError, {
+        description: dictionary.verifyGenericError,
       });
     }
   };
@@ -607,23 +607,23 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
+          <DropdownMenuLabel>{dictionary.actions}</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard.writeText(provider.id);
-              toast(dictionary.admin.idCopiedToast);
+              toast(dictionary.idCopiedToast);
             }}
           >
-            {dictionary.admin.copyId}
+            {dictionary.copyId}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setShowDetails(true)}>
-            {dictionary.admin.view}
+            {dictionary.view}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleVerifyToggle}>
             {provider.is_verified
-              ? dictionary.admin.unverify
-              : dictionary.admin.verify}
+              ? dictionary.unverify
+              : dictionary.verify}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -632,9 +632,9 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className='sm:max-w-[600px]'>
           <DialogHeader>
-            <DialogTitle>{dictionary.admin.viewProviderDetails}</DialogTitle>
+            <DialogTitle>{dictionary.viewProviderDetails}</DialogTitle>
             <DialogDescription>
-              {dictionary.admin.viewProviderDetailsDesc}
+              {dictionary.viewProviderDetailsDesc}
             </DialogDescription>
           </DialogHeader>
 
@@ -669,7 +669,7 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
               </div>
               <div className='space-y-1'>
                 <p className='text-sm font-medium capitalize'>
-                  {dictionary.admin.columns.phone}
+                  {dictionary.dataTable.columns.phone}
                 </p>
                 <p className='text-sm text-muted-foreground'>
                   {provider.phone}
@@ -677,17 +677,17 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
               </div>
               <div className='space-y-1'>
                 <p className='text-sm font-medium capitalize'>
-                  {dictionary.admin.columns.verified}
+                  {dictionary.dataTable.columns.verified}
                 </p>
                 <p className='text-sm text-muted-foreground'>
                   {provider.is_verified
-                    ? dictionary.admin.verifiedStatus
-                    : dictionary.admin.notVerifiedStatus}
+                    ? dictionary.verifiedStatus
+                    : dictionary.notVerifiedStatus}
                 </p>
               </div>
               <div className='space-y-1'>
                 <p className='text-sm font-medium capitalize'>
-                  {dictionary.admin.columns.created}
+                  {dictionary.dataTable.columns.created}
                 </p>
                 <p className='text-sm text-muted-foreground'>
                   {format(new Date(provider.created_at), 'PP')}
@@ -709,7 +709,7 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
 
 // Doctors Table Columns
 export const createDoctorColumns = (
-  dictionary: DictionaryType['Dashboard']
+  dictionary: DictionaryType['Dashboard']['admin']
 ): ColumnDef<Doctor>[] => [
   {
     id: 'avatar',
@@ -736,7 +736,7 @@ export const createDoctorColumns = (
       <DataTableColumnHeader
         column={column}
         title='name'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     accessorFn: (row) => `${row.first_name} ${row.last_name}`,
@@ -747,7 +747,7 @@ export const createDoctorColumns = (
       <DataTableColumnHeader
         column={column}
         title='title'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -757,7 +757,7 @@ export const createDoctorColumns = (
       <DataTableColumnHeader
         column={column}
         title='email'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -767,7 +767,7 @@ export const createDoctorColumns = (
       <DataTableColumnHeader
         column={column}
         title='phone'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
   },
@@ -777,7 +777,7 @@ export const createDoctorColumns = (
       <DataTableColumnHeader
         column={column}
         title='active'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => (
@@ -796,7 +796,7 @@ export const createDoctorColumns = (
       <DataTableColumnHeader
         column={column}
         title='created'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => format(new Date(row.getValue('created_at')), 'PP'),
@@ -807,7 +807,7 @@ export const createDoctorColumns = (
       <DataTableColumnHeader
         column={column}
         title='actions'
-        dictionary={dictionary}
+        dictionary={dictionary.dataTable}
       />
     ),
     cell: ({ row }) => (
@@ -818,7 +818,7 @@ export const createDoctorColumns = (
 
 type DoctorActionsProps = {
   doctor: Doctor;
-  dictionary: DictionaryType['Dashboard'];
+  dictionary: DictionaryType['Dashboard']['admin'];
 }
 
 const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
@@ -834,18 +834,18 @@ const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
       if (result && 'success' in result) {
         toast(
           doctor.is_active
-            ? dictionary.admin.deactivateSuccess
-            : dictionary.admin.activateSuccess
+            ? dictionary.deactivateSuccess
+            : dictionary.activateSuccess
         );
         router.refresh();
         return;
       }
-      toast(dictionary.admin.activateError, {
-        description: result?.error || dictionary.admin.activateGenericError,
+      toast(dictionary.activateError, {
+        description: result?.error || dictionary.activateGenericError,
       });
     } catch {
-      toast(dictionary.admin.activateError, {
-        description: dictionary.admin.activateGenericError,
+      toast(dictionary.activateError, {
+        description: dictionary.activateGenericError,
       });
     }
   };
@@ -860,23 +860,23 @@ const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuLabel>{dictionary.admin.actions}</DropdownMenuLabel>
+          <DropdownMenuLabel>{dictionary.actions}</DropdownMenuLabel>
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard.writeText(doctor.id);
-              toast(dictionary.admin.idCopiedToast);
+              toast(dictionary.idCopiedToast);
             }}
           >
-            {dictionary.admin.copyId}
+            {dictionary.copyId}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => setShowDetails(true)}>
-            {dictionary.admin.view}
+            {dictionary.view}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleActivationToggle}>
             {doctor.is_active
-              ? dictionary.admin.deactivate
-              : dictionary.admin.activate}
+              ? dictionary.deactivate
+              : dictionary.activate}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -885,9 +885,9 @@ const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
       <Dialog open={showDetails} onOpenChange={setShowDetails}>
         <DialogContent className='sm:max-w-[600px]'>
           <DialogHeader>
-            <DialogTitle>{dictionary.admin.viewDoctorDetails}</DialogTitle>
+            <DialogTitle>{dictionary.viewDoctorDetails}</DialogTitle>
             <DialogDescription>
-              {dictionary.admin.viewDoctorDetailsDesc}
+              {dictionary.viewDoctorDetailsDesc}
             </DialogDescription>
           </DialogHeader>
 
@@ -920,29 +920,29 @@ const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
               </div>
               <div className='space-y-1'>
                 <p className='text-sm font-medium capitalize'>
-                  {dictionary.admin.columns.phone}
+                  {dictionary.dataTable.columns.phone}
                 </p>
                 <p className='text-sm text-muted-foreground'>{doctor.phone}</p>
               </div>
               <div className='space-y-1'>
                 <p className='text-sm font-medium capitalize'>
-                  {dictionary.admin.columns.title}
+                  {dictionary.dataTable.columns.title}
                 </p>
                 <p className='text-sm text-muted-foreground'>{doctor.title}</p>
               </div>
               <div className='space-y-1'>
                 <p className='text-sm font-medium capitalize'>
-                  {dictionary.admin.columns.active}
+                  {dictionary.dataTable.columns.active}
                 </p>
                 <p className='text-sm text-muted-foreground'>
                   {doctor.is_active
-                    ? dictionary.admin.activeStatus
-                    : dictionary.admin.inactiveStatus}
+                    ? dictionary.activeStatus
+                    : dictionary.inactiveStatus}
                 </p>
               </div>
               <div className='space-y-1'>
                 <p className='text-sm font-medium capitalize'>
-                  {dictionary.admin.columns.created}
+                  {dictionary.dataTable.columns.created}
                 </p>
                 <p className='text-sm text-muted-foreground'>
                   {format(new Date(doctor.created_at), 'PP')}

@@ -30,3 +30,20 @@ export type UserWithProfilesType = User & {
   doctor: DoctorSummary | null;
   provider: ProviderSummary | null;
 };
+
+// create generic type definitions for data tables
+export type DataTableDictionaryType = {
+  filter: string;
+  no_results: string;
+  row_selected: string;
+  of: string;
+  per_page: string;
+  go_first: string;
+  go_last: string;
+  go_prev: string;
+  go_next: string;
+  page: string;
+  toggle_columns: string;
+  view: string;
+  columns: { [key: string]: string };
+}

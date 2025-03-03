@@ -7,7 +7,7 @@ import { HealthcareProvider } from '@prisma/client';
 import { DictionaryType } from '@/lib/types';
 
 type ProvidersTabProps = {
-  dictionary: DictionaryType['Dashboard'];
+  dictionary: DictionaryType['Dashboard']['admin'];
   providers: HealthcareProvider[];
 }
 
@@ -21,14 +21,14 @@ export default function ProvidersTab({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{dictionary.admin.tabs.providers}</CardTitle>
+        <CardTitle>{dictionary.tabs.providers}</CardTitle>
       </CardHeader>
       <CardContent>
         <DataTable
           columns={providerColumns}
           data={providers}
           searchField='name'
-          dictionary={dictionary}
+          dictionary={dictionary.dataTable}
         />
       </CardContent>
     </Card>
