@@ -108,7 +108,7 @@ export default function ProfileList({
                 variant='outline'
                 size='sm'
                 onClick={() =>
-                  router.push(`${lang}/dashboard/doctor/${doctor.id}`)
+                  router.push(`/${lang}/dashboard/doctor/${doctor.id}`)
                 }
               >
                 {dictionary.edt}
@@ -137,7 +137,7 @@ export default function ProfileList({
                 variant='outline'
                 size='sm'
                 onClick={() =>
-                  router.push(`${lang}/dashboard/provider/${provider.id}`)
+                  router.push(`/${lang}/dashboard/provider/${provider.id}`)
                 }
               >
                 {dictionary.edt}
