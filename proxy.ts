@@ -21,7 +21,7 @@ function getLocale(request: NextRequest): string | undefined {
   return locale;
 }
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   let pathname = request.nextUrl.pathname;
   const searchParams = request.nextUrl.search;
 

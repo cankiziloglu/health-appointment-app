@@ -1,7 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { User, HealthcareProvider, Doctor } from '@prisma/client';
+import { User, HealthcareProvider, Doctor } from '@/generated/prisma/client';
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal, CheckCircle, XCircle } from 'lucide-react';
@@ -566,7 +566,7 @@ export const createProviderColumns = (
 type ProviderActionsProps = {
   provider: HealthcareProvider;
   dictionary: DictionaryType['Dashboard']['admin'];
-}
+};
 
 const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -621,9 +621,7 @@ const ProviderActions = ({ provider, dictionary }: ProviderActionsProps) => {
             {dictionary.view}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleVerifyToggle}>
-            {provider.is_verified
-              ? dictionary.unverify
-              : dictionary.verify}
+            {provider.is_verified ? dictionary.unverify : dictionary.verify}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -819,7 +817,7 @@ export const createDoctorColumns = (
 type DoctorActionsProps = {
   doctor: Doctor;
   dictionary: DictionaryType['Dashboard']['admin'];
-}
+};
 
 const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -874,9 +872,7 @@ const DoctorActions = ({ doctor, dictionary }: DoctorActionsProps) => {
             {dictionary.view}
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleActivationToggle}>
-            {doctor.is_active
-              ? dictionary.deactivate
-              : dictionary.activate}
+            {doctor.is_active ? dictionary.deactivate : dictionary.activate}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -1,4 +1,4 @@
-import { Role, User } from '@prisma/client';
+import { Role, User } from '@/generated/prisma/client';
 import { getDictionary } from './dictionaries';
 
 export type DictionaryType = Awaited<ReturnType<typeof getDictionary>>;
@@ -46,4 +46,4 @@ export type DataTableDictionaryType = {
   toggle_columns: string;
   view: string;
   columns: { [key: string]: string };
-}
+};

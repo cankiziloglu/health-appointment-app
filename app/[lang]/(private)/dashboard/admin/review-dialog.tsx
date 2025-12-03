@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import { Doctor, HealthcareProvider } from '@prisma/client';
+import { Doctor, HealthcareProvider } from '@/generated/prisma/client';
 import { DictionaryType } from '@/lib/types';
 import Image from 'next/image';
 

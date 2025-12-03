@@ -16,7 +16,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { LoaderCircle } from 'lucide-react';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma/client';
 import { updateUserAction } from '@/server/actions/userActions';
 import { useState } from 'react';
 import { ChangePass } from './change-pass';

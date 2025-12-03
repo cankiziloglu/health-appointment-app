@@ -1,10 +1,10 @@
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../generated/prisma"
 }
 
 model User {
@@ -80,49 +80,49 @@ model MedicalUnit {
 }
 
 model DoctorSchedule {
-  id                String   @id @default(cuid())
-  doctor            Doctor   @relation(fields: [doctor_id], references: [id])
-  doctor_id         String
-  day_of_week       Int      // 0=Sunday, 1=Monday, etc.
-  start_time        String   // HH:MM format
-  end_time          String   // HH:MM format
-  appointment_duration Int    // Duration in minutes
-  is_active         Boolean  @default(true)
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  exceptions        ScheduleException[]
-  
+  id                   String              @id @default(cuid())
+  doctor               Doctor              @relation(fields: [doctor_id], references: [id])
+  doctor_id            String
+  day_of_week          Int // 0=Sunday, 1=Monday, etc.
+  start_time           String // HH:MM format
+  end_time             String // HH:MM format
+  appointment_duration Int // Duration in minutes
+  is_active            Boolean             @default(true)
+  created_at           DateTime            @default(now())
+  updated_at           DateTime            @updatedAt
+  exceptions           ScheduleException[]
+
   @@index([doctor_id, day_of_week])
 }
 
 model ScheduleException {
-  id              String   @id @default(cuid())
-  schedule        DoctorSchedule @relation(fields: [schedule_id], references: [id])
-  schedule_id     String
-  date            DateTime // Specific date this exception applies to
-  exception_type  ExceptionType @default(FULL_DAY)
-  start_time      String?  // HH:MM format (for PARTIAL_DAY exceptions)
-  end_time        String?  // HH:MM format (for PARTIAL_DAY exceptions)
-  reason          String?
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
-  
+  id             String         @id @default(cuid())
+  schedule       DoctorSchedule @relation(fields: [schedule_id], references: [id])
+  schedule_id    String
+  date           DateTime // Specific date this exception applies to
+  exception_type ExceptionType  @default(FULL_DAY)
+  start_time     String? // HH:MM format (for PARTIAL_DAY exceptions)
+  end_time       String? // HH:MM format (for PARTIAL_DAY exceptions)
+  reason         String?
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+
   @@index([schedule_id, date])
 }
 
 model Appointment {
-  id           String            @id @default(cuid())
-  doctor       Doctor            @relation(fields: [doctor_id], references: [id])
-  doctor_id    String
-  patient      Patient           @relation(fields: [patient_id], references: [id])
-  patient_id   String
-  start_time   DateTime          // Appointment start time and date
-  end_time     DateTime          // Appointment end time
-  status       AppointmentStatus @default(CONFIRMED)
-  notes        String?           @db.Text
-  created_at   DateTime          @default(now())
-  updated_at   DateTime          @updatedAt
-  
+  id         String            @id @default(cuid())
+  doctor     Doctor            @relation(fields: [doctor_id], references: [id])
+  doctor_id  String
+  patient    Patient           @relation(fields: [patient_id], references: [id])
+  patient_id String
+  start_time DateTime // Appointment start time and date
+  end_time   DateTime // Appointment end time
+  status     AppointmentStatus @default(CONFIRMED)
+  notes      String?           @db.Text
+  created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
+
   @@index([doctor_id, start_time])
   @@index([patient_id])
 }
@@ -169,6 +169,6 @@ enum AppointmentStatus {
 }
 
 enum ExceptionType {
-  FULL_DAY     // Affects the entire day
-  PARTIAL_DAY  // Affects only specific hours
+  FULL_DAY // Affects the entire day
+  PARTIAL_DAY // Affects only specific hours
 }

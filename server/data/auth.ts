@@ -3,7 +3,7 @@ import 'server-only';
 import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { SessionData } from '@/lib/types';
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client';
 
 const secretKey = process.env.AUTH_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);

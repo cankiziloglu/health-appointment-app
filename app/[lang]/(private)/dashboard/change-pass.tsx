@@ -1,7 +1,7 @@
 'use client';
 
 import { DictionaryType } from '@/lib/types';
-import { User } from '@prisma/client';
+import { User } from '@/generated/prisma/client';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';

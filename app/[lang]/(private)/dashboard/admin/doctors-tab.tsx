@@ -4,15 +4,21 @@ import React, { useState } from 'react';
 import { DataTable } from '@/components/ui/data-table';
 import { createDoctorColumns } from './columns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Doctor, HealthcareProvider } from '@prisma/client';
+import { Doctor, HealthcareProvider } from '@/generated/prisma/client';
 import { DictionaryType } from '@/lib/types';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 type DoctorsTabProps = {
   dictionary: DictionaryType['Dashboard']['admin'];
   doctors: Doctor[];
   providers: HealthcareProvider[];
-}
+};
 
 export default function DoctorsTab({
   dictionary,
@@ -25,20 +31,21 @@ export default function DoctorsTab({
   const doctorColumns = createDoctorColumns(dictionary);
 
   // Filter doctors based on selected provider
-  const filteredDoctors = selectedProvider === 'all' 
-    ? doctors 
-    : doctors.filter(doctor => doctor.provider_id === selectedProvider);
+  const filteredDoctors =
+    selectedProvider === 'all'
+      ? doctors
+      : doctors.filter((doctor) => doctor.provider_id === selectedProvider);
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+      <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-4'>
         <CardTitle>{dictionary.tabs.doctors}</CardTitle>
-        <Select onValueChange={setSelectedProvider} defaultValue="all">
-          <SelectTrigger className="w-[200px]">
+        <Select onValueChange={setSelectedProvider} defaultValue='all'>
+          <SelectTrigger className='w-[200px]'>
             <SelectValue placeholder={dictionary.provider} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">{dictionary.allProviders}</SelectItem>
+            <SelectItem value='all'>{dictionary.allProviders}</SelectItem>
             {providers.map((provider) => (
               <SelectItem key={provider.id} value={provider.id}>
                 {provider.name}
@@ -51,7 +58,7 @@ export default function DoctorsTab({
         <DataTable
           columns={doctorColumns}
           data={filteredDoctors}
-          searchField="name"
+          searchField='name'
           dictionary={dictionary.dataTable}
         />
       </CardContent>

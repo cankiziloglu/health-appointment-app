@@ -27,7 +27,7 @@ import {
 import { DictionaryType } from '@/lib/types';
 import { createPrivatePractitionerAction } from '@/server/actions/doctorActions';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MedicalUnit } from '@prisma/client';
+import { MedicalUnit } from '@/generated/prisma/client';
 import { LoaderCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';

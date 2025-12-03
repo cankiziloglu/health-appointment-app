@@ -23,7 +23,7 @@ import { CircleUser } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import CreatePrivatePractitionerForm from './create-private-practitioner-form';
 import CreateHealthcareProviderForm from './create-healthcare-provider-form';
-import { MedicalUnit } from '@prisma/client';
+import { MedicalUnit } from '@/generated/prisma/client';
 import { useState } from 'react';
 
 export default function ProfileList({

@@ -17,7 +17,7 @@ import {
   verifyEmail,
 } from '../data/user';
 import { auth, decrypt, deleteSession, updateSession } from '../data/auth';
-import { Role, User } from '@prisma/client';
+import { Role, User } from '@/generated/prisma/client';
 
 export async function updateUserAction(data: updateUserSchemaType) {
   const session = await auth();
