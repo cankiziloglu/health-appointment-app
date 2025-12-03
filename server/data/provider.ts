@@ -106,3 +106,27 @@ export const getAllHealthcareProviders = cache(async () => {
     },
   });
 });
+
+// Get healthcare provider data by ID
+export const getHealthcareProviderById = cache(async (id: string) => { 
+  return await db.healthcareProvider.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      users: true,
+      doctors: {
+        include: {
+          medical_unit: true,
+          // schedules: {
+          //   include: {
+          //     exceptions: true,
+          //   }
+          // },
+          // appointments: true,
+        }
+      },
+      locations: true,
+    },
+  });
+})
