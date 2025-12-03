@@ -57,7 +57,7 @@ const AdminPage = async ({
   const allDoctors = await getAllDoctors();
 
   return (
-    <div className='container mx-auto py-6 px-4'>
+    <div className='mx-auto py-6 px-4'>
       <h1 className='text-3xl font-bold mb-6'>{dictionary.admin.title}</h1>
       <PendingVerifications
         dictionary={dictionary}
