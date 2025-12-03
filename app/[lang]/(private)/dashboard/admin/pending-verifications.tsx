@@ -13,7 +13,7 @@ import {
   verifyProviderAction,
   activatePractitionerAction,
 } from '@/server/actions/adminActions';
-import { Doctor, HealthcareProvider } from '@prisma/client';
+import { Doctor, HealthcareProvider } from '@/generated/prisma/client';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import ReviewDialog from './review-dialog';

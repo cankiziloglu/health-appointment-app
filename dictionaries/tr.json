@@ -205,6 +205,9 @@
           "createdAt": "oluşturulma"
         }
       }
+    },
+    "provider":{
+      
     }
   },
   "Verify": {

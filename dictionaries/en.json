@@ -205,6 +205,9 @@
           "createdAt": "created at"
         }
       }
+    },
+    "provider":{
+      
     }
   },
   "Verify": {
